@@ -1,5 +1,4 @@
-{
-  "scripts": {
+{  "scripts": {
     "sequelize": "sequelize",
     "sequelize-cli": "sequelize-cli",
     "start": "per-env",
