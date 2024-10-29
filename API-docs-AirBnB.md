@@ -1,4 +1,4 @@
-# `<name of application here>`
+# `Winding-Down`
 
 ## Database Schema Design
 
@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/users/userId
+  * Route path: /api/users/:userId    <!-- initially w/o ':', due to :userId from login -->
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -275,7 +275,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/spots/userId
+  * Route path: /api/spots/:userId    <!-- initially w/o ':' due userId from login -->
   * Body: none
 
 * Successful Response
@@ -454,7 +454,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/image/:spotId
+  * Route path: /api/spots/:spotId/image        <!-- initial spots/image/:spotId>
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -622,7 +622,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/reviews/userId
+  * Route path: /api/reviews/:userId     <!-- initial with ':' as userId from login -->
   * Body: none
 
 * Successful Response
@@ -678,7 +678,7 @@ Returns all the reviews that belong to a spot specified by id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/reviews/:spotId
+  * Route path: /api/spots/:spotId/reviews    <!-- initially reviews/:spotId -->
   * Body: none
 
 * Successful Response
@@ -811,7 +811,7 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/reviews/image/:spotId
+  * Route path: /api/reviews/:reviewId/images   <!-- initially /reviews/image/:spotId>
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -970,7 +970,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/bookings/userId
+  * Route path: /api/bookings/:userId   <!-- initially w/o ':' due to userId from login -->
   * Body: none
 
 * Successful Response
@@ -1015,7 +1015,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/bookings/:spotId
+  * Route path: /api/spots/:spotId/bookings   <!-- initially /bookings/:spotId -->
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
@@ -1309,7 +1309,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /spots/:spotImageId 
+  * Route path: /spots/:spotId/images/:spotImageId    <!-- initially /spots/:spotImageId -->
   * Body: none
 
 * Successful Response
@@ -1344,7 +1344,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /reviews/:reviewImageId
+  * Route path: /reviews/:reviewId/image/:reviewImageId   <!-- initially /reviews/:reviewImageId -->
   * Body: none
 
 * Successful Response
