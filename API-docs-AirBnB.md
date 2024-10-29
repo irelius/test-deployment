@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/users/:userId    <!-- initially w/o ':', due to :userId from login -->
+  * Route path: /api/users/:userId    <!-- 1st rev: initially w/o ':', due to :userId from login -->
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -275,7 +275,10 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/spots/:userId    <!-- initially w/o ':' due userId from login -->
+  * Route path: /api/users/:userId/spots  <!-- 2nd rev: since get all spots by current user and get spot details have similar endpoint -->
+                                          <!--  the express can't differentiate userId and spotId, so the change is as follow -->
+                                          <!--  from /api/spots/:userId to /api/users/:userId/spots -->
+                                          <!-- 1st rev: initially w/o ':' due userId from login -->
   * Body: none
 
 * Successful Response
@@ -454,7 +457,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/image        <!-- initial spots/image/:spotId>
+  * Route path: /api/spots/:spotId/image        <!-- 1st rev: initially spots/image/:spotId -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -500,7 +503,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/spots/:spotId    <!-- current user is based on login. 
+  * Route path: /api/spots/:spotId    <!-- 1st rev: initially w/o ':' due current user is based on login. -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -622,7 +625,10 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/reviews/:userId     <!-- initial with ':' as userId from login -->
+  * Route path: /api/users/:userId/reviews  <!-- 2nd rev: since get all spots by current user and get review details have similar endpoint -->
+                                            <!--  the express can't differentiate the userIds, so the change is as follow -->
+                                            <!--  from /api/reviews/:userId to /api/users/:userId/reviews -->
+                                            <!-- 1st rev: initial with ':' as userId from login -->
   * Body: none
 
 * Successful Response
@@ -678,7 +684,7 @@ Returns all the reviews that belong to a spot specified by id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/spots/:spotId/reviews    <!-- initially reviews/:spotId -->
+  * Route path: /api/spots/:spotId/reviews    <!-- 1st rev: initially reviews/:spotId -->
   * Body: none
 
 * Successful Response
@@ -733,7 +739,7 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /api/reviews/:spotId
+  * Route path: /api/spots/:spotId/reviews      <!-- 1st rev: from /api/reviews/:spotId to /api/spots/:spotId/reviews -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -811,7 +817,7 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/reviews/:reviewId/images   <!-- initially /reviews/image/:spotId>
+  * Route path: /api/reviews/:reviewId/images   <!-- 1st rev: initially /reviews/image/:spotId -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -970,7 +976,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/bookings/:userId   <!-- initially w/o ':' due to userId from login -->
+  * Route path: /api/bookings/:userId   <!-- 1st rev: initially w/o ':' due to userId from login -->
   * Body: none
 
 * Successful Response
@@ -1015,7 +1021,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/spots/:spotId/bookings   <!-- initially /bookings/:spotId -->
+  * Route path: /api/spots/:spotId/bookings   <!-- 1st rev: initially /bookings/:spotId -->
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
@@ -1083,7 +1089,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/bookings/new
+  * Route path: /api/spots/:spotId/bookings     <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1309,7 +1315,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /spots/:spotId/images/:spotImageId    <!-- initially /spots/:spotImageId -->
+  * Route path: /spots/:spotId/images/:spotImageId    <!-- 1st rev: initially /spots/:spotImageId -->
   * Body: none
 
 * Successful Response
@@ -1344,7 +1350,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /reviews/:reviewId/image/:reviewImageId   <!-- initially /reviews/:reviewImageId -->
+  * Route path: /reviews/:reviewId/image/:reviewImageId   <!-- 1st rev: initially /reviews/:reviewImageId -->
   * Body: none
 
 * Successful Response
@@ -1378,7 +1384,10 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/spots/query/:page/:size/:minLat/:max:at/:minLng/:minPrice/:maxPrice
+  * Route path: api/spots
+                              <!-- 1st rev: for the query, make it simple to: api/spots -->
+                              <!--  initially: /api/spots/query/:page/:size/:minLat/:max:at/:minLng/:minPrice/:maxPrice -->
+                              <!--  this route path should be at the bottom of the coding, so it will supersede other routes -->
   * Query Parameters
     * page: integer, minimum: 1, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
