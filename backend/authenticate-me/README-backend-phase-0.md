@@ -164,7 +164,7 @@ running `npm init -y`.
 - `per-env` - use environment variables for starting app differently
 - `sequelize@6` - Sequelize
 - `sequelize-cli@6` - use `sequelize` in the command line
-- `pg` - use Postgres as the production environment database
+- `pg` - use Postgres as the production environment database 
 
 `npm install -D` the following packages as dev-dependencies:
 
