@@ -191,7 +191,7 @@ If at any point you don't see the expected behavior while testing, then check
 your backend server logs in the terminal where you ran `npm start`. Also, check
 the syntax in the `session.js` as well as the `login` method in the `user.js`
 model file.
-
+f6LNE5uD-xTZSMgH2QzQD-m5xcwWVFlxNIGc
 Try to login the demo user with the username first.
 
 ```js
