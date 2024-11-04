@@ -49,7 +49,7 @@ router.get(
 
 // Sign up
 router.post(
-    '/users/new',   //path
+    '/new',   //path?
     validateSignup,
     async (req, res) => {
       const { email, password, username, firstName, lastName } = req.body;
@@ -71,7 +71,7 @@ router.post(
   );
 
 //Get User Id
-router.get('/users/:userId', requireAuth, async (req, res) => {
+router.get('/:userId', requireAuth, async (req, res) => {
   const user = await User.findByPk(req.params.userId, {
     attributes: { exclude: ['hashedPassword']}
   });
@@ -87,7 +87,7 @@ router.get('/users/:userId', requireAuth, async (req, res) => {
 
   // Login
 router.post(
-  '/users/login',  
+  '/login',  
   async (req, res) => {
   const { credential, password } = req.body;   
   const user = await User.findOne({ where: { credential } });  
