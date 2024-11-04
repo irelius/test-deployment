@@ -67,7 +67,7 @@ This will run `npm install` in the `backend` folder.
 
 Define a `sequelize` script that will run `npm run sequelize` in the `backend`
 folder.
-
+ 
 Define a `build` script that will run `npm run build` in the `backend`
 folder.
 
