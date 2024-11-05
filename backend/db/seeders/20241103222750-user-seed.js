@@ -38,6 +38,13 @@ const userSeeds = [
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    // Reset the sequence to ensure the 'id' column starts from 1
+    if (process.env.NODE_ENV === 'production') {
+      // PostgreSQL: Reset the sequence for the 'id' column of the 'Users' table
+      await queryInterface.sequelize.query(
+        `SELECT setval(pg_get_serial_sequence('Users', 'id'), 1, false);`
+      );
+    }
     await User.bulkCreate(userSeeds,
       { schema: options.schema,
         validate: true
