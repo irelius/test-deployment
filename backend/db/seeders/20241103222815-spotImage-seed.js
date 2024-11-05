@@ -42,8 +42,8 @@ module.exports = {
      * }], {});
     */
    await queryInterface.bulkInsert('SpotImages', spotImageSeeds,
-    { validate: true,
-      schema: options.schema
+    { schema: options.schema,
+      validate: true
     });
   },
 
@@ -54,7 +54,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'SpotImages';
-    return queryInterface.bulkDelete(options, null, { schema: options.schema })
+    // options.tableName = 'SpotImages';
+    return queryInterface.bulkDelete('SpotImages', null, { schema: options.schema })
   }
 };

@@ -45,8 +45,8 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('Reviews', reviewSeeds,
-      { validate: true,
-        schema: options.schema
+      { schema: options.schema,
+        validate: true
       });
   },
 
@@ -57,7 +57,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'Reviews';
-    return queryInterface.bulkDelete(options, null, { schema: options.schema })
+    // options.tableName = 'Reviews';
+    return queryInterface.bulkDelete('Reviews', null, { schema: options.schema })
   }
 };

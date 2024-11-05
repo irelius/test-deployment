@@ -39,15 +39,15 @@ const userSeeds = [
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Users', userSeeds,
-      { validate: true,
-        schema: options.schema
+      { schema: options.schema,
+        validate: true
       });
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Users';
+    // options.tableName = 'Users';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
+    return queryInterface.bulkDelete('Users', {
       username: {
         [Op.in]: ['johndoe', 'janesmith', 'sambrown']
       }
