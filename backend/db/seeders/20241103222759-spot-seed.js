@@ -67,9 +67,9 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkUpdate('Spots', spotSeeds,
-      { schema: options.schema,
-        validate: true
+    await queryInterface.bulkInsert('Spots', spotSeeds,
+      { schema: options.schema
+        // validate: true
       });
   },
 
