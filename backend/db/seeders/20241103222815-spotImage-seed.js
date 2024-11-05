@@ -41,7 +41,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await SpotImage.bulkCreate(spotImageSeeds,
+   await queryInterface.bulkInsert('SpotImages', spotImageSeeds,
     { validate: true });
   },
 

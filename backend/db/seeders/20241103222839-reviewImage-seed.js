@@ -38,7 +38,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await ReviewImage.bulkCreate(reviewImageSeeds,
+    await queryInterface.bulkInsert('ReviewImages', reviewImageSeeds,
       { validate: true });
   },
 
