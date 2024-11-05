@@ -42,7 +42,9 @@ module.exports = {
      * }], {});
     */
    await queryInterface.bulkInsert('SpotImages', spotImageSeeds,
-    { validate: true });
+    { validate: true,
+      schema: options.schema
+    });
   },
 
   async down (queryInterface, Sequelize) {
@@ -53,6 +55,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'SpotImages';
-    return queryInterface.bulkDelete(options, {})
+    return queryInterface.bulkDelete(options, { schema: options.schema })
   }
 };

@@ -45,7 +45,9 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('Bookings', bookingSeeds,
-      { validate: true });
+      { validate: true,
+        schema: options.schema
+      });
   },
 
   async down (queryInterface, Sequelize) {
@@ -56,6 +58,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'Bookings';
-    return queryInterface.bulkDelete(options, {})
+    return queryInterface.bulkDelete(options, { schema: options.schema })
   }
 };

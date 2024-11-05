@@ -39,7 +39,9 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('ReviewImages', reviewImageSeeds,
-      { validate: true });
+      { validate: true,
+        schema: options.schema
+      });
   },
 
   async down (queryInterface, Sequelize) {
@@ -50,6 +52,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'ReviewImages';
-    return queryInterface.bulkDelete(options, {})
+    return queryInterface.bulkDelete(options, { schema: options.schema })
   }
 };
