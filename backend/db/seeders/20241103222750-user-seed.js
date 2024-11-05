@@ -38,8 +38,7 @@ const userSeeds = [
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.sequelize.query("DELETE FROM sqlite_sequence WHERE name='Users'")
-    await User.bulkCreate(userSeeds,
+    await queryInterface.bulkInsert('Users', userSeeds,
       { validate: true });
   },
 
