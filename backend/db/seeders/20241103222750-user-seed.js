@@ -39,7 +39,9 @@ const userSeeds = [
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Users', userSeeds,
-      { validate: true });
+      { validate: true,
+        schema: options.schema
+      });
   },
 
   async down (queryInterface, Sequelize) {
@@ -49,6 +51,6 @@ module.exports = {
       username: {
         [Op.in]: ['johndoe', 'janesmith', 'sambrown']
       }
-    }, {})
+    }, { schema: options.schema })
   }
 };
