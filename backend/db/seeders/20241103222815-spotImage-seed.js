@@ -55,6 +55,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'SpotImages';
-    return queryInterface.bulkDelete(options, { schema: options.schema })
+    return queryInterface.bulkDelete(options, null, { schema: options.schema })
   }
 };
