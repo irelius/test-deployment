@@ -67,7 +67,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Spots', spotSeeds,
+    await Spot.bulkCreate(spotSeeds,
       { validate: true });
   },
 
