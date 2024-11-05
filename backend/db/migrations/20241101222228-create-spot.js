@@ -42,14 +42,14 @@ module.exports = {
       },
       lat: {
         type: Sequelize.DECIMAL,
-        allowNull: false
+        allowNull: false,
       },
       lng: {
         type: Sequelize.DECIMAL,
         allowNull: false
       },
       name: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING(50),
         allowNull: false
       },
       description: {
@@ -65,7 +65,7 @@ module.exports = {
         allowNull: false
       },
       previewImage: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(256),
         allowNull: false
       },
       createdAt: {
