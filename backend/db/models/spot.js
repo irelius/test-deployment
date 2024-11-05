@@ -38,14 +38,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6, 128]
+        len: [4, 128]
       }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4, 30]
+        len: [2, 30]
       }
     },
     state: {
@@ -74,14 +74,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4, 30]
+        len: [2, 30]
       }
     },
     description: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [10, 256]
+        len: [2, 256]
       }
     },
     price: {
