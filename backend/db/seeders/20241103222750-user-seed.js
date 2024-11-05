@@ -38,7 +38,7 @@ const userSeeds = [
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Users', userSeeds,
+    await User.bulkCreate(userSeeds,
       { schema: options.schema,
         validate: true
       });
