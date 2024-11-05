@@ -28,12 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   Spot.init({
     ownerId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { 
-        model: 'User',
-        key: 'id'
-       },
-      onDelete: 'CASCADE'
+      allowNull: false
     },
     address: {
       type: DataTypes.STRING,
