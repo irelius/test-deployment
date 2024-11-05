@@ -44,7 +44,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Reviews', reviewSeeds,
+    await Review.bulkCreate(reviewSeeds,
       { schema: options.schema,
         validate: true
       });

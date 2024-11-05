@@ -38,7 +38,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('ReviewImages', reviewImageSeeds,
+    await ReviewImage.bulkCreate(reviewImageSeeds,
       { schema: options.schema,
         validate: true
       });

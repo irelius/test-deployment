@@ -44,7 +44,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Bookings', bookingSeeds,
+    await Booking.bulkCreate(bookingSeeds,
       { schema: options.schema,
         validate: true
       });
