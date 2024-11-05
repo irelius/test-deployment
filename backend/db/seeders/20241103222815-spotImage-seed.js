@@ -41,7 +41,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await queryInterface.bulkInsert('SpotImages', spotImageSeeds,
+   await SpotImage.bulkCreate(spotImageSeeds,
     { schema: options.schema,
       validate: true
     });
