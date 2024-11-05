@@ -68,8 +68,8 @@ module.exports = {
      * }], {});
     */
     await Spot.bulkCreate(spotSeeds,
-      { schema: options.schema
-        // validate: true
+      { schema: options.schema,
+        validate: true
       });
   },
 
