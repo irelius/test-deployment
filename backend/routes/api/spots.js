@@ -40,6 +40,44 @@ const validateReview = [
     handleValidationErrors
 ];
 
+router.get('/test/a', async (req, res, next) => {
+    const data = await Spot.findAll({
+        attributes: { exclude: ['address'] }
+    })
+    return res.json(data)
+})
+
+router.get('/test/b', async (req, res, next) => {
+    const data = await Spot.findAll({
+        attributes: { exclude: ['Address'] }
+    })
+    return res.json(data)
+})
+
+router.get('/test/c', async (req, res, next) => {
+    const data = await Review.findAll({
+        where: {
+            spotId: 1
+        },
+        attributes: {
+            exclude: ["userId"]
+        }
+    })
+    return res.json(data)
+})
+
+router.get('/test/d', async (req, res, next) => {
+    const data = await Review.findAll({
+        where: {
+            spotId: 1
+        },
+        attributes: {
+            exclude: ["UserId"]
+        }
+    })
+    return res.json(data)
+})
+
 // Add Image based on Spot ID
 router.post("/:spotId/images", async (req, res, next) => {
     const { user } = req;
@@ -457,7 +495,7 @@ router.get("/", async (req, res, next) => {
                 spotId: spots[i].id,
             },
             attributes: {
-              exclude: ['UserId', 'SpotId']
+                exclude: ['UserId', 'SpotId']
             }
         });
         let avgStars;
