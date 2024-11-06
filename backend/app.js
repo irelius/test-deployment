@@ -14,7 +14,7 @@ const { ValidationError } = require('sequelize');
 const app = express();
 const routes = require('./routes');
 
-app.use(morgan('dev'));
+app.use(morgan('dev')); 
 app.use(cookieParser());
 app.use(express.json());
 

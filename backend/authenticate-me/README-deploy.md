@@ -238,7 +238,7 @@ Add the following keys and values in the Render GUI form:
 Open a new tab and navigate to your Render dashboard. Click on your Postgres
 database instance and scroll down to "Connections". Copy the value from
 "Internal Database URL", then return to the tab with "Environment Variables".
-
+ 
 Add the following key and paste the value you copied:
 
 - DATABASE_URL (copy value from Internal Database URL field)
