@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Review.belongsTo(models.User, {
-        foriegnKey: 'userId',
+        foreignKey: 'userId',
       });
       Review.belongsTo(models.Spot, {
-        foriegnKey: 'spotId',
+        foreignKey: 'spotId',
       });
       Review.hasMany(models.ReviewImage, {
-        foriegnKey: 'reviewId',
+        foreignKey: 'reviewId',
         hooks: true,
         onDelete: 'CASCADE',
       });      
