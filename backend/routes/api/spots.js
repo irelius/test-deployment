@@ -6,6 +6,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { SpotImage, Spot, User, Review, ReviewImage } = require('../../db/models');
+const Spots = require('../../db/seeders/2-spots');
 
 const router = express.Router();
 
@@ -373,6 +374,12 @@ router.delete("/:spotId", async (req, res, next) => {
     }
 });
 
+router.get('/test', async (req, res, next) => {
+    const data = await Spots.findAll();
+
+    return res.json(data)
+})
+
 // Get all Spots
 router.get("/", async (req, res, next) => {
 
@@ -449,9 +456,9 @@ router.get("/", async (req, res, next) => {
             where: {
                 spotId: spots[i].id,
             },
-            // attributes: {
-            //   exclude: ['UserId', 'SpotId']
-            // }
+            attributes: {
+              exclude: ['UserId', 'SpotId']
+            }
         });
         let avgStars;
         if (reviews.length !== 0) {
