@@ -14,7 +14,7 @@ POST /spots/:spotId/reviews         <!-- Create a Review for a Spot based on the
 GET  /spots/:spotId/bookings        <!-- Get all Bookings for a Spot based on the Spot's id -->
 POST /spots/:spotId/bookings        <!-- Create a Booking from a Spot based on the Spot's id -->
 GET  /spots/:spotId                 <!-- Get details of a Spot from an id -->
-PUT  /spots/:spotId                 <!-- Edit a Spot -->
+PUT  /spots/:spotId/user/:userId    <!-- Edit a Spot only by the owner -->
 DELETE /spots/:spotId               <!-- Delete a Spot -->
 POST /spots/new                     <!-- Create a Spot -->
 GET  /spots/query                   <!-- Add query Filter to Get All Spots -->

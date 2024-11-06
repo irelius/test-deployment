@@ -1089,7 +1089,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/bookings     <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
+  * Route path: /api/spots/:spotId/bookings/:userId     <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
   * Headers:
     * Content-Type: application/json
   * Body:

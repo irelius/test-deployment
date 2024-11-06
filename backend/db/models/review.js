@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: 1.0,
         max: 5.0
-      }
+      } 
     }
   }, {
     sequelize,
