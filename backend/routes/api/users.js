@@ -47,21 +47,42 @@ router.get(
   '/:userId/reviews',
   requireAuth,
   async (req, res) => {
+    try{
     const userReviews = await Review.findAll({ 
       where: { userId: req.params.userId },
-      raw: true
-    
-      // attributes: 
-      // ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
+      include: [
+        {
+          model: User,
+          as: 'User',
+          attributes: ['id', 'firstName', 'lastName']
+        },
+        {
+          model: Spot,
+          as: 'Spot',
+          attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage']
+        },
+        {
+          model: ReviewImage,
+          as: 'ReviewImages',
+          attributes: ['id', 'url']
+        }
+      ]
     });
-      
 
-    if (!userReviews) {
+    if (!userReviews || userReviews.length === 0) {
       return res.status(400).json({ message: 'No reviews found for this user' });
     }
+    const formattedReviews = userReviews.map(review => ({
+      ...review.toJSON(), 
+      createdAt: format(new Date(review.createdAt), "yyyy-MM-dd HH:mm:ss"),
+      updatedAt: format(new Date(review.updatedAt), "yyyy-MM-dd HH:mm:ss"),
+    }));
 
-    return res.json({ reviews: userReviews })
+    return res.json({ reviews: formattedReviews })
+  }catch (error) {
+    return res.status(500).json({ message: 'An error occurred', error });
   }
+}
 )
 
 
