@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     stars: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: 5.0,
       validate: {
@@ -53,6 +53,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Review',
+    tableName: 'Reviews'
+    // defaultScope: {
+    //   attributes: {
+    //     exclude: ['createdAt', 'updatedAt']
+    //   }
+    // }
   });
   return Review;
 };

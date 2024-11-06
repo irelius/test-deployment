@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Spot.belongsTo(models.User, {
         foreignKey: 'ownerId',
+        as: 'Owner',
         onDelete: 'CASCADE'
       })
       Spot.hasMany(models.SpotImage, {
@@ -52,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [2, 2]
+        len: [2, 30]
       }
     },
     country: {
@@ -107,6 +108,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Spot',
+    tableName: 'Spots'
+    // defaultScope: {
+    //   attributes: {
+    //     exclude: ['createdAt', 'updatedAt']
+    //   }
+    // }
   });
   return Spot;
 };
