@@ -2,7 +2,7 @@
 GET  /users/:userId/reviews         <!-- Get all Reviews of the Current user -->
 GET  /users/:userId                 <!-- Get the Current User -->
 POST /users/login                   <!-- Log In a User -->
-POST /users/new                     <!-- Sign Up a User -->
+POST /users/signup                  <!-- Sign Up a User + change from /new to /signup -->
 
 
 /spots
@@ -10,25 +10,25 @@ GET  /spots/users/:userId/spots     <!-- Get all Spots owned by the Current User
 DELETE /spots/:spotId/images/:spotImageId   <!-- Delete a Spot Image -->
 POST /spots/:spotId/images          <!-- Add an Image to a Spot based on the Spot's id -->
 GET  /spots/:spotId/reviews         <!-- Get all Reviews by a Spot's Id -->
-POST /spots/:spotId/reviews         <!-- Create a Review for a Spot based on the Spot's id -->
+POST /spots/:spotId/reviews/users/:userId         <!-- Create a Review for a Spot based on the Spot's id + userId to check if already has a review -->
 GET  /spots/:spotId/bookings        <!-- Get all Bookings for a Spot based on the Spot's id -->
-POST /spots/:spotId/bookings        <!-- Create a Booking from a Spot based on the Spot's id -->
-GET  /spots/:spotId                 <!-- Get details of a Spot from an id -->
-PUT  /spots/:spotId/user/:userId    <!-- Edit a Spot only by the owner -->
-DELETE /spots/:spotId               <!-- Delete a Spot -->
-POST /spots/new                     <!-- Create a Spot -->
+POST /spots/:spotId/bookings/:userId        <!-- Create a Booking from a Spot based on the Spot's id + userId as the one created the booking -->
 GET  /spots/query                   <!-- Add query Filter to Get All Spots -->
+GET  /spots/:spotId                 <!-- Get details of a Spot from an id -->
+PUT  /spots/:spotId/users/:userId    <!-- Edit a Spot + only by the owner -->
+DELETE /spots/:spotId/users/:userId  <!-- Delete a Spot + only by the owner -->
+POST /spots/users/:userId/new       <!-- Create a Spot + need userId for owner in Spot -->
 GET  /spots                         <!-- Get all the Spots -->
 
 
 /reviews
-DELETE /reviews/:reviewId/image/:reviewImageId  <!-- Delete a Review Image -->
-POST /reviews/:reviewId/images      <!-- Add an Image to a Review based on the Reviews's id -->
-PUT  /reviews/:reviewId             <!-- Edit a Review -->
-DELETE /reviews/:reviewId           <!-- Delete a Review -->
+DELETE /reviews/:reviewId/image/:reviewImageId/users/:userId  <!-- Delete a Review Image + userId as the owner of the review -->
+POST /reviews/:reviewId/users/:userId/images      <!-- Add an Image to a Review based on the Reviews's id + userId for the owner -->
+PUT  /reviews/:reviewId/users/:userId             <!-- Edit a Review + userId of the review owner -->
+DELETE /reviews/:reviewId/users/:userId           <!-- Delete a Review + userId of the review owner -->
 
 
 /bookings
 GET  /bookings/:userId              <!-- Get all the Current User's Bookings -->
-PUT  /bookings/:bookingId           <!-- Edit a Booking -->
-DELETE /bookings/:bookingId         <!-- Delete a Booking -->
+PUT  /bookings/:bookingId/users/:userId           <!-- Edit a Booking + userId as the owner of the booking -->
+DELETE /bookings/:bookingId/users/:userId         <!-- Delete a Booking + userId as the owner of the booking or the owner of the Spot -->

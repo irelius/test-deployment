@@ -159,7 +159,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * Route path: /api/users/new
+  * Route path: /api/users/signup     <!-- *** change from 'new' to 'signup' -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -275,10 +275,12 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/users/:userId/spots  <!-- 2nd rev: since get all spots by current user and get spot details have similar endpoint -->
-                                          <!--  the express can't differentiate userId and spotId, so the change is as follow -->
-                                          <!--  from /api/spots/:userId to /api/users/:userId/spots -->
-                                          <!-- 1st rev: initially w/o ':' due userId from login -->
+  * Route path: /api/spots/users/:userId/spots  <!-- *** 3rd rev: mistakenly add /spots after /api -->
+                                                <!-- *** should we take out or leave as it is now? -->
+            <!-- 2nd rev: since get all spots by current user and get spot details have similar endpoint -->
+            <!--  the express can't differentiate userId and spotId, so the change is as follow -->
+            <!--  from /api/spots/:userId to /api/users/:userId/spots -->
+            <!-- 1st rev: initially w/o ':' due userId from login -->
   * Body: none
 
 * Successful Response
@@ -383,8 +385,8 @@ Creates and returns a new spot.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /api/spots/new
-  * Headers:
+  * Route path: /api/spots/users/:userId/new    <!-- *** 1st rev: add users/:userId as the owner of the Spot -->
+  * Headers:                                    <!-- *** the userId can be taken out once there is a login logic -->
     * Content-Type: application/json
   * Body:
 
@@ -457,7 +459,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/image        <!-- 1st rev: initially spots/image/:spotId -->
+  * Route path: /api/spots/:spotId/images        <!-- 1st rev: initially spots/image/:spotId -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -503,9 +505,9 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/spots/:spotId    <!-- 1st rev: initially w/o ':' due current user is based on login. -->
-  * Headers:
-    * Content-Type: application/json
+  * Route path: /api/spots/:spotId/users/:userId  <!-- *** 2nd rev: add /users/:userId after the /spotId as owner of the Spot -->
+  * Headers:                                      <!-- *** the userId can be taken out later once there is a login logic -->
+    * Content-Type: application/json              <!-- 1st rev: initially w/o ':' due current user is based on login. -->
   * Body:
 
     ```json
@@ -589,8 +591,8 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: api/spots/:spotId 
-  * Body: none
+  * Route path: api/spots/:spotId/users/:userId <!-- *** 1st rev: add /users/:userId after the :spotId as owner of the Spot --> 
+  * Body: none                                  <!-- *** the userId can be taken out later once there is a login logic -->
 
 * Successful Response
   * Status Code: 200
@@ -739,10 +741,10 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/reviews      <!-- 1st rev: from /api/reviews/:spotId to /api/spots/:spotId/reviews -->
-  * Headers:
-    * Content-Type: application/json
-  * Body:
+  * Route path: /api/spots/:spotId/reviews/users/:userId  <!-- *** 2nd rev: add /users/:userId after /reviews-->      
+  * Headers:                                              <!-- *** to check if a user already has a review -->
+    * Content-Type: application/json                      <!-- *** the userId can be taken out once there is a login logic -->
+  * Body:                                                 <!-- 1st rev: from /api/reviews/:spotId to /api/spots/:spotId/reviews -->
 
     ```json
     {
@@ -817,10 +819,10 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/reviews/:reviewId/images   <!-- 1st rev: initially /reviews/image/:spotId -->
-  * Headers:
-    * Content-Type: application/json
-  * Body:
+  * Route path: /api/reviews/:reviewId/users/:userId/images <!-- *** 2nd rev: add /users/:userId after :reviewId -->
+  * Headers:                                                <!-- *** the userId to ensure the owner of the Review-->
+    * Content-Type: application/json                        <!-- *** the userId can be taken out later once there a login logic -->
+  * Body:                                                   <!-- 1st rev: initially /reviews/image/:spotId -->
 
     ```json
     {
@@ -874,8 +876,8 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/reviews/:reviewId
-  * Headers:
+  * Route path: /api/reviews/:reviewId/users/:userId  <!-- *** 1st rev: add /users/:userId to the end to ensure as Review owner -->
+  * Headers:                                          <!-- *** the userId can be taken out later once there is a login logic -->
     * Content-Type: application/json
   * Body:
 
@@ -940,8 +942,8 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /api/reviews/:reviewId
-  * Body: none
+  * Route path: /api/reviews/:reviewId/users/:userId  <!-- *** 1st rev: add /users/:userId at the end as the owner of the Review -->
+  * Body: none                                        <!-- *** the userId can be taken out once there is login logic -->
 
 * Successful Response
   * Status Code: 200
@@ -1089,9 +1091,9 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/bookings/:userId     <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
-  * Headers:
-    * Content-Type: application/json
+  * Route path: /api/spots/:spotId/bookings/:userId <!-- *** 1st rev: add /:userId to ensure who created the booking -->    
+  * Headers:                                        <!-- *** the userId can be taken out once there is login logic -->
+    * Content-Type: application/json                <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
   * Body:
 
     ```json
@@ -1171,7 +1173,7 @@ Update and return an existing booking.
 * Require proper authorization: Booking must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/bookings/:bookingId
+  * Route path: /api/bookings/:bookingId/users/:userId  <!-- -->
   * Headers:
     * Content-Type: application/json
   * Body:
