@@ -5,7 +5,7 @@ const { requireAuth } = require('../../utils/auth')
 const router = express.Router();
 const { format } = require('date-fns');
 
-//GET ALL CURRENT USER BOOKINGS:
+// GET all the bookings based on the userId (login userId)
 router.get(
     '/:userId',
     requireAuth,
@@ -54,7 +54,8 @@ router.get(
 })
 
 
-//EDIT BOOKING
+// PUT (edit) a booking + userId as the owner of the booking
+// the userId can be taken out later when there is a login
 router.put(
     '/:bookingId/users/:userId',
     requireAuth,
@@ -128,7 +129,8 @@ router.put(
 );
 
 
-//DELETE BOOKING
+// DELETE a booking + userId as the owner of the booking or owner of the Spot
+// the userId can be taken out later when there is a login
 router.delete(
     '/:bookingId/users/:userId',
     requireAuth,

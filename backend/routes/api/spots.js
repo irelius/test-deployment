@@ -5,20 +5,17 @@ const { User, Spot, SpotImage, Review, ReviewImage, Booking, Sequelize } = requi
 const { format, roundToNearestHours } = require('date-fns');
 const { Op } = require('sequelize');
 
-// const { environment } = require('./config');
-// const app = require('../../app');
-// const isProduction = environment === 'production';
-
-// app.use(morgan('dev'));
+// example for date formatting
+// const updatedEndDate = updatedBooking.endDate.toISOString().split('T')[0];
+// const updatedCreatedAt = updatedBooking.createdAt.toISOString().replace('T', ' ').slice(0, 19);
 
 const router = express.Router();
 
 router.use(express.json());
 
-// Get all Spots owned by the Current User - as :userId
+// GET all Spots owned by the Current User - as :userId
 router.get('/users/:userId/spots', 
-    // restoreUser,
-    // requireAuth, 
+    requireAuth, 
     async (req, res) => {
         const { userId } = req.params;
 
@@ -31,8 +28,8 @@ router.get('/users/:userId/spots',
 
                 const formattedSpots = allSpotsByUser.map(date => {
                     // Format the createdAt and updatedAt for each spot
-                    const formattedCreatedAt = format(new Date(date.createdAt), "yyyy-MM-dd HH:mm:ss");
-                    const formattedUpdatedAt = format(new Date(date.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                    const formattedCreatedAt = date.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                    const formattedUpdatedAt = date.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                     // Return a new object with the formatted dates
                     return {
@@ -52,8 +49,9 @@ router.get('/users/:userId/spots',
         }
 })
 
+// DELETE a Spot Image
 router.delete('/:spotId/images/:spotImageId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId, spotImageId } = req.params;
 
@@ -75,8 +73,9 @@ router.delete('/:spotId/images/:spotImageId',
     }
 )
 
+// POST (add) an Image to a Spot based on the Spot's Id
 router.post('/:spotId/images',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId } = req.params;
         const { url, preview } = req.body;
@@ -98,8 +97,8 @@ router.post('/:spotId/images',
                     await Spot.save(spot);
                 }
 
-                const formattedCreatedAt = format(new Date(spotImage.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(spotImage.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = spotImage.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spotImage.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 const formattedSpotImageDetail = {
                     ...spotImage.toJSON(),
@@ -119,6 +118,7 @@ router.post('/:spotId/images',
     }
 )
 
+// GET all Reviews by a Spot's Id
 router.get('/:spotId/reviews',
     async (req, res) => {
         const { spotId } = req.params;
@@ -140,8 +140,8 @@ router.get('/:spotId/reviews',
 
                 const formattedReviews = reviewBySpotId.map(date => {
                     // Format the createdAt and updatedAt for each spot
-                    const formattedCreatedAt = format(new Date(date.createdAt), "yyyy-MM-dd HH:mm:ss");
-                    const formattedUpdatedAt = format(new Date(date.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                    const formattedCreatedAt = date.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                    const formattedUpdatedAt = date.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                     // Return a new object with the formatted dates
                     return {
@@ -162,8 +162,10 @@ router.get('/:spotId/reviews',
     }
 )
 
+// POST (create) a Review for a Spot based on the Spot's Id + userId to check if already has a review
+// the userId can be taken out later when there is login user
 router.post('/:spotId/reviews/users/:userId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId, userId } = req.params;
         const { review, stars } = req.body;
@@ -201,8 +203,8 @@ router.post('/:spotId/reviews/users/:userId',
 
                 if (newReview) {
 
-                    const formattedCreatedAt = format(new Date(newReview.createdAt), "yyyy-MM-dd HH:mm:ss");
-                    const formattedUpdatedAt = format(new Date(newReview.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                    const formattedCreatedAt = newReview.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                    const formattedUpdatedAt = newReview.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
     
                     const formattedNewReview = {
                         ...newReview.toJSON(),
@@ -238,8 +240,9 @@ router.post('/:spotId/reviews/users/:userId',
     }
 )
 
+// GET all Bookings for a Spot based on the Spot's Id
 router.get('/:spotId/bookings',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId } = req.params;
 
@@ -269,17 +272,17 @@ router.get('/:spotId/bookings',
                     result.spotId = spotId;
                     result.userId = el.userId;
 
-                    result.startDate = format(new Date(el.startDate), "yyyy-MM-dd");
-                    result.endDate = format(new Date(el.endDate), "yyyy-MM-dd");
-                    result.createdAt = format(new Date(el.createdAt), "yyyy-MM-dd HH:mm:ss");
-                    result.updatedAt = format(new Date(el.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                    result.startDate = el.startDate.toISOString().split('T')[0];
+                    result.endDate = el.endDate.toISOString().split('T')[0];
+                    result.createdAt = el.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                    result.updatedAt = el.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
                     bookingResult.push(result);
                     res.status(200).json({ Bookings: bookingResult })
                 } else {
                     result.spotId = el.spotId;
 
-                    result.startDate = format(new Date(el.startDate), "yyyy-MM-dd");
-                    result.endDate = format(new Date(el.endDate), "yyyy-MM-dd");
+                    result.startDate = el.startDate.toISOString().split('T')[0];
+                    result.endDate = el.endDate.toISOString().split('T')[0];
                     bookingResult.push(result);
                     res.status(200).json({ Bookings: bookingResult })
                 }
@@ -291,15 +294,14 @@ router.get('/:spotId/bookings',
     }
 )
 
+// POST (create) a Booking from a Spot based on the Spot's Id
 router.post('/:spotId/bookings/:userId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId, userId } = req.params;
         const { startDate, endDate } = req.body;
         const today = new Date();
-        const newToday = format(new Date(today), "yyyy-MM-dd")
-        const newStartDate = format(new Date(startDate), "yyyy-MM-dd");
-        const newEndDate = format(new Date(endDate), "yyyy-MM-dd");
+        const newToday = today.toISOString().split('T')[0];
 
         if (newStartDate >= newEndDate || newStartDate < newToday) {
             return res.status(400).json({
@@ -334,8 +336,8 @@ router.post('/:spotId/bookings/:userId',
                     spotId: spotId,
                     [Op.or]: [
                         {
-                            startDate: { [Op.lt]: newEndDate },
-                            endDate: { [Op.gt]: newStartDate }
+                            startDate: { [Op.lt]: endDate },
+                            endDate: { [Op.gt]: startDate }
                         }
                     ]
                  }
@@ -354,16 +356,16 @@ router.post('/:spotId/bookings/:userId',
             const newBooking = await Booking.create({
                 spotId: Number(spotId),
                 userId: Number(userId),
-                startDate: newStartDate,
-                endDate: newEndDate
+                startDate: startDate,
+                endDate: endDate
             })
 
             const formattedBooking = {
                 ...newBooking.toJSON(),
-                startDate: format(new Date(newBooking.startDate), "yyyy-MM-dd"),
-                endDate: format(new Date(newBooking.endDate), "yyyy-MM-dd"),
-                createdAt: format(new Date(newBooking.createdAt), "yyyy-MM-dd HH:mm:ss"),
-                updatedAt: format(new Date(newBooking.updatedAt), "yyyy-MM-dd HH:mm:ss")
+                startDate: newBooking.startDate.toISOString().split('T')[0],
+                endDate: newBooking.endDate.toISOString().split('T')[0],
+                createdAt: newBooking.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+                updatedAt: newBooking.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
             }
 
             return res.status(201).json({
@@ -382,6 +384,7 @@ router.post('/:spotId/bookings/:userId',
     }
 )
 
+// GET all Spots based on the query filter
 router.get('/query',
     async (req, res) => {
         const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
@@ -460,8 +463,8 @@ router.get('/query',
             // Map through all the spots and format their createdAt and updatedAt
             const formattedSpots = allSpots.map(spot => {
                 // Format the createdAt and updatedAt for each spot
-                const formattedCreatedAt = format(new Date(spot.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(spot.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 // Return a new object with the formatted dates
                 return {
@@ -479,6 +482,7 @@ router.get('/query',
     }   
 )
 
+// GET details of a Spot from a Spot's Id
 router.get('/:spotId',
     async (req, res) => {
         const { spotId } = req.params;
@@ -498,8 +502,8 @@ router.get('/:spotId',
             })
 
             if (spotDetail) {
-                const formattedCreatedAt = format(new Date(spotDetail.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(spotDetail.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = spotDetail.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spotDetail.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 const formattedSpotDetail = {
                     ...spotDetail.toJSON(),
@@ -517,8 +521,10 @@ router.get('/:spotId',
     }
 )
 
+// PUT (edit) a Spot + userId to ensure that the edit done by the owner
+// the userId can be taken out later once there is a login
 router.put('/:spotId/users/:userId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId, userId } = req.params;
         const { address, city, state, country, lat, lng, name, description, price } = req.body
@@ -571,8 +577,8 @@ router.put('/:spotId/users/:userId',
 
                 const updatedSpot = await spotDetail.save();
 
-                const formattedCreatedAt = format(new Date(updatedSpot.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(updatedSpot.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = updatedSpot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = updatedSpot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 const formattedSpotDetail = {
                     ...spotDetail.toJSON(),
@@ -590,8 +596,10 @@ router.put('/:spotId/users/:userId',
     }
 )
 
+// DELETE a Spot + userId to ensure the deletion by the owner
+// the userId can be taken out later once there is a login
 router.delete('/:spotId/users/:userId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { spotId, userId } = req.params;
 
@@ -615,8 +623,10 @@ router.delete('/:spotId/users/:userId',
     }
 )
 
+// POST (create) a Spot + need userId for owner of the Spot
+// the userId can be taken out later once there is a login
 router.post('/users/:userId/new',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { userId } = req.params;
         const { address, city, state, country, lat, lng, name, description, price } = req.body
@@ -668,8 +678,8 @@ router.post('/users/:userId/new',
 
             const createdSpot = await Spot.create(spotDetail);
 
-            const formattedCreatedAt = format(new Date(createdSpot.createdAt), "yyyy-MM-dd HH:mm:ss");
-            const formattedUpdatedAt = format(new Date(createdSpot.updatedAt), "yyyy-MM-dd HH:mm:ss");
+            const formattedCreatedAt = createdSpot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+            const formattedUpdatedAt = createdSpot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
             const formattedSpotDetail = {
                 ...createdSpot.toJSON(),
@@ -684,6 +694,7 @@ router.post('/users/:userId/new',
     }
 )
 
+// GET all Spots
 router.get('/',
     async (req, res) => {
         
@@ -697,8 +708,8 @@ router.get('/',
             // Map through all the spots and format their createdAt and updatedAt
             const formattedSpots = allSpots.map(spot => {
                 // Format the createdAt and updatedAt for each spot
-                const formattedCreatedAt = format(new Date(spot.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(spot.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 // Return a new object with the formatted dates
                 return {
@@ -715,10 +726,6 @@ router.get('/',
         }
     }   
 )
-
-
-
-
 
 
 module.exports = router;

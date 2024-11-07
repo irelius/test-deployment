@@ -42,7 +42,7 @@ const validateLogin = [
     handleValidationErrors
 ]
 
-//Get Reviews of current user
+// GET all Reviews of current user by userId
 router.get(
   '/:userId/reviews',
   // requireAuth,
@@ -87,8 +87,8 @@ router.get(
     }
     const formattedReviews = userReviews.map(review => ({
       ...review.toJSON(), 
-      createdAt: format(new Date(review.createdAt), "yyyy-MM-dd HH:mm:ss"),
-      updatedAt: format(new Date(review.updatedAt), "yyyy-MM-dd HH:mm:ss"),
+      createdAt: review.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+      updatedAt: review.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
     }));
 
     return res.json({ reviews: formattedReviews })
@@ -99,7 +99,7 @@ router.get(
 )
 
 
-// Sign up
+// POST (create) a new User
 router.post(
     '/signup',   
     validateSignup,
@@ -163,7 +163,7 @@ router.post(
       });
     });
 
-//Get User Id
+// GET detail of a User based on userId
 router.get(
   '/:userId', 
   //requireAuth, 
@@ -189,7 +189,7 @@ router.get(
 
 
 
-  // Login
+// POST to Login
 router.post(
   '/login',  
   async (req, res) => {
