@@ -162,13 +162,15 @@ router.get('/:spotId/reviews',
     }
 )
 
-router.post('/:spotId/reviews',
+router.post('/:spotId/reviews/users/:userId',
     // requireAuth,
     async (req, res) => {
-        const { spotId } = req.params;
+        const { spotId, userId } = req.params;
         const { review, stars } = req.body;
 
-        if (review.length < 1 || Number(stars) < 1 || Number(stars) > 5) {
+        console.log(spotId, userId);
+
+        if (!review || review.length < 1 || !stars || Number(stars) < 1 || Number(stars) > 5) {
             return res.status(400).json({ 
                 message: "Bad Request",
                 errors: {
@@ -179,11 +181,17 @@ router.post('/:spotId/reviews',
         }
 
         try {
-            const spot = await Spot.findByPk(spotId)
+            const reviewByUser = await Review.findAll({
+                where: { userId: userId, spotId: spotId }
+            });
+            if (reviewByUser.length > 0) {
+                return res.status(500).json({ message: "User already has a review for this spot" })
+            }
 
+            const spot = await Spot.findByPk(spotId)
             if (spot) {
                 const spotNewReview = {
-                    userId: spot.ownerId,
+                    userId: Number(userId),
                     spotId: spot.id,
                     review: review,
                     stars: Number(stars)
@@ -202,8 +210,6 @@ router.post('/:spotId/reviews',
                         updatedAt: formattedUpdatedAt
                     }
 
-                    res.status(201).json(formattedNewReview)
-                    
                     // update avgRating in Spots
                     const allReviews = await Review.findAll({ where: { spotId: spotId} })
                     const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
@@ -211,7 +217,8 @@ router.post('/:spotId/reviews',
 
                     spot.avgRating = avgRating;
                     await spot.save();
-                    return
+
+                    return res.status(201).json(formattedNewReview)
                 } else {
                     return res.status(400).json({ 
                         message: "Bad Request",
@@ -221,6 +228,8 @@ router.post('/:spotId/reviews',
                         }
                     })
                 }
+            } else {
+                return res.status(500).json({ message: "Spot couldn't be found" })
             }
         } catch (error) {
             console.error(error);
@@ -254,7 +263,7 @@ router.get('/:spotId/bookings',
 
             booking.forEach(el => {
                 if (el.userId === spot.ownerId) {
-                    result.User = spot.User;
+                    result.User = spot.Owner;
 
                     result.id = el.id;
                     result.spotId = spotId;
@@ -289,8 +298,8 @@ router.post('/:spotId/bookings/:userId',
         const { startDate, endDate } = req.body;
         const today = new Date();
         const newToday = format(new Date(today), "yyyy-MM-dd")
-        const newStartDate = new Date(startDate);
-        const newEndDate = new Date (endDate);
+        const newStartDate = format(new Date(startDate), "yyyy-MM-dd");
+        const newEndDate = format(new Date(endDate), "yyyy-MM-dd");
 
         if (newStartDate >= newEndDate || newStartDate < newToday) {
             return res.status(400).json({
@@ -343,8 +352,8 @@ router.post('/:spotId/bookings/:userId',
             }
 
             const newBooking = await Booking.create({
-                spotId: spotId,
-                userId: userId,
+                spotId: Number(spotId),
+                userId: Number(userId),
                 startDate: newStartDate,
                 endDate: newEndDate
             })
@@ -587,18 +596,18 @@ router.delete('/:spotId/users/:userId',
         const { spotId, userId } = req.params;
 
         try {
-            const spotToDelete = Spot.findByPk(spotId);
+            const spotToDelete = await Spot.findByPk(spotId);
 
-            if (spotToDelete && spotToDelete.ownerId !== Number(userId)) {
+            if (spotToDelete.ownerId !== Number(userId)) {
                 return res.status(400).json({ message: "This Spot is not belong to the User, can't delete" })
+            }
+
+            if (spotToDelete) {
+                await spotToDelete.destroy();
+                return res.status(200).json({ message: "Successfully deleted" });
             } else {
-                if (spotToDelete) {
-                    await spotToDelete.destroy();
-                    return res.status(200).json({ message: "Successfully deleted" });
-                } else {
-                    return res.status(404).json({ message: "Spot couldn't be found" })
-                }
-            } 
+                return res.status(404).json({ message: "Spot couldn't be found" })
+            }
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "An error occurred while deleting a Spot" })

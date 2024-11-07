@@ -13,8 +13,8 @@ const bookingSeeds = [
     id: 1,
     spotId: 1,
     userId: 1,
-    startDate: '2024-11-01',
-    endDate: '2024-11-05'
+    startDate: '2024-11-05',
+    endDate: '2024-11-10'
   },
   {
     id: 2,
