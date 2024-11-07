@@ -4,8 +4,9 @@ const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { User } = require('../../db/models'); 
-const { Review } = require('../../db/models');
+const { User, Review, Spot, ReviewImage } = require('../../db/models'); 
+
+
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -50,14 +51,13 @@ router.get(
     try{
       //const { userId } = req.params;
       const userId = req.params.userId;
-console.log(userId);
       // Find all reviews by the current user
       const userReviews = await Review.findAll({
         where: { userId },
         include: [
           {
             model: User,
-            as: 'Owner',
+            //as: 'Owner',
             attributes: ['id', 'firstName', 'lastName']
           },
           {
@@ -168,7 +168,6 @@ router.post(
 router.get(
   '/:userId', 
   requireAuth, 
-  restoreUser,
   async (req, res) => {
     if (!req.user) {
       return res.status(200).json({ user:null });
