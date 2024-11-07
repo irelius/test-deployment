@@ -10,7 +10,7 @@ const { requireAuth } = require('../../utils/auth');   //auth middleware
 //DELETE IMAGE FROM REVIEW:
 router.delete(
     '/:reviewId/images/:imageId/users/:userId',
-    // requireAuth,
+    requireAuth,
     async (req, res) => {
         const { reviewId, imageId, userId } = req.params;
 
@@ -39,19 +39,19 @@ router.delete(
 //ADD IMAGE TO REVIEW
 router.post(
     '/:reviewId/users/:userId/images', 
-    // requireAuth, 
+    requireAuth, 
     async (req, res) => {
     const { reviewId, userId } = req.params;
-    const { url } = req.body;   //! image url passed in the body?
+    const { url } = req.body;
 
-    //check: does review exist 
+    // review exist 
     const review = await Review.findByPk(reviewId);
     if (!review) {
         return res.status(404).json({ message: "Review couldn't be found" });
     }
 
-//Check: if current user is the owner of review
-if (review.userId !== userId) {
+//user is the owner of review
+if (review.userId !== req.user.id) {
     return res.status(403).json({ message: 'You are not authorized to add an image to this review'
     });
 }
@@ -64,10 +64,11 @@ if (existingImages >= 10) {
 }
 
 //add image
-const newImage = await ReviewImage.create({
-    reviewId: reviewId,
-    url: url
-});
+const newImage = await ReviewImage.create({ reviewId, url });
+    return res.status(201).json({ 
+        id: newImage.id, url: newImage.url 
+     });
+    });
 
 //return w/ image data
 const formattedReview = {
@@ -76,14 +77,6 @@ const formattedReview = {
     updatedAt: format(new Date(review.updatedAt), 'yyyy-MM-dd HH:mm:ss'),
   };
 
-//return data
-return res.status(201).json({
-    review: formattedReview,
-    image: { id: newImage.id, url: newImage.url },
-    });
- }
-);
- 
 
 //EDIT REVIEW:
 router.put(
@@ -103,10 +96,20 @@ router.put(
         }
 //review content and stars
         if(!review || review.length < 10 || review.length > 256) {
-            return res.status(400).json({ message: 'Review must be between 10 and 256 characters'});
+            return res.status(400).json({ 
+                message: "Bad Request",
+                errors: {
+                    review: 'Review must be between 10 and 256 characters'
+                   }
+                });
         }
         if (isNaN(stars) || stars < 1 || stars > 5) {
-            return res.status(400).json({ message: "Stars must be between 1 and 5" });
+            return res.status(400).json({ 
+                message: "Bad Request",
+                errors: {
+                    stars: "Stars must be between 1 and 5",
+                  }
+                });
         }
 //update review
         reviewToUpdate.review = review;
