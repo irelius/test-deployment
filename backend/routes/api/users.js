@@ -170,7 +170,7 @@ router.get(
   requireAuth, 
   async (req, res) => {
     if (!req.user) {
-      return res.status(200).json({ user:null });
+      return res.status(200).json({ user: null });
     }
 
     const user = await User.findByPk(req.params.userId, {
@@ -184,7 +184,15 @@ router.get(
     return res.status(404).json({ message: 'User not found' });
   }
 
-  return res.json({ user });
+  const reorderedUser = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,       
+    username: user.username  
+  };
+
+  return res.json({ user: reorderedUser });
 })
 
 
