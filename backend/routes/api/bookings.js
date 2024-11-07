@@ -83,7 +83,7 @@ router.put(
             const formattedStartDate = booking.startDate.toISOString().split('T')[0];
             const formattedEndDate = booking.endDate.toISOString().split('T')[0];
 
-            if (!booking) {
+            if (booking.length <= 0) {
                 return res.status(404).json({ message: "Booking couldn't be found" });
             }
 

@@ -45,11 +45,12 @@ const validateLogin = [
 // GET all Reviews of current user by userId
 router.get(
   '/:userId/reviews',
-  // requireAuth,
+  requireAuth,
   async (req, res) => {
     try{
-      const { userId } = req.params;
-
+      //const { userId } = req.params;
+      const userId = req.params.userId;
+console.log(userId);
       // Find all reviews by the current user
       const userReviews = await Review.findAll({
         where: { userId },
@@ -106,7 +107,7 @@ router.post(
     async (req, res) => {
       const { email, password, username, firstName, lastName } = req.body;
       
-      if (!firstName || !LastName || !email || !username || !password) {
+      if (!firstName || !lastName || !email || !username || !password) {
         return res.status(400).json({
           message: "Bad Request",
           errors: {
@@ -166,8 +167,8 @@ router.post(
 // GET detail of a User based on userId
 router.get(
   '/:userId', 
-  //requireAuth, 
-  //restoreUser,
+  requireAuth, 
+  restoreUser,
   async (req, res) => {
     if (!req.user) {
       return res.status(200).json({ user:null });
@@ -176,7 +177,7 @@ router.get(
     const user = await User.findByPk(req.params.userId, {
     attributes: { 
       exclude: ['hashedPassword'],
-      include: ['id', 'firstName', 'lastName', 'email']
+      include: ['id', 'firstName', 'lastName', 'username', 'email']
     }
   });
 
@@ -195,7 +196,7 @@ router.post(
   async (req, res) => {
   const { credential, password } = req.body;   
 
-    if (!credential || password) {
+    if (!credential || !password) {
       return res.status(400).json({
         message: "Bad Request",
         errors: {
@@ -211,12 +212,10 @@ router.post(
       username: credential,
       email: credential
     }
-   }
-    // attributes: 
-    //   ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
-    
+   },
+    attributes: 
+      ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
   });  
-
   if (!user || !bcrypt.compareSync(password, user.hashedPassword)) {
     return res.status(401).json({ message: 'Invalid credentials'});
   }

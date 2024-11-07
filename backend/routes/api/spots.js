@@ -303,7 +303,7 @@ router.post('/:spotId/bookings/:userId',
         const today = new Date();
         const newToday = today.toISOString().split('T')[0];
 
-        if (newStartDate >= newEndDate || newStartDate < newToday) {
+        if (startDate >= endDate || startDate < newToday) {
             return res.status(400).json({
                 message: "Bad Request",
                 errors: {

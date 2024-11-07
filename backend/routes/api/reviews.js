@@ -25,7 +25,7 @@ router.delete(
             return res.status(404).json({ message: 'Review image not found' });
         }
         //user/owner check
-        if (review.userId !== req.user.id) {
+        if (review.userId !== Number(userId)) {
             return res.status(403).json({ message: 'You are not authorized to delete this image' });
         }
         //delete
@@ -51,7 +51,7 @@ router.post(
     }
 
 //user is the owner of review
-if (review.userId !== req.user.id) {
+if (review.userId !== Number(userId)) {
     return res.status(403).json({ message: 'You are not authorized to add an image to this review'
     });
 }
@@ -70,12 +70,12 @@ const newImage = await ReviewImage.create({ reviewId, url });
      });
     });
 
-//return w/ image data
-const formattedReview = {
-    ...review.toJSON(),
-    createdAt: format(new Date(review.createdAt), 'yyyy-MM-dd HH:mm:ss'),
-    updatedAt: format(new Date(review.updatedAt), 'yyyy-MM-dd HH:mm:ss'),
-  };
+// //return w/ image data
+// const formattedReview = {
+//     ...review.toJSON(),
+//     createdAt: format(new Date(review.createdAt), 'yyyy-MM-dd HH:mm:ss'),
+//     updatedAt: format(new Date(review.updatedAt), 'yyyy-MM-dd HH:mm:ss'),
+//   };
 
 
 //EDIT REVIEW:
@@ -91,7 +91,7 @@ router.put(
             return res.status(404).json({ message: 'Review not found' });
         }
 //check owner
-        if (reviewToUpdate.userId !== req.user.id) {
+        if (reviewToUpdate.userId !== Number(userId)) {
             return res.status(403).json({ message: 'You are not authorized to edit this review'});
         }
 //review content and stars
@@ -124,7 +124,7 @@ router.put(
 
         const spot = await Spot.findByPk(reviewToUpdate.spotId);
         spot.avgRating = avgRating;
-        await Spot.save();
+        await spot.save();
 
         return res.json(reviewToUpdate);
     });
@@ -144,7 +144,7 @@ router.put(
         }
 
         //user is owner
-        if (reviewToDelete.userId !== req.user.id) {
+        if (reviewToDelete.userId !== Number(userId)) {
             return res.status(403).json({ message: 'You are not authorized to delete this review.' });
         }
         //delete review
@@ -155,7 +155,7 @@ router.put(
         const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
         const avgRating = allReviews.length > 0 ? sum / allReviews.length : 0;
 
-        const spots = await Spot.findByPk(reviewToDelete.spotId);
+        const spot = await Spot.findByPk(reviewToDelete.spotId);
         spot.avgRating = avgRating;
         await spot.save();
 
