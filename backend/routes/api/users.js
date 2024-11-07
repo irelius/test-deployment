@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models'); 
 const { Review } = require('../../db/models');
 
@@ -48,23 +48,36 @@ router.get(
   // requireAuth,
   async (req, res) => {
     try{
-    const userReviews = await Review.findAll({ 
-      where: { userId: req.params.userId },
-      include: [
-        {
-          model: User,
-          as: 'Owner',
-          attributes: ['id', 'firstName', 'lastName']
-        },
-        {
-          model: Spot,
-          // as: 'Spot',
-          attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage']
-        },
-        {
-          model: ReviewImage,
-          // as: 'ReviewImages',
-          attributes: ['id', 'url']
+      const { userId } = req.params;
+
+      // Find all reviews by the current user
+      const userReviews = await Review.findAll({
+        where: { userId },
+        include: [
+          {
+            model: User,
+            as: 'Owner',
+            attributes: ['id', 'firstName', 'lastName']
+          },
+          {
+            model: Spot,
+            attributes: [
+              'id',
+              'ownerId',
+              'address',
+              'city',
+              'state',
+              'country',
+              'lat',
+              'lng',
+              'name',
+              'price',
+              'previewImage'
+            ]
+          },
+          {
+            model: ReviewImage,
+            attributes: ['id', 'url']
         }
       ]
     });
@@ -86,7 +99,6 @@ router.get(
 )
 
 
-
 // Sign up
 router.post(
     '/signup',   
@@ -94,11 +106,29 @@ router.post(
     async (req, res) => {
       const { email, password, username, firstName, lastName } = req.body;
       
+      if (!firstName || !LastName || !email || !username || !password) {
+        return res.status(400).json({
+          message: "Bad Request",
+          errors: {
+            firstName: "First name is required",
+            lastName: "Last name is required",
+            email: "Email is required",
+            username: "Username is required",
+            password: "Password is required"
+          }
+        })
+      }
+
+
       const existingUser = await User.findOne({
-        where: { email },
-      }) || await User.findOne({
-        where: { username },
+        where: { 
+          [Op.or]: [
+            { email },
+            { username } 
+          ]
+        }
       });
+     
 
       if (existingUser) {
         return res.status(500).json({ 
@@ -111,28 +141,39 @@ router.post(
       }
       
       const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ email, username, hashedPassword, firstName, lastName });
-  
-      const safeUser = {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-      };
-  
-      await setTokenCookie(res, safeUser);
-  
-      return res.status(201).json({ user: safeUser });
-    }
-  );
+  //create user
+      const newUser = await User.create({
+        firstName,
+        lastName,
+        email,
+        username,
+        hashedPassword
+      });
+  //cookie and resp w/ data
+      await setTokenCookie(res, newUser);
+    
+      return res.status(201).json({
+        user: {
+          id: newUser.id,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          email: newUser.email,
+          username: newUser.username
+        }
+      });
+    });
 
 //Get User Id
 router.get(
   '/:userId', 
-  // requireAuth, 
+  //requireAuth, 
+  //restoreUser,
   async (req, res) => {
-  const user = await User.findByPk(req.params.userId, {
+    if (!req.user) {
+      return res.status(200).json({ user:null });
+    }
+
+    const user = await User.findByPk(req.params.userId, {
     attributes: { 
       exclude: ['hashedPassword'],
       include: ['id', 'firstName', 'lastName', 'email']
@@ -153,10 +194,26 @@ router.post(
   '/login',  
   async (req, res) => {
   const { credential, password } = req.body;   
+
+    if (!credential || password) {
+      return res.status(400).json({
+        message: "Bad Request",
+        errors: {
+          credential: "Email or username is required",
+          password: "Password is required"
+        }
+      });
+    }
+
   const user = await User.findOne({ 
-    where: { [Op.or]: [{ email: credential }, { username: credential }] },
-    attributes: 
-      ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
+    where: 
+    { [Op.or]: {
+      username: credential,
+      email: credential
+    }
+   }
+    // attributes: 
+    //   ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
     
   });  
 
@@ -164,17 +221,18 @@ router.post(
     return res.status(401).json({ message: 'Invalid credentials'});
   }
 
-  const safeUser = {
+  //const safeUser = {
+  setTokenCookie(res, user);
+  return res.status(200).json({
+    user:{
     id: user.id, 
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email, 
-    username: user.username };
-
-  await setTokenCookie(res, safeUser);
-
-  return res.json({ user: safeUser });
-
-});
+    username: user.username 
+     }
+  });
+ }
+);
 
 module.exports = router;
