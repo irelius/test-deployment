@@ -120,7 +120,7 @@ router.put(
 //update spots avgRating after edit
         const allReviews = await Review.findAll({ where: { spotId: reviewToUpdate.spotId } });
         const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
-        const avgRating = sum / allReviews.length;
+        const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
 
         const spot = await Spot.findByPk(reviewToUpdate.spotId);
         spot.avgRating = avgRating;
@@ -152,12 +152,18 @@ router.put(
 
         //update avgRating for spot
         const allReviews = await Review.findAll({ where: { spotId: reviewToDelete.spotId } });
-        const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
-        const avgRating = allReviews.length > 0 ? sum / allReviews.length : 0;
+        if (allReviews.length > 0) {
+            const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
+            const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
 
-        const spot = await Spot.findByPk(reviewToDelete.spotId);
-        spot.avgRating = avgRating;
-        await spot.save();
+            const spot = await Spot.findByPk(reviewToDelete.spotId);
+            spot.avgRating = avgRating;
+            await spot.save();
+        } else {
+            const spot = await Spot.findByPk(reviewToDelete.spotId);
+            spot.avgRating = null;
+            await spot.save();
+        }
 
         return res.json({ message: 'Review deleted successfully' });
     })

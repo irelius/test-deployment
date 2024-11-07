@@ -6,14 +6,14 @@ const reviewRouter = require('./reviews.js');
 const bookingRouter = require('./bookings.js')
 const { restoreUser, requireAuth } = require('../../utils/auth.js');
 
-router.get('/test', requireAuth, (req, res) => {
-  res.json ({ message: 'success' })
-})
-
 // Connect restoreUser middleware to the API router
   // If current user session is valid, set req.user to the user in the database
   // If current user session is not valid, set req.user to null
   router.use(restoreUser);
+
+  router.get('/test', requireAuth, (req, res) => {
+    res.json ({ message: 'success' })
+  })
 
   router.use('/session', sessionRouter);    // to login and logout into the session
   router.use('/users', usersRouter);

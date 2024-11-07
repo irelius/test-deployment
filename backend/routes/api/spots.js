@@ -257,9 +257,17 @@ router.get('/:spotId/bookings',
                 ]
             })
 
+            if (!spot) {
+                return res.status(404).json({ message: "The Spot is not found" })
+            }
+
             const booking = await Booking.findAll({
                 where: { spotId: spotId }
             })
+
+            if (booking.length <= 0) {
+                return res.status(404).json({ message: "There is NO booking for this Spot" })
+            }
 
             let bookingResult = []
             let result = {}

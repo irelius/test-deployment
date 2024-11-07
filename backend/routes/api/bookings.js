@@ -53,7 +53,6 @@ router.get(
     }
 })
 
-
 // PUT (edit) a booking + userId as the owner of the booking
 // the userId can be taken out later when there is a login
 router.put(
@@ -79,13 +78,13 @@ router.put(
 
         try {
             const booking = await Booking.findByPk(bookingId);
+
+            if (!booking) {
+                return res.status(404).json({ message: "Booking couldn't be found" });
+            }
  
             const formattedStartDate = booking.startDate.toISOString().split('T')[0];
             const formattedEndDate = booking.endDate.toISOString().split('T')[0];
-
-            if (booking.length <= 0) {
-                return res.status(404).json({ message: "Booking couldn't be found" });
-            }
 
             //belong to user
             if (Number(booking.userId) !== Number(userId)) {
@@ -127,7 +126,6 @@ router.put(
         }
     }
 );
-
 
 // DELETE a booking + userId as the owner of the booking or owner of the Spot
 // the userId can be taken out later when there is a login
