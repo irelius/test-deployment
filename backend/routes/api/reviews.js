@@ -9,10 +9,10 @@ const { requireAuth } = require('../../utils/auth');   //auth middleware
 
 //DELETE IMAGE FROM REVIEW:
 router.delete(
-    '/:reviewId/images/:imageId',
-    requireAuth,
+    '/:reviewId/images/:imageId/users/:userId',
+    // requireAuth,
     async (req, res) => {
-        const { reviewId, imageId } = req.params;
+        const { reviewId, imageId, userId } = req.params;
 
         //exist
         const review = await Review.findByPk(reviewId);
@@ -38,10 +38,10 @@ router.delete(
 
 //ADD IMAGE TO REVIEW
 router.post(
-    '/:reviewId/images', 
-    requireAuth, 
+    '/:reviewId/users/:userId/images', 
+    // requireAuth, 
     async (req, res) => {
-    const { reviewId } = req.params;
+    const { reviewId, userId } = req.params;
     const { url } = req.body;   //! image url passed in the body?
 
     //check: does review exist 
@@ -51,7 +51,7 @@ router.post(
     }
 
 //Check: if current user is the owner of review
-if (review.userId !== req.user.id) {
+if (review.userId !== userId) {
     return res.status(403).json({ message: 'You are not authorized to add an image to this review'
     });
 }
@@ -65,8 +65,8 @@ if (existingImages >= 10) {
 
 //add image
 const newImage = await ReviewImage.create({
-    reviewId: req.params.reviewId,
-    url: req.body.url,
+    reviewId: reviewId,
+    url: url
 });
 
 //return w/ image data
@@ -87,11 +87,11 @@ return res.status(201).json({
 
 //EDIT REVIEW:
 router.put(
-    '/:reviewId',
-    requireAuth,
+    '/:reviewId/users/:userId',
+    // requireAuth,
     async (req, res) => {
-        const {reviewId } = req.params;
-        const {review, stars } = req.body;
+        const { reviewId, userId } = req.params;
+        const { review, stars } = req.body;
 //find review
         const reviewToUpdate = await Review.findByPk(reviewId);
         if (!reviewToUpdate) {
@@ -129,10 +129,10 @@ router.put(
 
     //DELETE REVIEW:
     router.delete(
-        '/:reviewId', 
-        requireAuth, 
+        '/:reviewId/users/:userId', 
+        // requireAuth, 
         async(req, res) => {
-        const { reviewId } = req.params;
+        const { reviewId, userId } = req.params;
 
         //find review
         const reviewToDelete = await Review.findByPk(reviewId);

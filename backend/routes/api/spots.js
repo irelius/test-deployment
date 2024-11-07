@@ -17,8 +17,8 @@ router.use(express.json());
 
 // Get all Spots owned by the Current User - as :userId
 router.get('/users/:userId/spots', 
-    restoreUser,
-    requireAuth, 
+    // restoreUser,
+    // requireAuth, 
     async (req, res) => {
         const { userId } = req.params;
 
@@ -80,14 +80,13 @@ router.post('/:spotId/images',
     async (req, res) => {
         const { spotId } = req.params;
         const { url, preview } = req.body;
-        let previewVal;
 
         try {
             const spot = await Spot.findByPk(spotId)
 
             if (spot) {
                 const newSpotImage = {
-                    spotId: spotId,
+                    spotId: Number(spotId),
                     url: url,
                     preview: preview
                 };
@@ -128,14 +127,16 @@ router.get('/:spotId/reviews',
             const reviewBySpotId = await Review.findAll({
                 where: { spotId: spotId },
                 include: [
-                    { model: User },
+                    { model: User ,
+                        attributes: ['id', 'firstName', 'lastName']
+                    },
                     { model: ReviewImage,
                         attributes: ['id', 'url']
                     }
                 ]
             });
 
-            if (reviewBySpotId) {
+            if (reviewBySpotId.length > 0) {
 
                 const formattedReviews = reviewBySpotId.map(date => {
                     // Format the createdAt and updatedAt for each spot
@@ -150,7 +151,7 @@ router.get('/:spotId/reviews',
                     };
                 });
     
-                return res.status(200).json(formattedReviews);
+                return res.status(200).json({ Reviews: formattedReviews });
             } else {
                 return res.status(404).json({ message: "Spot couldn't be found" })
             }
@@ -201,7 +202,7 @@ router.post('/:spotId/reviews',
                         updatedAt: formattedUpdatedAt
                     }
 
-                    res.status(201).json({ formattedNewReview })
+                    res.status(201).json(formattedNewReview)
                     
                     // update avgRating in Spots
                     const allReviews = await Review.findAll({ where: { spotId: spotId} })
@@ -559,10 +560,10 @@ router.put('/:spotId/users/:userId',
                 spotDetail.description = description;
                 spotDetail.price = Number(price);
 
-                await Spot.save(spotDetail, { where: { id: spotId }});
+                const updatedSpot = await spotDetail.save();
 
-                const formattedCreatedAt = format(new Date(spotDetail.createdAt), "yyyy-MM-dd HH:mm:ss");
-                const formattedUpdatedAt = format(new Date(spotDetail.updatedAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedCreatedAt = format(new Date(updatedSpot.createdAt), "yyyy-MM-dd HH:mm:ss");
+                const formattedUpdatedAt = format(new Date(updatedSpot.updatedAt), "yyyy-MM-dd HH:mm:ss");
 
                 const formattedSpotDetail = {
                     ...spotDetail.toJSON(),
@@ -580,7 +581,7 @@ router.put('/:spotId/users/:userId',
     }
 )
 
-router.delete('/:spotId/user/:userId',
+router.delete('/:spotId/users/:userId',
     // requireAuth,
     async (req, res) => {
         const { spotId, userId } = req.params;
@@ -588,7 +589,7 @@ router.delete('/:spotId/user/:userId',
         try {
             const spotToDelete = Spot.findByPk(spotId);
 
-            if (spotToDelete && spotToDelete.ownerId !== userId) {
+            if (spotToDelete && spotToDelete.ownerId !== Number(userId)) {
                 return res.status(400).json({ message: "This Spot is not belong to the User, can't delete" })
             } else {
                 if (spotToDelete) {
@@ -698,7 +699,7 @@ router.get('/',
                 };
             });
 
-            return res.status(200).json(formattedSpots);
+            return res.status(200).json({ Spots: formattedSpots });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "An error occurred while getting all Spots" })

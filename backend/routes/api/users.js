@@ -45,7 +45,7 @@ const validateLogin = [
 //Get Reviews of current user
 router.get(
   '/:userId/reviews',
-  requireAuth,
+  // requireAuth,
   async (req, res) => {
     try{
     const userReviews = await Review.findAll({ 
@@ -53,17 +53,17 @@ router.get(
       include: [
         {
           model: User,
-          as: 'User',
+          as: 'Owner',
           attributes: ['id', 'firstName', 'lastName']
         },
         {
           model: Spot,
-          as: 'Spot',
+          // as: 'Spot',
           attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage']
         },
         {
           model: ReviewImage,
-          as: 'ReviewImages',
+          // as: 'ReviewImages',
           attributes: ['id', 'url']
         }
       ]
@@ -101,7 +101,13 @@ router.post(
       });
 
       if (existingUser) {
-        return res.status(500).json({ message: "Email or username already exists" });
+        return res.status(500).json({ 
+          message: "User already exists",
+          errors: {
+            email: "User with that email already exists",
+            username: "User with that username already exists"
+          } 
+        });
       }
       
       const hashedPassword = bcrypt.hashSync(password);
@@ -124,7 +130,7 @@ router.post(
 //Get User Id
 router.get(
   '/:userId', 
-  requireAuth, 
+  // requireAuth, 
   async (req, res) => {
   const user = await User.findByPk(req.params.userId, {
     attributes: { 
@@ -137,7 +143,7 @@ router.get(
     return res.status(404).json({ message: 'User not found' });
   }
 
-  return res.json(user);
+  return res.json({ user });
 })
 
 
@@ -153,9 +159,9 @@ router.post(
       ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
     
   });  
-console.log(user.hashedPassword, password);
+
   if (!user || !bcrypt.compareSync(password, user.hashedPassword)) {
-    return res.status(401).json({ message: 'Invalid user name or password'});
+    return res.status(401).json({ message: 'Invalid credentials'});
   }
 
   const safeUser = {
