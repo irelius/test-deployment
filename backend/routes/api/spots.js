@@ -50,12 +50,19 @@ router.get('/users/:userId/spots',
 })
 
 // DELETE a Spot Image
-router.delete('/:spotId/images/:spotImageId',
+router.delete('/:spotId/images/:spotImageId/users/:userId',
     requireAuth,
     async (req, res) => {
-        const { spotId, spotImageId } = req.params;
+        const { spotId, spotImageId, userId } = req.params;
 
         try {
+            const spot = await Spot.findOne({
+                where: { ownerId: Number(userId) }
+            })
+            if (!spot || spot.length <= 0) {
+                return res.status(400).json({ message: "The Spot doesn't belong to the User" })
+            }
+
             const imageBySpot = await SpotImage.findOne({
                 where: { spotId: spotId, id: spotImageId }
             });
@@ -74,16 +81,21 @@ router.delete('/:spotId/images/:spotImageId',
 )
 
 // POST (add) an Image to a Spot based on the Spot's Id
-router.post('/:spotId/images',
+router.post('/:spotId/images/users/:userId',
     requireAuth,
     async (req, res) => {
-        const { spotId } = req.params;
+        const { spotId, userId } = req.params;
         const { url, preview } = req.body;
 
         try {
             const spot = await Spot.findByPk(spotId)
 
             if (spot) {
+
+                if (spot.ownerId !== Number(userId)) {
+                    return res.status(400).json({ message: "The Spot doesn't belong to the User" })
+                }
+
                 const newSpotImage = {
                     spotId: Number(spotId),
                     url: url,
@@ -124,6 +136,11 @@ router.get('/:spotId/reviews',
         const { spotId } = req.params;
 
         try {
+            const spot = await Spot.findByPk(spotId);
+            if (!spot || spot.length <= 0) {
+                return res.status(404).json({ message: "There is no Spot" })
+            }
+
             const reviewBySpotId = await Review.findAll({
                 where: { spotId: spotId },
                 include: [
@@ -153,7 +170,7 @@ router.get('/:spotId/reviews',
     
                 return res.status(200).json({ Reviews: formattedReviews });
             } else {
-                return res.status(404).json({ message: "Spot couldn't be found" })
+                return res.status(404).json({ message: "There is no reviews for this Spot" })
             }
         } catch (error) {
             console.error(error);
@@ -172,7 +189,7 @@ router.post('/:spotId/reviews/users/:userId',
 
         console.log(spotId, userId);
 
-        if (!review || review.length < 1 || !stars || Number(stars) < 1 || Number(stars) > 5) {
+        if (!review || review.length < 2 || !stars || Number(stars) < 1 || Number(stars) > 5) {
             return res.status(400).json({ 
                 message: "Bad Request",
                 errors: {
@@ -285,14 +302,14 @@ router.get('/:spotId/bookings',
                     result.createdAt = el.createdAt.toISOString().replace('T', ' ').slice(0, 19);
                     result.updatedAt = el.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
                     bookingResult.push(result);
-                    res.status(200).json({ Bookings: bookingResult })
+                    return res.status(200).json({ Bookings: bookingResult })
                 } else {
                     result.spotId = el.spotId;
 
                     result.startDate = el.startDate.toISOString().split('T')[0];
                     result.endDate = el.endDate.toISOString().split('T')[0];
                     bookingResult.push(result);
-                    res.status(200).json({ Bookings: bookingResult })
+                    return res.status(200).json({ Bookings: bookingResult })
                 }
             })
         } catch (error) {
@@ -694,6 +711,8 @@ router.post('/users/:userId/new',
                 createdAt: formattedCreatedAt,
                 updatedAt: formattedUpdatedAt
             }
+            delete formattedSpotDetail.avgRating;
+            delete formattedSpotDetail.previewImage;
             return res.status(201).json(formattedSpotDetail);
         } catch (error) {
             console.error(error);

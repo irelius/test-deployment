@@ -95,11 +95,11 @@ router.put(
             return res.status(403).json({ message: 'You are not authorized to edit this review'});
         }
 //review content and stars
-        if(!review || review.length < 10 || review.length > 256) {
+        if(!review || review.length < 2 || review.length > 256) {
             return res.status(400).json({ 
                 message: "Bad Request",
                 errors: {
-                    review: 'Review must be between 10 and 256 characters'
+                    review: 'Review must be between 2 and 256 characters'
                    }
                 });
         }

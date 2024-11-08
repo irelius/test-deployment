@@ -99,7 +99,6 @@ router.get(
 }
 )
 
-
 // POST (create) a new User
 router.post(
     '/signup',   
@@ -195,50 +194,48 @@ router.get(
   return res.json({ user: reorderedUser });
 })
 
+//! POST to Login => the login is in the session router
+// router.post(
+//   '/login',  
+//   async (req, res) => {
+//   const { credential, password } = req.body;   
 
+//     if (!credential || !password) {
+//       return res.status(400).json({
+//         message: "Bad Request",
+//         errors: {
+//           credential: "Email or username is required",
+//           password: "Password is required"
+//         }
+//       });
+//     }
 
-// POST to Login
-router.post(
-  '/login',  
-  async (req, res) => {
-  const { credential, password } = req.body;   
+//   const user = await User.findOne({ 
+//     where: 
+//     { [Op.or]: {
+//       username: credential,
+//       email: credential
+//     }
+//    },
+//     attributes: 
+//       ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
+//   });  
+//   if (!user || !bcrypt.compareSync(password, user.hashedPassword)) {
+//     return res.status(401).json({ message: 'Invalid credentials'});
+//   }
 
-    if (!credential || !password) {
-      return res.status(400).json({
-        message: "Bad Request",
-        errors: {
-          credential: "Email or username is required",
-          password: "Password is required"
-        }
-      });
-    }
-
-  const user = await User.findOne({ 
-    where: 
-    { [Op.or]: {
-      username: credential,
-      email: credential
-    }
-   },
-    attributes: 
-      ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
-  });  
-  if (!user || !bcrypt.compareSync(password, user.hashedPassword)) {
-    return res.status(401).json({ message: 'Invalid credentials'});
-  }
-
-  //const safeUser = {
-  setTokenCookie(res, user);
-  return res.status(200).json({
-    user:{
-    id: user.id, 
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email, 
-    username: user.username 
-     }
-  });
- }
-);
+//   //const safeUser = {
+//   setTokenCookie(res, user);
+//   return res.status(200).json({
+//     user:{
+//     id: user.id, 
+//     firstName: user.firstName,
+//     lastName: user.lastName,
+//     email: user.email, 
+//     username: user.username 
+//      }
+//   });
+//  }
+// );
 
 module.exports = router;

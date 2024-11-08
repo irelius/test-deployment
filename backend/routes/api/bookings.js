@@ -137,13 +137,12 @@ router.delete(
 
         try {
             const booking = await Booking.findByPk(bookingId);
-            console.log('booking > ', booking);
-            if(!booking) {
+            if(!booking || booking.length <= 0) {
                 return res.status(404).json({ message: "Booking couldn't be found" });
             }
             //auth check
             const spot = await booking.getSpot();
-            console.log('spot > ', spot);
+
             if (booking.userId !== Number(userId) && spot.ownerId !== Number(userId)) {
                 return res.status(403).json({ message: "Unauthorized to delete this booking" });
             }
