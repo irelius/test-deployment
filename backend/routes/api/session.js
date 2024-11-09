@@ -66,10 +66,16 @@ router.post(
 router.delete(
     '/',
     (_req, res) => {
-      res.clearCookie('token');
-      return res.json({ message: 'success' });
+      res.clearCookie('token', {
+        path: '/',
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction && "Lax"
+    });
+      return res.status(200).json({ message: 'success' });
     }
   );
+
 
 // Restore session user
 router.get(

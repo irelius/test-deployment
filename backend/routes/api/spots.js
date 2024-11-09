@@ -17,8 +17,8 @@ router.use(express.json());
 router.get('/users/:userId/spots', 
     requireAuth, 
     async (req, res) => {
-        // const { userId } = req.params;
-        const { id } = req.user;
+        const { userId } = req.params;
+        // const { id } = req.user;
 
         try {
             const allSpotsByUser = await Spot.findAll({
