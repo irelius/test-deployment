@@ -3,8 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { format } = require('date-fns');
-const { Review, Spot, ReviewImage } = require('../../db/models');  //import models
+const { User, Review, Spot, ReviewImage } = require('../../db/models');  //import models
 const { requireAuth } = require('../../utils/auth');   //auth middleware
 
 // GET all Reviews of current user 
@@ -21,7 +20,7 @@ router.get(
           include: [
             {
               model: User,
-              as: 'Owner',
+            //   as: 'Owner',
               attributes: ['id', 'firstName', 'lastName']
             },
             {
