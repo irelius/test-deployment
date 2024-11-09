@@ -9,7 +9,7 @@ router.use(express.json());
 
 //DELETE IMAGE FROM REVIEW:
 router.delete(
-    '/review-images/:imageId',
+    '/:imageId',
     requireAuth,
     async (req, res) => {
         const { id } = req.user;

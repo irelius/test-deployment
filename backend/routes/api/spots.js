@@ -307,7 +307,7 @@ router.post('/:spotId/bookings',
             })
         }
 
-        const user = await User.findByPk(id);
+        const user = await User.findByPk(Number(id));
         if (!user) {
             return res.status(404).json({ message: "User is not exist" })
         }
@@ -318,7 +318,7 @@ router.post('/:spotId/bookings',
         if (!spot) {
             return res.status(404).json({ message: "Spot couldn't be found" })
         }
-        if (spot.ownerId === Number(userId)) {
+        if (spot.ownerId === Number(id)) {
             return res.status(404).json({ message: "An Owner can't book his / her own Spot" })
         }
 
@@ -347,7 +347,7 @@ router.post('/:spotId/bookings',
 
             const newBooking = await Booking.create({
                 spotId: Number(spotId),
-                userId: Number(userId),
+                userId: Number(id),
                 startDate: startDate,
                 endDate: endDate
             })
