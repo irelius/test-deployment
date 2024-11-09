@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /api/session/         <!-- *** 2nd rev: change from /user to /session -->  
+  <!-- * Route path: /api/session/          *** 2nd rev: change from /user to /session -->  
   * Route path: /api/users/:userId    <!-- *** another route to check specific userId -->
   * Body: none                        <!-- *** the userId will be replaced by req.user after the review or kept for checking any User -->
                                       <!-- 1st rev: initially w/o ':', due to :userId from login -->
