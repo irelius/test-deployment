@@ -152,7 +152,7 @@ router.put(
         const formattedUpdatedAt = updatedReview.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
         const formattedUpdatedReview = {
-            ...spotImage.toJSON(),
+            ...updatedReview.toJSON(),
             createdAt: formattedCreatedAt,
             updatedAt: formattedUpdatedAt
         }
