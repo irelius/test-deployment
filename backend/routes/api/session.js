@@ -47,6 +47,7 @@ router.post(
       }
   
       const safeUser = {
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -62,11 +63,17 @@ router.post(
     }
   );
 
+  const isProduction = process.env.NODE_ENV === "production";
+
 // Log out
 router.delete(
     '/',
     (_req, res) => {
-      res.clearCookie('token');
+      res.clearCookie('token', {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction && "Lax"
+      });
       return res.status(200).json({ message: 'success' });
     }
   );
