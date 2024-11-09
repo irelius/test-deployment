@@ -18,11 +18,13 @@ router.use(express.json());
 router.get('/current',
     requireAuth, 
     async (req, res) => {
-        const { userId } = req.params;
+        // const { userId } = req.params;
+        const { id } = req.user;
 
         try {
             const allSpotsByUser = await Spot.findAll({
-                where: { ownerId: userId }
+                // where: { ownerId: userId }
+                where: { ownerId: id }
             })
 
             if (allSpotsByUser.length > 0) {
