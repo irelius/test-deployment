@@ -288,10 +288,11 @@ router.get('/:spotId/bookings',
 )
 
 // POST (create) a Booking from a Spot based on the Spot's Id
-router.post('/:spotId/bookings/:userId',
+router.post('/:spotId/bookings',
     requireAuth,
     async (req, res) => {
-        const { spotId, userId } = req.params;
+        const { id } = req.user;
+        const { spotId } = req.params;
         const { startDate, endDate } = req.body;
         const today = new Date();
         const newToday = today.toISOString().split('T')[0];
@@ -306,9 +307,7 @@ router.post('/:spotId/bookings/:userId',
             })
         }
 
-        const user = await User.findOne({
-            where: { id: userId }
-        })
+        const user = await User.findByPk(id);
         if (!user) {
             return res.status(404).json({ message: "User is not exist" })
         }

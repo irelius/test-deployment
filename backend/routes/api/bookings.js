@@ -7,14 +7,14 @@ const { format } = require('date-fns');
 
 // GET all the bookings based on the userId (login userId)
 router.get(
-    '/:userId',
+    '/current',
     requireAuth,
     async (req, res) => {
-    const { userId } = req.params;
+    const { id } = req.user;
 
     try {
         const bookings = await Booking.findAll({
-            where: { userId },
+            where: { userId: id },
             include: [{ model: Spot,
                 attributes: {
                     exclude: ['description', 'avgRating', 'createdAt', 'updatedAt']
@@ -56,10 +56,11 @@ router.get(
 // PUT (edit) a booking + userId as the owner of the booking
 // the userId can be taken out later when there is a login
 router.put(
-    '/:bookingId/users/:userId',
+    '/:bookingId',
     requireAuth,
     async (req, res) => {
-        const { bookingId, userId } = req.params;
+        const { id } = req.user;
+        const { bookingId } = req.params;
         const { startDate, endDate } = req.body;
 
         const today = new Date();
@@ -87,7 +88,7 @@ router.put(
             const formattedEndDate = booking.endDate.toISOString().split('T')[0];
 
             //belong to user
-            if (Number(booking.userId) !== Number(userId)) {
+            if (Number(booking.userId) !== Number(id)) {
                 return res.status(403).json({ message: "Unauthorized to edit this booking"});
             }
 
@@ -130,10 +131,11 @@ router.put(
 // DELETE a booking + userId as the owner of the booking or owner of the Spot
 // the userId can be taken out later when there is a login
 router.delete(
-    '/:bookingId/users/:userId',
+    '/:bookingId',
     requireAuth,
     async (req, res) => {
-        const { bookingId, userId } = req.params;
+        const { id } = req.user;
+        const { bookingId } = req.params;
 
         try {
             const booking = await Booking.findByPk(bookingId);
@@ -143,7 +145,7 @@ router.delete(
             //auth check
             const spot = await booking.getSpot();
 
-            if (booking.userId !== Number(userId) && spot.ownerId !== Number(userId)) {
+            if (booking.userId !== Number(id) && spot.ownerId !== Number(id)) {
                 return res.status(403).json({ message: "Unauthorized to delete this booking" });
             }
             //booking started
