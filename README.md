@@ -970,7 +970,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/bookings/:userId   <!-- *** the userId will be replaced by req.user after the review -->   
+  * Route path: /api/bookings/current   <!-- *** following other path, use /current for current user -->   
   * Body: none                          <!-- 1st rev: initially w/o ':' due to userId from login -->
 
 * Successful Response
@@ -1083,8 +1083,8 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/bookings/:userId <!-- *** 1st rev: add /:userId to ensure who created the booking -->    
-  * Headers:                                        <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/spots/:spotId/bookings     
+  * Headers:                                        
     * Content-Type: application/json                <!-- 1st rev: from /api/bookings/new to /api/spots/:spotId/bookings -->
   * Body:
 
@@ -1165,8 +1165,8 @@ Update and return an existing booking.
 * Require proper authorization: Booking must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/bookings/:bookingId/users/:userId  <!-- *** 1st rev: add /users/:userId after the /:bookingId as the current user -->
-  * Headers:                                            <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/bookings/:bookingId 
+  * Headers:                                          
     * Content-Type: application/json
   * Body:
 
@@ -1260,8 +1260,8 @@ Delete an existing booking.
   Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /api/bookings/:bookingId/users/:userId  <!-- *** 1st rev: add /users/:userId after the /:bookingId as owner of the user or Spot -->
-  * Body: none                                          <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/bookings/:bookingId  
+  * Body: none                                         
 
 * Successful Response
   * Status Code: 200
