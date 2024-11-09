@@ -10,21 +10,21 @@ if (process.env.NODE_ENV === 'production') {
 
 const reviewSeeds = [
   {
-    id: 1,
+    // id: 1,
     userId: 2,
     spotId: 1,
     review: 'Had a fantastic experience! Highly recommend this spot.',
     stars: 5
   },
   {
-    id: 2,
+    // id: 2,
     userId: 3,
     spotId: 1,
     review: 'It was okay, but could be improved.',
     stars: 3
   },
   {
-    id: 3,
+    // id: 3,
     userId: 3,
     spotId: 2,
     review: 'Loved it! Will definitely come back.',

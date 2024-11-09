@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const userSeeds = [
   {
-    id: 1,
+    // id: 1,
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
@@ -18,7 +18,7 @@ const userSeeds = [
     hashedPassword: bcrypt.hashSync('password1')
   },
   {
-    id: 2,
+    // id: 2,
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'jane.smith@example.com',
@@ -26,7 +26,7 @@ const userSeeds = [
     hashedPassword: bcrypt.hashSync('password2')
   },
   {
-    id: 3,
+    // id: 3,
     firstName: 'Sam',
     lastName: 'Brown',
     email: 'sam.brown@example.com',

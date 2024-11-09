@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const spotSeeds = [
   {
-    id: 1,
+    // id: 1,
     ownerId: 1,
     address: '123 Main St',
     city: 'Los Angeles',
@@ -24,7 +24,7 @@ const spotSeeds = [
     previewImage: 'https://example.com/image1.jpg'
   },
   {
-    id: 2,
+    // id: 2,
     ownerId: 2,
     address: '456 Oak Ave',
     city: 'San Francisco',
@@ -39,7 +39,7 @@ const spotSeeds = [
     previewImage: 'https://example.com/image2.jpg'
   },
   {
-    id: 3,
+    // id: 3,
     ownerId: 1,
     address: '789 Pine Rd',
     city: 'Seattle',

@@ -53,7 +53,8 @@ router.post(
         username: user.username,
       };
   
-      await setTokenCookie(res, safeUser);
+      // await setTokenCookie(res, safeUser);
+      setTokenCookie(res, safeUser);
   
       return res.status(200).json({
         user: safeUser

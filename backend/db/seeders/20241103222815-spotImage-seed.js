@@ -10,19 +10,19 @@ if (process.env.NODE_ENV === 'production') {
 
 const spotImageSeeds = [
   {
-    id: 1,
+    // id: 1,
     spotId: 1,
     url: 'https://example.com/image1.jpg',
     preview: true
   },
   {
-    id: 2,
+    // id: 2,
     spotId: 1,
     url: 'https://example.com/image2.jpg',
     preview: false
   },
   {
-    id: 3,
+    // id: 3,
     spotId: 2,
     url: 'https://example.com/image3.jpg',
     preview: true

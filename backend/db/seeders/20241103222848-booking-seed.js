@@ -10,21 +10,21 @@ if (process.env.NODE_ENV === 'production') {
 
 const bookingSeeds = [
   {
-    id: 1,
+    // id: 1,
     spotId: 1,
     userId: 1,
     startDate: '2024-11-05',
     endDate: '2024-11-10'
   },
   {
-    id: 2,
+    // id: 2,
     spotId: 2,
     userId: 1,
     startDate: '2024-12-10',
     endDate: '2024-12-15'
   },
   {
-    id: 3,
+    // id: 3,
     spotId: 3,
     userId: 2,
     startDate: '2024-11-20',

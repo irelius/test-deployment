@@ -10,17 +10,17 @@ if (process.env.NODE_ENV === 'production') {
 
 const reviewImageSeeds = [
   {
-    id: 1,
+    // id: 1,
     reviewId: 1,
     url: 'https://example.com/review-image1.jpg'
   },
   {
-    id: 2,
+    // id: 2,
     reviewId: 1,
     url: 'https://example.com/review-image2.jpg'
   },
   {
-    id: 3,
+    // id: 3,
     reviewId: 2,
     url: 'https://example.com/review-image3.jpg'
   },

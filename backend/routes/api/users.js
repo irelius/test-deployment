@@ -104,7 +104,7 @@ router.post(
     '/signup',   
     validateSignup,
     async (req, res) => {
-      const { email, password, username, firstName, lastName } = req.body;
+      const { firstName, lastName, email, password, username } = req.body;
       
       if (!firstName || !lastName || !email || !username || !password) {
         return res.status(400).json({
@@ -119,7 +119,6 @@ router.post(
         })
       }
 
-
       const existingUser = await User.findOne({
         where: { 
           [Op.or]: [
@@ -129,7 +128,6 @@ router.post(
         }
       });
      
-
       if (existingUser) {
         return res.status(500).json({ 
           message: "User already exists",
@@ -138,9 +136,10 @@ router.post(
             username: "User with that username already exists"
           } 
         });
-      }
+      };
       
       const hashedPassword = bcrypt.hashSync(password);
+
   //create user
       const newUser = await User.create({
         firstName,
@@ -149,8 +148,10 @@ router.post(
         username,
         hashedPassword
       });
+
   //cookie and resp w/ data
-      await setTokenCookie(res, newUser);
+      // await setTokenCookie(res, newUser);
+      setTokenCookie(res, newUser);
     
       return res.status(201).json({
         user: {
