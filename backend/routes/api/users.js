@@ -191,7 +191,7 @@ router.get(
     username: user.username  
   };
 
-  return res.json({ user: reorderedUser });
+  return res.status(200).json({ user: reorderedUser });
 })
 
 //! POST to Login => the login is in the session router
