@@ -53,8 +53,7 @@ Returns the information about the current user that is logged in.
 * Request
   * Method: GET
   * Route path: /api/session          <!-- *** 2nd rev: change from /user to /session -->  
-  <!--* Route path: /api/users/:userId    <!-- *** another route to check specific userId -->
-  * Body: none                        <!-- *** the userId will be replaced by req.user after the review or kept for checking any User -->
+  * Body: none                        
                                       <!-- 1st rev: initially w/o ':', due to :userId from login -->
 * Successful Response when there is a logged in user
   * Status Code: 200
@@ -160,7 +159,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * Route path: /api/users/signup     <!-- *** change from 'new' to 'signup' -->
+  * Route path: /api/users     <!-- *** take out any word after /users -->
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -276,14 +275,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/spots/current
-  <!-- Route path: /api/spots/users/:userId/spots  <!-- *** 3rd rev: mistakenly add /spots after /api -->
-                                                <!-- *** should we take out or leave as it is now? -->
-                                                <!-- *** the userId will be replaced by req.user after the review -->
-            <!-- 2nd rev: since get all spots by current user and get spot details have similar endpoint -->
-            <!--  the express can't differentiate userId and spotId, so the change is as follow -->
-            <!--  from /api/spots/:userId to /api/users/:userId/spots -->
-            <!-- 1st rev: initially w/o ':' due userId from login -->
+  * Route path: /api/spots/current          <!-- *** using 'current' as indicated by the test spec -->
   * Body: none
 
 * Successful Response
@@ -388,8 +380,8 @@ Creates and returns a new spot.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /api/spots/users/:userId/new    <!-- *** 1st rev: add users/:userId as the owner of the Spot -->
-  * Headers:                                    <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/spots    <!-- *** take out all words after /spot - follow test spec -->
+  * Headers:                                  
     * Content-Type: application/json
   * Body:
 
@@ -462,8 +454,8 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/images/users/:userId  <!-- *** 2nd rev: add /users/:userId after the /images as Spot belong to the User -->      
-  * Headers:                                             <!-- *** the userId will be replaced by req.user after the review --> 
+  * Route path: /api/spots/:spotId/images  <!-- *** follow the test spec -->      
+  * Headers:                                            
     * Content-Type: application/json                     <!-- 1st rev: initially spots/image/:spotId -->
   * Body:
 
@@ -508,8 +500,8 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/spots/:spotId/users/:userId  <!-- *** 2nd rev: add /users/:userId after the /spotId as owner of the Spot -->
-  * Headers:                                      <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/spots/:spotId  <!-- *** route follows test spec -->
+  * Headers:                                     
     * Content-Type: application/json              <!-- 1st rev: initially w/o ':' due current user is based on login. -->
   * Body:
 
@@ -594,8 +586,8 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: api/spots/:spotId/users/:userId <!-- *** 1st rev: add /users/:userId after the :spotId as owner of the Spot --> 
-  * Body: none                                  <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: api/spots/:spotId             <!-- *** route follow tes spec --> 
+  * Body: none                                
 
 * Successful Response
   * Status Code: 200
@@ -630,11 +622,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/users/:userId/reviews  <!-- 2nd rev: since get all spots by current user and get review details have similar endpoint -->
-                                            <!-- *** the userId will be replaced by req.user after the review -->
-                                            <!--  the express can't differentiate the userIds, so the change is as follow -->
-                                            <!--  from /api/reviews/:userId to /api/users/:userId/reviews -->
-                                            <!-- 1st rev: initial with ':' as userId from login -->
+  * Route path: /api/reviews/current  <!-- *** routes follow test spec -->
   * Body: none
 
 * Successful Response
@@ -745,10 +733,10 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /api/spots/:spotId/reviews/users/:userId  <!-- *** 2nd rev: add /users/:userId after /reviews-->      
-  * Headers:                                              <!-- *** to check if a user already has a review -->
-    * Content-Type: application/json                      <!-- *** the userId will be replaced by req.user after the review -->
-  * Body:                                                 <!-- 1st rev: from /api/reviews/:spotId to /api/spots/:spotId/reviews -->
+  * Route path: /api/spots/:spotId/reviews      <!-- 1st rev: from /api/reviews/:spotId to /api/spots/:spotId/reviews -->
+  * Headers:                                              
+    * Content-Type: application/json                      
+  * Body:                                                 
 
     ```json
     {
@@ -823,9 +811,9 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * Route path: /api/reviews/:reviewId/users/:userId/images <!-- *** 2nd rev: add /users/:userId after :reviewId -->
-  * Headers:                                                <!-- *** the userId to ensure the owner of the Review-->
-    * Content-Type: application/json                        <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/reviews/:reviewId/images               <!-- *** route path follows test spec -->
+  * Headers:                                                
+    * Content-Type: application/json                        
   * Body:                                                   <!-- 1st rev: initially /reviews/image/:spotId -->
 
     ```json
@@ -880,8 +868,8 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: PUT/PATCH
-  * Route path: /api/reviews/:reviewId/users/:userId  <!-- *** 1st rev: add /users/:userId to the end to ensure as Review owner -->
-  * Headers:                                          <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/reviews/:reviewId      <!-- *** route path follows test spec -->
+  * Headers:                                     
     * Content-Type: application/json
   * Body:
 
@@ -946,8 +934,8 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /api/reviews/:reviewId/users/:userId  <!-- *** 1st rev: add /users/:userId at the end as the owner of the Review -->
-  * Body: none                                        <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /api/reviews/:reviewId      <!-- *** route path follows test spec -->
+  * Body: none                                        
 
 * Successful Response
   * Status Code: 200
@@ -1321,8 +1309,8 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /spots/:spotId/images/:spotImageId/users/:userId <!-- *** 2nd rev: add /users/:userId after /:spotImageId to ensure the owner -->
-  * Body: none                                                   <!-- *** the userId will be replaced by req.user after the review -->
+  * Route path: /spot-images/:imageId   <!-- *** route path follow test spec -->
+  * Body: none                          <!-- *** the codes is within route/api/index.js -->
                                                                  <!-- 1st rev: initially /spots/:spotImageId -->
 * Successful Response
   * Status Code: 200
@@ -1356,9 +1344,9 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /reviews/:reviewId/image/:reviewImageId/users/:userId <!-- *** 2nd rev: add /users/:userId after /:reviewImageId to ensure the owner -->
-  * Body: none                                                        <!-- *** the userId will be replaced by req.user after the review -->
-                                                                      <!-- 1st rev: initially /reviews/:reviewImageId -->
+  * Route path: /review-images/:imageId <!-- *** route path follows test spec -->
+  * Body: none                          <!-- *** the codes in route/api/index.js -->
+                                        <!-- 1st rev: initially /reviews/:reviewImageId -->
 * Successful Response
   * Status Code: 200
   * Headers:
@@ -1390,7 +1378,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: api/spots/query <!-- *** 2nd rev: add /query after /spots to differentiate with the get all Spots route -->
+  * Route path: api/spots <!-- *** follows test spec with expected describe: GET /api/spot?query=params -->
                                 <!-- 1st rev: for the query, make it simple to: api/spots -->
                                 <!--  initially: /api/spots/query/:page/:size/:minLat/:max:at/:minLng/:minPrice/:maxPrice -->
                                 <!--  this route path should be at the bottom of the coding, so it will supersede other routes -->

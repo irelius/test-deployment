@@ -39,11 +39,12 @@ router.post(
       });
   
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-        const err = new Error('Login failed');
-        err.status = 401;
-        err.title = 'Login failed';
-        err.errors = { credential: 'The provided credentials were invalid.' };
-        return next(err);
+        // const err = new Error('Login failed');
+        // err.status = 401;
+        // err.title = 'Login failed';
+        // err.errors = { message: 'Invalid credentials' };
+        // return next(err);
+        return res.status(401).json({ message: 'Invalid credentials' })
       }
   
       const safeUser = {
@@ -64,7 +65,6 @@ router.post(
   );
 
   const isProduction = process.env.NODE_ENV === "production";
-
 // Log out
 router.delete(
     '/',
@@ -79,7 +79,7 @@ router.delete(
   );
 
 
-// Restore session user
+// Get the current User
 router.get(
     '/',
     (req, res) => {

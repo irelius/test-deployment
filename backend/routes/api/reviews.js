@@ -7,41 +7,70 @@ const { format } = require('date-fns');
 const { Review, Spot, ReviewImage } = require('../../db/models');  //import models
 const { requireAuth } = require('../../utils/auth');   //auth middleware
 
-//DELETE IMAGE FROM REVIEW:
-router.delete(
-    '/:reviewId/images/:imageId/users/:userId',
+// GET all Reviews of current user by userId
+router.get(
+    '/current',
     requireAuth,
     async (req, res) => {
-        const { reviewId, imageId, userId } = req.params;
+      try{
+        const { id } = req.user;
 
-        //exist
-        const review = await Review.findByPk(reviewId);
-        if(!review) {
-            return res.status(404).json({ message: 'Review not found' });
-        }
-        //find image
-        const reviewImage = await ReviewImage.findByPk(imageId);
-        if (!reviewImage) {
-            return res.status(404).json({ message: 'Review image not found' });
-        }
-        //user/owner check
-        if (review.userId !== Number(userId)) {
-            return res.status(403).json({ message: 'You are not authorized to delete this image' });
-        }
-        //delete
-        await reviewImage.destroy();
-
-        return res.json({ message: 'Review image deleted successfully' });
-    });
-
-
+        // Find all reviews by the current user
+        const userReviews = await Review.findAll({
+          where: { userId: id },
+          include: [
+            {
+              model: User,
+              //as: 'Owner',
+              attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+              model: Spot,
+              attributes: [
+                'id',
+                'ownerId',
+                'address',
+                'city',
+                'state',
+                'country',
+                'lat',
+                'lng',
+                'name',
+                'price',
+                'previewImage'
+              ]
+            },
+            {
+              model: ReviewImage,
+              attributes: ['id', 'url']
+          }
+        ]
+      });
+  
+      if (!userReviews || userReviews.length === 0) {
+        return res.status(400).json({ message: 'No reviews found for this user' });
+      }
+      const formattedReviews = userReviews.map(review => ({
+        ...review.toJSON(), 
+        createdAt: review.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+        updatedAt: review.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
+      }));
+  
+      return res.json({ reviews: formattedReviews })
+    }catch (error) {
+      return res.status(500).json({ message: 'An error occurred', error });
+    }
+  }
+  )
+  
 
 //ADD IMAGE TO REVIEW
 router.post(
-    '/:reviewId/users/:userId/images', 
+    '/:reviewId/images', 
     requireAuth, 
     async (req, res) => {
-    const { reviewId, userId } = req.params;
+    const { id } = req.user;
+    const { reviewId } = req.params;
     const { url } = req.body;
 
     // review exist 
@@ -51,7 +80,7 @@ router.post(
     }
 
 //user is the owner of review
-if (review.userId !== Number(userId)) {
+if (review.userId !== Number(id)) {
     return res.status(403).json({ message: 'You are not authorized to add an image to this review'
     });
 }
@@ -70,20 +99,14 @@ const newImage = await ReviewImage.create({ reviewId, url });
      });
     });
 
-// //return w/ image data
-// const formattedReview = {
-//     ...review.toJSON(),
-//     createdAt: format(new Date(review.createdAt), 'yyyy-MM-dd HH:mm:ss'),
-//     updatedAt: format(new Date(review.updatedAt), 'yyyy-MM-dd HH:mm:ss'),
-//   };
-
 
 //EDIT REVIEW:
 router.put(
-    '/:reviewId/users/:userId',
-    // requireAuth,
+    '/:reviewId',
+    requireAuth,
     async (req, res) => {
-        const { reviewId, userId } = req.params;
+        const { id } = req.user;
+        const { reviewId } = req.params;
         const { review, stars } = req.body;
 //find review
         const reviewToUpdate = await Review.findByPk(reviewId);
@@ -91,7 +114,7 @@ router.put(
             return res.status(404).json({ message: 'Review not found' });
         }
 //check owner
-        if (reviewToUpdate.userId !== Number(userId)) {
+        if (reviewToUpdate.userId !== Number(id)) {
             return res.status(403).json({ message: 'You are not authorized to edit this review'});
         }
 //review content and stars
@@ -132,10 +155,11 @@ router.put(
 
     //DELETE REVIEW:
     router.delete(
-        '/:reviewId/users/:userId', 
-        // requireAuth, 
+        '/:reviewId', 
+        requireAuth, 
         async(req, res) => {
-        const { reviewId, userId } = req.params;
+        const { id } = req.user
+        const { reviewId } = req.params;
 
         //find review
         const reviewToDelete = await Review.findByPk(reviewId);
@@ -144,7 +168,7 @@ router.put(
         }
 
         //user is owner
-        if (reviewToDelete.userId !== Number(userId)) {
+        if (reviewToDelete.userId !== Number(id)) {
             return res.status(403).json({ message: 'You are not authorized to delete this review.' });
         }
         //delete review

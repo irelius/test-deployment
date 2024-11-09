@@ -43,126 +43,6 @@ const validateLogin = [
     handleValidationErrors
 ]
 
-// GET all Reviews of current user by userId
-router.get(
-  '/:userId/reviews',
-  requireAuth,
-  async (req, res) => {
-    try{
-      //const { userId } = req.params;
-      const userId = req.params.userId;
-      // Find all reviews by the current user
-      const userReviews = await Review.findAll({
-        where: { userId },
-        include: [
-          {
-            model: User,
-            //as: 'Owner',
-            attributes: ['id', 'firstName', 'lastName']
-          },
-          {
-            model: Spot,
-            attributes: [
-              'id',
-              'ownerId',
-              'address',
-              'city',
-              'state',
-              'country',
-              'lat',
-              'lng',
-              'name',
-              'price',
-              'previewImage'
-            ]
-          },
-          {
-            model: ReviewImage,
-            attributes: ['id', 'url']
-        }
-      ]
-    });
-
-    if (!userReviews || userReviews.length === 0) {
-      return res.status(400).json({ message: 'No reviews found for this user' });
-    }
-    const formattedReviews = userReviews.map(review => ({
-      ...review.toJSON(), 
-      createdAt: review.createdAt.toISOString().replace('T', ' ').slice(0, 19),
-      updatedAt: review.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
-    }));
-
-    return res.json({ reviews: formattedReviews })
-  }catch (error) {
-    return res.status(500).json({ message: 'An error occurred', error });
-  }
-}
-)
-
-// POST (create) a new User
-router.post(
-    '/signup',   
-    validateSignup,
-    async (req, res) => {
-      const { firstName, lastName, email, password, username } = req.body;
-      
-      if (!firstName || !lastName || !email || !username || !password) {
-        return res.status(400).json({
-          message: "Bad Request",
-          errors: {
-            firstName: "First name is required",
-            lastName: "Last name is required",
-            email: "Email is required",
-            username: "Username is required",
-            password: "Password is required"
-          }
-        })
-      }
-
-      const existingUser = await User.findOne({
-        where: { 
-          [Op.or]: [
-            { email },
-            { username } 
-          ]
-        }
-      });
-     
-      if (existingUser) {
-        return res.status(500).json({ 
-          message: "User already exists",
-          errors: {
-            email: "User with that email already exists",
-            username: "User with that username already exists"
-          } 
-        });
-      };
-      
-      const hashedPassword = bcrypt.hashSync(password);
-
-  //create user
-      const newUser = await User.create({
-        firstName,
-        lastName,
-        email,
-        username,
-        hashedPassword
-      });
-
-  //cookie and resp w/ data
-      // await setTokenCookie(res, newUser);
-      setTokenCookie(res, newUser);
-    
-      return res.status(201).json({
-        user: {
-          id: newUser.id,
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          email: newUser.email,
-          username: newUser.username
-        }
-      });
-    });
 
 // GET detail of a User based on userId
 router.get(
@@ -195,48 +75,69 @@ router.get(
   return res.status(200).json({ user: reorderedUser });
 })
 
-//! POST to Login => the login is in the session router
-// router.post(
-//   '/login',  
-//   async (req, res) => {
-//   const { credential, password } = req.body;   
+// POST (create) a new User
+router.post(
+  '/',   
+  validateSignup,
+  async (req, res) => {
+    const { firstName, lastName, email, password, username } = req.body;
+    
+    if (!firstName || !lastName || !email || !username || !password) {
+      return res.status(400).json({
+        message: "Bad Request",
+        errors: {
+          firstName: "First name is required",
+          lastName: "Last name is required",
+          email: "Email is required",
+          username: "Username is required",
+          password: "Password is required"
+        }
+      })
+    }
 
-//     if (!credential || !password) {
-//       return res.status(400).json({
-//         message: "Bad Request",
-//         errors: {
-//           credential: "Email or username is required",
-//           password: "Password is required"
-//         }
-//       });
-//     }
+    const existingUser = await User.findOne({
+      where: { 
+        [Op.or]: [
+          { email },
+          { username } 
+        ]
+      }
+    });
+   
+    if (existingUser) {
+      return res.status(500).json({ 
+        message: "User already exists",
+        errors: {
+          email: "User with that email already exists",
+          username: "User with that username already exists"
+        } 
+      });
+    };
+    
+    const hashedPassword = bcrypt.hashSync(password);
 
-//   const user = await User.findOne({ 
-//     where: 
-//     { [Op.or]: {
-//       username: credential,
-//       email: credential
-//     }
-//    },
-//     attributes: 
-//       ['id', 'firstName', 'lastName', 'email', 'username', 'hashedPassword']
-//   });  
-//   if (!user || !bcrypt.compareSync(password, user.hashedPassword)) {
-//     return res.status(401).json({ message: 'Invalid credentials'});
-//   }
+//create user
+    const newUser = await User.create({
+      firstName,
+      lastName,
+      email,
+      username,
+      hashedPassword
+    });
 
-//   //const safeUser = {
-//   setTokenCookie(res, user);
-//   return res.status(200).json({
-//     user:{
-//     id: user.id, 
-//     firstName: user.firstName,
-//     lastName: user.lastName,
-//     email: user.email, 
-//     username: user.username 
-//      }
-//   });
-//  }
-// );
+//cookie and resp w/ data
+    await setTokenCookie(res, newUser);
+  
+    return res.status(201).json({
+      user: {
+        id: newUser.id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        username: newUser.username
+      }
+    });
+  });
+
 
 module.exports = router;
