@@ -9,6 +9,9 @@ const { User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
+const { environment } = require('./config');
+const isProduction = environment === 'production';
+
 const router = express.Router();
 
 const validateLogin = [
@@ -67,7 +70,6 @@ router.delete(
     '/',
     (_req, res) => {
       res.clearCookie('token', {
-        path: '/',
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction && "Lax"
