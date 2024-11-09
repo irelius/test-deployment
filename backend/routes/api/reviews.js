@@ -137,7 +137,7 @@ router.put(
         reviewToUpdate.review = review;
         reviewToUpdate.stars = stars;
 
-        await reviewToUpdate.save();
+        const updatedReview = await reviewToUpdate.save();
 
 //update spots avgRating after edit
         const allReviews = await Review.findAll({ where: { spotId: reviewToUpdate.spotId } });
@@ -148,7 +148,16 @@ router.put(
         spot.avgRating = avgRating;
         await spot.save();
 
-        return res.json(reviewToUpdate);
+        const formattedCreatedAt = updatedReview.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedUpdatedAt = updatedReview.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+
+        const formattedUpdatedReview = {
+            ...spotImage.toJSON(),
+            createdAt: formattedCreatedAt,
+            updatedAt: formattedUpdatedAt
+        }
+
+        return res.json(formattedUpdatedReview);
     });
 
 
