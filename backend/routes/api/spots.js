@@ -14,7 +14,8 @@ const router = express.Router();
 router.use(express.json());
 
 // GET all Spots owned by the Current User - as :userId
-router.get('/users/:userId/spots', 
+// router.get('/users/:userId/spots', 
+router.get('/current',
     requireAuth, 
     async (req, res) => {
         const { userId } = req.params;

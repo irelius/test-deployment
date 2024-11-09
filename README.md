@@ -276,7 +276,8 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /api/spots/users/:userId/spots  <!-- *** 3rd rev: mistakenly add /spots after /api -->
+  * Route path: /api/spots/current
+  <!-- Route path: /api/spots/users/:userId/spots  <!-- *** 3rd rev: mistakenly add /spots after /api -->
                                                 <!-- *** should we take out or leave as it is now? -->
                                                 <!-- *** the userId will be replaced by req.user after the review -->
             <!-- 2nd rev: since get all spots by current user and get spot details have similar endpoint -->
