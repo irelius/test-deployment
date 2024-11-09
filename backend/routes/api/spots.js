@@ -2,7 +2,6 @@
 const express = require('express');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
-const { format, roundToNearestHours } = require('date-fns');
 const { Op } = require('sequelize');
 
 // example for date formatting

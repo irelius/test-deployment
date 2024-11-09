@@ -7,7 +7,7 @@ const { format } = require('date-fns');
 const { Review, Spot, ReviewImage } = require('../../db/models');  //import models
 const { requireAuth } = require('../../utils/auth');   //auth middleware
 
-// GET all Reviews of current user by userId
+// GET all Reviews of current user 
 router.get(
     '/current',
     requireAuth,
@@ -21,7 +21,7 @@ router.get(
           include: [
             {
               model: User,
-              //as: 'Owner',
+              as: 'Owner',
               attributes: ['id', 'firstName', 'lastName']
             },
             {

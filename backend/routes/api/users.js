@@ -3,14 +3,12 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
-const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { User, Review, Spot, ReviewImage } = require('../../db/models'); 
-
-
+const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { User } = require('../../db/models'); 
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { format } = require('date-fns');
+
 const router = express.Router();
 
 const validateSignup = [
@@ -126,7 +124,13 @@ router.post(
     });
 
 //cookie and resp w/ data
-    await setTokenCookie(res, newUser);
+
+    const safeUser = {
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username
+    };
+    await setTokenCookie(res, safeUser);
   
     return res.status(201).json({
       user: {

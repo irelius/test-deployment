@@ -39,42 +39,33 @@ router.post(
       });
   
       if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-        // const err = new Error('Login failed');
-        // err.status = 401;
-        // err.title = 'Login failed';
-        // err.errors = { message: 'Invalid credentials' };
-        // return next(err);
-        return res.status(401).json({ message: 'Invalid credentials' })
+        const err = new Error('Login failed');
+        err.status = 401;
+        err.title = 'Login failed';
+        err.errors = { message: 'Invalid credentials' };
+        return next(err);
       }
   
       const safeUser = {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
         email: user.email,
-        username: user.username,
+        username: user.username
       };
   
-      // await setTokenCookie(res, safeUser);
-      setTokenCookie(res, safeUser);
+      await setTokenCookie(res, safeUser);
   
-      return res.status(200).json({
+      return res.json({
         user: safeUser
       });
     }
-  );
+);
 
-  const isProduction = process.env.NODE_ENV === "production";
 // Log out
 router.delete(
     '/',
     (_req, res) => {
-      res.clearCookie('token', {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction && "Lax"
-      });
-      return res.status(200).json({ message: 'success' });
+      res.clearCookie('token');
+      return res.json({ message: 'success' });
     }
   );
 
@@ -92,10 +83,10 @@ router.get(
           email: user.email,
           username: user.username,
         };
-        return res.status(200).json({
+        return res.json({
           user: safeUser
         });
-      } else return res.status(200).json({ user: null });
+      } else return res.json({ user: null });
     }
   );
 
