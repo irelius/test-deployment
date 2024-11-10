@@ -610,7 +610,7 @@ router.get('/:spotId',
 // GET all Spots based on the query filter
 router.get('/',
     async (req, res) => {
-        const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+        let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
         let check = true;
 
         try {
@@ -739,7 +739,7 @@ router.get('/',
 
             return res.status(200).json({ Spots: formattedSpots });
         }
-        
+
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "An error occurred while getting all Spots" })
