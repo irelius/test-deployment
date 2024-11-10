@@ -55,7 +55,7 @@ router.get(
         updatedAt: review.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
       }));
   
-      return res.json({ reviews: formattedReviews })
+      return res.json({ Reviews: formattedReviews })
     }catch (error) {
       return res.status(500).json({ message: 'An error occurred', error });
     }
@@ -110,7 +110,7 @@ router.put(
 //find review
         const reviewToUpdate = await Review.findByPk(reviewId);
         if (!reviewToUpdate) {
-            return res.status(404).json({ message: 'Review not found' });
+            return res.status(404).json({ message: "Review couldn't be found" });
         }
 //check owner
         if (reviewToUpdate.userId !== Number(id)) {
@@ -172,7 +172,7 @@ router.put(
         //find review
         const reviewToDelete = await Review.findByPk(reviewId);
         if (!reviewToDelete) {
-            return res.status(404).json({ message: 'Review not found' });
+            return res.status(404).json({ message: "Review couldn't be found" });
         }
 
         //user is owner
@@ -197,7 +197,7 @@ router.put(
             await spot.save();
         }
 
-        return res.json({ message: 'Review deleted successfully' });
+        return res.json({ message: 'Successfully deleted' });
     })
 
 

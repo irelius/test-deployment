@@ -108,7 +108,7 @@ router.get('/:spotId/reviews',
         try {
             const spot = await Spot.findByPk(spotId);
             if (!spot || spot.length <= 0) {
-                return res.status(404).json({ message: "There is no Spot" })
+                return res.status(404).json({ message: "Spot couldn't be found" })
             }
 
             const reviewBySpotId = await Review.findAll({
@@ -181,7 +181,7 @@ router.post('/:spotId/reviews',
                     userId: Number(id),
                     spotId: spot.id,
                     review: review,
-                    stars: Number(stars)
+                    stars: parseFloat(stars)
                 }
 
                 const newReview = await Review.create(spotNewReview);
@@ -216,7 +216,7 @@ router.post('/:spotId/reviews',
                     })
                 }
             } else {
-                return res.status(500).json({ message: "Spot couldn't be found" })
+                return res.status(404).json({ message: "Spot couldn't be found" })
             }
         } catch (error) {
             console.error(error);
