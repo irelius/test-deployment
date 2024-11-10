@@ -62,9 +62,9 @@ router.post('/:spotId/images',
 
             if (spot) {
 
-                if (spot.ownerId !== Number(id)) {
-                    return res.status(403).json({ message: "The Spot doesn't belong to the User" })
-                }
+                // if (spot.ownerId !== Number(id)) {
+                //     return res.status(403).json({ message: "The Spot doesn't belong to the User" })
+                // }
 
                 const newSpotImage = {
                     spotId: Number(spotId),
