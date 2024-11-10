@@ -602,8 +602,8 @@ router.get('/',
             let pageNum = parseInt(page);
             let sizeNum = parseInt(size);
 
-            if (isNaN(pageNum)) pageNum = 1;
-            if (isNaN(sizeNum)) sizeNum = 20;
+            if (isNaN(pageNum) || pageNum === null) pageNum = 1;
+            if (isNaN(sizeNum) || sizeNum === null) sizeNum = 20;
             if (sizeNum > 20) sizeNum = 20;
 
             const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
