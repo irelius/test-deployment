@@ -127,19 +127,15 @@ router.post(
 
     const safeUser = {
       id: newUser.id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
       email: newUser.email,
       username: newUser.username
     };
     await setTokenCookie(res, safeUser);
   
     return res.status(201).json({
-      user: {
-        id: newUser.id,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        username: newUser.username
-      }
+      user: safeUser
     });
   });
 

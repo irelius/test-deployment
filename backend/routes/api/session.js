@@ -48,18 +48,20 @@ router.post(
   
       const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username
       };
   
       await setTokenCookie(res, safeUser);
 
-      safeUser = {
-        firstName: user.firstName,
-        lastName: user.lastName
-      };
+      // safeUser = {
+      //   firstName: user.firstName,
+      //   lastName: user.lastName
+      // };
   
-      return res.json({
+      return res.status(200).json({
         user: safeUser
       });
     }
@@ -88,10 +90,10 @@ router.get(
           email: user.email,
           username: user.username
         };
-        return res.json({
+        return res.status(200).json({
           user: safeUser
         });
-      } else return res.json({ user: null });
+      } else return res.status(200).json({ user: null });
     }
   );
 
