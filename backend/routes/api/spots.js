@@ -606,12 +606,14 @@ router.get('/',
             if (isNaN(sizeNum)) sizeNum = 20;
             if (sizeNum > 20) sizeNum = 20;
 
-            if (minLat && minLat < -90) check = false;
-            if (maxLat && maxLat > 90) check = false;
-            if (minLng && minLng < -180) check = false;
-            if (maxLng && maxLng > 180) check = false;
-            if (minPrice && minPrice < 0) check = false;
-            if (maxPrice && maxPrice < 0) check = false;
+            const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
+
+            if (minLat && !isValidDecimal(minLat) && minLat < -90) check = false;
+            if (maxLat && !isValidDecimal(maxLat) && maxLat > 90) check = false;
+            if (minLng && !isValidDecimal(minLng) && minLng < -180) check = false;
+            if (maxLng && !isValidDecimal(maxLng) && maxLng > 180) check = false;
+            if (minPrice && !isValidDecimal(minPrice) && minPrice < 0) check = false;
+            if (maxPrice && !isValidDecimal(maxPrice) && maxPrice < 0) check = false;
             if (minPrice && maxPrice && minPrice > maxPrice) check = false;
 
             if (check === false) {
