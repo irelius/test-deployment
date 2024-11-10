@@ -25,7 +25,7 @@ router.delete('/:imageId',
                 return res.status(404).json({ message: "The Spot couldn't be found" })
             }
   
-            if (spot.userId !== Number(id)) {
+            if (spot.ownerId !== Number(id)) {
                 return res.status(403).json({ message: "You are not authorized to delete this image" })
             }
   

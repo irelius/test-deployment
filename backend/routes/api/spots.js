@@ -583,10 +583,10 @@ router.get('/:spotId',
                 const formattedUpdatedAt = spotDetail.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
                 const numReviews = await Review.count({
-                    where: { spotId }
+                    where: { spotId: spotId }
                 })
                 const avgStarRating = await Review.aggregate('stars', 'avg', {
-                    where: { spotId }
+                    where: { spotId: spotId }
                 })
 
                 const formattedSpotDetail = {
