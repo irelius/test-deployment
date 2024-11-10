@@ -63,7 +63,7 @@ router.post('/:spotId/images',
             if (spot) {
 
                 if (spot.ownerId !== Number(id)) {
-                    return res.status(403).json({ message: "Forbidden" })
+                    return res.status(403).json({ message: "User not authorize to add an image to the Spot" })
                 }
 
                 const newSpotImage = {
@@ -417,7 +417,7 @@ router.put('/:spotId',
             if (spotDetail) {
 
                 if (spotDetail.ownerId !== Number(id)) {
-                    return res.status(404).json({ message: "The Spot is not belong to the User, can't update" })
+                    return res.status(403).json({ message: "The Spot is not belong to the User, can't update" })
                 }
 
                 spotDetail.address = address;
@@ -465,7 +465,7 @@ router.delete('/:spotId',
                 return res.status(403).json({ message: "This Spot is not belong to the User, can't delete" })
             }
 
-            if (spotToDelete) {
+            if (spotToDelete || spotToDelete.length > 0) {
                 await spotToDelete.destroy();
                 return res.status(200).json({ message: "Successfully deleted" });
             } else {
@@ -486,15 +486,17 @@ router.post('/',
         const { address, city, state, country, lat, lng, name, description, price } = req.body
         let check = true;
 
+        const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
+
         if (!address || address.length < 4) check = false;
         if (!city || city.length < 2) check = false;
         if (!state || state.length < 2) check = false;
         if (!country || country.length < 2) check = false;
-        if (!lat || lat < -90 || lat > 90) check = false;
-        if (!lng || lng < -180 || lng > 180) check = false;
+        if (!lat || !isValidDecimal(lat) || lat < -90 || lat > 90) check = false;
+        if (!lng || !isValidDecimal(lng) || lng < -180 || lng > 180) check = false;
         if (!name || name.length < 2) check = false;
         if (!description || description.length < 2) check = false;
-        if (!price || price < 0) check = false;
+        if (!price || !isValidDecimal(price) || price < 0) check = false;
         if (check === false) {
             return res.status(400).json({
                 message: "Bad Request",
@@ -524,11 +526,11 @@ router.post('/',
             spotDetail.city = city;
             spotDetail.state = state;
             spotDetail.country = country;
-            spotDetail.lat = Number(lat);
-            spotDetail.lng = Number(lng);
+            spotDetail.lat = parseFloat(lat);
+            spotDetail.lng = parseFloat(lng);
             spotDetail.name = name;
             spotDetail.description = description;
-            spotDetail.price = Number(price);
+            spotDetail.price = parseFloat(price);
 
             const createdSpot = await Spot.create(spotDetail);
 
@@ -644,6 +646,12 @@ router.get('/',
             }
 
             const where = {};
+            minLat = parseFloat(minLat);
+            maxLat = parseFloat(maxLat);
+            minLng = parseFloat(minLng);
+            maxLng = parseFloat(maxLng);
+            minPrice = parseFloat(minPrice);
+            maxPrice = parseFloat(maxPrice);
 
             if (minLat && maxLat) {
                 where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] }
