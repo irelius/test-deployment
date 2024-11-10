@@ -73,10 +73,10 @@ router.post('/:spotId/images',
                 };
                 const spotImage = await SpotImage.create(newSpotImage);
 
-                // checking if there is a previewImage, if there is none, put the url into it
+                // checking if there is no previewImage in Spot, put the url in it and save it.
                 if (!spot.previewImage) {
                     spot.previewImage = url;
-                    await Spot.save(spot);
+                    await spot.save();
                 }
 
                 const formattedCreatedAt = spotImage.createdAt.toISOString().replace('T', ' ').slice(0, 19);
