@@ -666,11 +666,11 @@ router.get('/',
             }
 
             if (minLng && maxLng) {
-                where.lat = { [Op.between]: [minLng, maxLng] }
+                where.lng = { [Op.between]: [minLng, maxLng] }
             } else if (minLng) {
-                where.lat = { [Op.between]: [minLng, 180] }
+                where.lng = { [Op.between]: [minLng, 180] }
             } else if (maxLng) {
-                where.lat = { [Op.between]: [-180, maxLng] }
+                where.lng = { [Op.between]: [-180, maxLng] }
             }
 
             if (minPrice && maxPrice) {
