@@ -646,12 +646,12 @@ router.get('/',
             }
 
             const where = {};
-            minLat = parseFloat(minLat);
-            maxLat = parseFloat(maxLat);
-            minLng = parseFloat(minLng);
-            maxLng = parseFloat(maxLng);
-            minPrice = parseFloat(minPrice);
-            maxPrice = parseFloat(maxPrice);
+            if (minLat) minLat = parseFloat(minLat);
+            if (maxLat) maxLat = parseFloat(maxLat);
+            if (minLng) minLng = parseFloat(minLng);
+            if (maxLng) maxLng = parseFloat(maxLng);
+            if (minPrice) minPrice = parseFloat(minPrice);
+            if (maxPrice) maxPrice = parseFloat(maxPrice);
 
             // if (minLat && maxLat) {
             //     where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] }
