@@ -73,7 +73,7 @@ router.get(
   return res.status(200).json({ user: reorderedUser });
 })
 
-// POST (create) a new User
+// POST (create) a new User = sign-up
 router.post(
   '/',   
   validateSignup,
@@ -82,7 +82,7 @@ router.post(
     
     if (!firstName || !lastName || !email || !username || !password) {
       return res.status(400).json({
-        message: "Bad Request",
+        message: "Bad Request.",
         errors: {
           firstName: "First name is required",
           lastName: "Last name is required",
