@@ -461,6 +461,10 @@ router.delete('/:spotId',
         try {
             const spotToDelete = await Spot.findByPk(spotId);
 
+            if (!spotToDelete || spotToDelete.length <= 0) {
+                return res.status(404).json({ message: "Spot couldn't be found" })
+            }
+
             if (spotToDelete.ownerId !== Number(id)) {
                 return res.status(403).json({ message: "This Spot is not belong to the User, can't delete" })
             }
@@ -603,6 +607,39 @@ router.get('/:spotId',
     }
 )
 
+// GET all Spots - no query
+router.get('/',
+    async (req, res) => {
+        
+        try {
+            const allSpots = await Spot.findAll();
+
+            if (!allSpots) {
+                return res.status(400).json({ message: "There is no Spot in the system" })
+            }
+
+            // Map through all the spots and format their createdAt and updatedAt
+            const formattedSpots = allSpots.map(spot => {
+                // Format the createdAt and updatedAt for each spot
+                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+
+                // Return a new object with the formatted dates
+                return {
+                    ...spot.toJSON(),
+                    createdAt: formattedCreatedAt,
+                    updatedAt: formattedUpdatedAt
+                };
+            });
+
+            return res.status(200).json({ Spots: formattedSpots });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "An error occurred while getting all Spots" })
+        }
+    }   
+)
+
 // GET all Spots based on the query filter
 router.get('/',
     async (req, res) => {
@@ -732,39 +769,5 @@ router.get('/',
         }
     }   
 )
-
-// GET all Spots
-router.get('/',
-    async (req, res) => {
-        
-        try {
-            const allSpots = await Spot.findAll();
-
-            if (!allSpots) {
-                return res.status(400).json({ message: "There is no Spot in the system" })
-            }
-
-            // Map through all the spots and format their createdAt and updatedAt
-            const formattedSpots = allSpots.map(spot => {
-                // Format the createdAt and updatedAt for each spot
-                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-
-                // Return a new object with the formatted dates
-                return {
-                    ...spot.toJSON(),
-                    createdAt: formattedCreatedAt,
-                    updatedAt: formattedUpdatedAt
-                };
-            });
-
-            return res.status(200).json({ Spots: formattedSpots });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "An error occurred while getting all Spots" })
-        }
-    }   
-)
-
 
 module.exports = router;
