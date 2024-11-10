@@ -649,19 +649,12 @@ router.get('/',
                 })
             }
 
-            minLat = minLat ? parseFloat(minLat) : null;
-            maxLat = maxLat ? parseFloat(maxLat) : null;
-            minLng = minLng ? parseFloat(minLng) : null;
-            maxLng = maxLng ? parseFloat(maxLng) : null;
-            minPrice = minPrice ? parseFloat(minPrice) : null;
-            maxPrice = maxPrice ? parseFloat(maxPrice) : null;
-
-            // if (minLat) minLat = parseFloat(minLat);
-            // if (maxLat) maxLat = parseFloat(maxLat);
-            // if (minLng) minLng = parseFloat(minLng);
-            // if (maxLng) maxLng = parseFloat(maxLng);
-            // if (minPrice) minPrice = parseFloat(minPrice);
-            // if (maxPrice) maxPrice = parseFloat(maxPrice);
+            if (minLat) minLat = minLat ? parseFloat(minLat) : null;
+            if (maxLat) maxLat = maxLat ? parseFloat(maxLat) : null;
+            if (minLng) minLng = minLng ? parseFloat(minLng) : null;
+            if (maxLng) maxLng = maxLng ? parseFloat(maxLng) : null;
+            if (minPrice) minPrice = minPrice ? parseFloat(minPrice) : null;
+            if (maxPrice) maxPrice = maxPrice ? parseFloat(maxPrice) : null;
 
             const where = {};
             if (minLat && maxLat) {
