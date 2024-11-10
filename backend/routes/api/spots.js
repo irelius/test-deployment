@@ -615,7 +615,7 @@ router.get('/',
 
         try {
 
-        if (Object.keys(req.query).length > 0) {
+        // if (Object.keys(req.query).length > 0) {
 
             const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
 
@@ -719,29 +719,29 @@ router.get('/',
 
             return res.status(200).json(displaySpots);
 
-        } else {
-            const allSpots = await Spot.findAll();
+        // } else {
+        //     const allSpots = await Spot.findAll();
 
-            if (!allSpots) {
-                return res.status(400).json({ message: "There is no Spot in the system" })
-            }
+        //     if (!allSpots) {
+        //         return res.status(400).json({ message: "There is no Spot in the system" })
+        //     }
 
-            // Map through all the spots and format their createdAt and updatedAt
-            const formattedSpots = allSpots.map(spot => {
-                // Format the createdAt and updatedAt for each spot
-                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        //     // Map through all the spots and format their createdAt and updatedAt
+        //     const formattedSpots = allSpots.map(spot => {
+        //         // Format the createdAt and updatedAt for each spot
+        //         const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        //         const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
-                // Return a new object with the formatted dates
-                return {
-                    ...spot.toJSON(),
-                    createdAt: formattedCreatedAt,
-                    updatedAt: formattedUpdatedAt
-                };
-            });
+        //         // Return a new object with the formatted dates
+        //         return {
+        //             ...spot.toJSON(),
+        //             createdAt: formattedCreatedAt,
+        //             updatedAt: formattedUpdatedAt
+        //         };
+        //     });
 
-            return res.status(200).json({ Spots: formattedSpots });
-        }
+        //     return res.status(200).json({ Spots: formattedSpots });
+        // }
 
         } catch (error) {
             console.error(error);
