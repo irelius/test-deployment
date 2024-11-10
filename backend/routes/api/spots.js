@@ -558,6 +558,9 @@ router.get('/:spotId',
         try {
             const spotDetail = await Spot.findOne({
                 where: { id: spotId },
+                attribute: {
+                    exclude: ['avgRating', 'previewImage']
+                }, 
                 include: [
                     { model: SpotImage,
                         attributes: ['id', 'url', 'preview']
@@ -573,10 +576,19 @@ router.get('/:spotId',
                 const formattedCreatedAt = spotDetail.createdAt.toISOString().replace('T', ' ').slice(0, 19);
                 const formattedUpdatedAt = spotDetail.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
+                const numReviews = await Review.count({
+                    where: { spotId }
+                })
+                const avgStarRating = await Review.aggregate('stars', 'avg', {
+                    where: { spotId }
+                })
+
                 const formattedSpotDetail = {
                     ...spotDetail.toJSON(),
                     createdAt: formattedCreatedAt,
-                    updatedAt: formattedUpdatedAt
+                    updatedAt: formattedUpdatedAt,
+                    numReviews,
+                    avgStarRating
                 }
                 return res.status(200).json(formattedSpotDetail);
             } else {
