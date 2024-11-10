@@ -615,8 +615,6 @@ router.get('/',
 
         try {
 
-        // if (Object.keys(req.query).length > 0) {
-
             const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
 
             if (page && !isValidDecimal(page)) check = false;
@@ -647,19 +645,22 @@ router.get('/',
                 })
             }
 
-            let pageNum = parseInt(page);
-            let sizeNum = parseInt(size);
-
-            if (isNaN(pageNum) || pageNum === null) pageNum = 1;
-            if (isNaN(sizeNum) || sizeNum === null) sizeNum = 20;
+            let pageNum = parseInt(page) || 1;
+            let sizeNum = parseInt(size) || 20
             if (sizeNum > 20) sizeNum = 20;
 
-            if (minLat) minLat = minLat ? parseFloat(minLat) : null;
-            if (maxLat) maxLat = maxLat ? parseFloat(maxLat) : null;
-            if (minLng) minLng = minLng ? parseFloat(minLng) : null;
-            if (maxLng) maxLng = maxLng ? parseFloat(maxLng) : null;
-            if (minPrice) minPrice = minPrice ? parseFloat(minPrice) : null;
-            if (maxPrice) maxPrice = maxPrice ? parseFloat(maxPrice) : null;
+            // if (minLat) minLat = minLat ? parseFloat(minLat) : null;
+            // if (maxLat) maxLat = maxLat ? parseFloat(maxLat) : null;
+            // if (minLng) minLng = minLng ? parseFloat(minLng) : null;
+            // if (maxLng) maxLng = maxLng ? parseFloat(maxLng) : null;
+            // if (minPrice) minPrice = minPrice ? parseFloat(minPrice) : null;
+            // if (maxPrice) maxPrice = maxPrice ? parseFloat(maxPrice) : null;
+            minLat = minLat ? parseFloat(minLat) : null;
+            maxLat = maxLat ? parseFloat(maxLat) : null;
+            minLng = minLng ? parseFloat(minLng) : null;
+            maxLng = maxLng ? parseFloat(maxLng) : null;
+            minPrice = minPrice ? parseFloat(minPrice) : null;
+            maxPrice = maxPrice ? parseFloat(maxPrice) : null;
 
             const where = {};
             if (minLat && maxLat) {
@@ -718,30 +719,6 @@ router.get('/',
             displaySpots.size = sizeNum;
 
             return res.status(200).json(displaySpots);
-
-        // } else {
-        //     const allSpots = await Spot.findAll();
-
-        //     if (!allSpots) {
-        //         return res.status(400).json({ message: "There is no Spot in the system" })
-        //     }
-
-        //     // Map through all the spots and format their createdAt and updatedAt
-        //     const formattedSpots = allSpots.map(spot => {
-        //         // Format the createdAt and updatedAt for each spot
-        //         const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-        //         const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-
-        //         // Return a new object with the formatted dates
-        //         return {
-        //             ...spot.toJSON(),
-        //             createdAt: formattedCreatedAt,
-        //             updatedAt: formattedUpdatedAt
-        //         };
-        //     });
-
-        //     return res.status(200).json({ Spots: formattedSpots });
-        // }
 
         } catch (error) {
             console.error(error);

@@ -39,8 +39,7 @@ module.exports = {
       },
       stars: {
         type: Sequelize.DECIMAL(2, 1),
-        allowNull: false,
-        defaultValue: 5.0
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
