@@ -63,7 +63,7 @@ router.post('/:spotId/images',
             if (spot) {
 
                 if (spot.ownerId !== Number(id)) {
-                    return res.status(400).json({ message: "The Spot doesn't belong to the User" })
+                    return res.status(403).json({ message: "The Spot doesn't belong to the User" })
                 }
 
                 const newSpotImage = {
@@ -376,8 +376,7 @@ router.post('/:spotId/bookings',
     }
 )
 
-// PUT (edit) a Spot + userId to ensure that the edit done by the owner
-// the userId can be taken out later once there is a login
+// PUT (edit) a Spot
 router.put('/:spotId',
     requireAuth,
     async (req, res) => {
@@ -452,8 +451,7 @@ router.put('/:spotId',
     }
 )
 
-// DELETE a Spot + userId to ensure the deletion by the owner
-// the userId can be taken out later once there is a login
+// DELETE a Spot
 router.delete('/:spotId',
     requireAuth,
     async (req, res) => {
@@ -464,7 +462,7 @@ router.delete('/:spotId',
             const spotToDelete = await Spot.findByPk(spotId);
 
             if (spotToDelete.ownerId !== Number(id)) {
-                return res.status(400).json({ message: "This Spot is not belong to the User, can't delete" })
+                return res.status(403).json({ message: "This Spot is not belong to the User, can't delete" })
             }
 
             if (spotToDelete) {
@@ -480,8 +478,7 @@ router.delete('/:spotId',
     }
 )
 
-// POST (create) a Spot + need userId for owner of the Spot
-// the userId can be taken out later once there is a login
+// POST (create) a Spot
 router.post('/',
     requireAuth,
     async (req, res) => {
@@ -684,10 +681,10 @@ router.get('/',
                 };
             });
 
-            return res.status(200).json(formattedSpots);
+            return res.status(200).json({ Spots: formattedSpots });
         } catch (error) {
             console.error(error);
-            return res.status(500).json({ message: "An error occurred while getting all Spots by query" })
+            return res.status(500).json({ message: "An error occurred while getting all Spots" })
         }
     }   
 )
