@@ -157,7 +157,7 @@ router.post('/:spotId/reviews',
         const { spotId } = req.params;
         const { review, stars } = req.body;
 
-        if (!review || review.length < 2 || !stars || Number(stars) < 1 || Number(stars) > 5) {
+        if (!review || review.length < 2 || !stars || isNaN(stars) || stars < 1 || stars > 5) {
             return res.status(400).json({ 
                 message: "Bad Request",
                 errors: {
