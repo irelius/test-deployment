@@ -619,8 +619,8 @@ router.get('/',
 
             const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
 
-            if (page && isValidDecimal(page)) check = false;
-            if (size && isValidDecimal(size)) check = false;
+            if (page && !isValidDecimal(page)) check = false;
+            if (size && !isValidDecimal(size)) check = false;
             if (minLat && (!isValidDecimal(minLat) || minLat < -90)) check = false;
             if (maxLat && (!isValidDecimal(maxLat) || maxLat > 90)) check = false;
             if (minLng && (!isValidDecimal(minLng) || minLng < -180)) check = false;
