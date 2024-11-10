@@ -614,6 +614,8 @@ router.get('/',
         let check = true;
 
         try {
+
+        if (Object.keys(req.query).length > 0) {
             let pageNum = parseInt(page);
             let sizeNum = parseInt(size);
 
@@ -701,11 +703,43 @@ router.get('/',
                 return {
                     ...spot.toJSON(),
                     createdAt: formattedCreatedAt,
+                    updatedAt: formattedUpdatedAt,
+                };
+            });
+
+            const displaySpots = {
+                Spots: formattedSpots
+            }
+
+            displaySpots.page = pageNum;
+            displaySpots.size = sizeNum;
+
+            return res.status(200).json(displaySpots);
+
+        } else {
+            const allSpots = await Spot.findAll();
+
+            if (!allSpots) {
+                return res.status(400).json({ message: "There is no Spot in the system" })
+            }
+
+            // Map through all the spots and format their createdAt and updatedAt
+            const formattedSpots = allSpots.map(spot => {
+                // Format the createdAt and updatedAt for each spot
+                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+
+                // Return a new object with the formatted dates
+                return {
+                    ...spot.toJSON(),
+                    createdAt: formattedCreatedAt,
                     updatedAt: formattedUpdatedAt
                 };
             });
 
             return res.status(200).json({ Spots: formattedSpots });
+        }
+        
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "An error occurred while getting all Spots" })

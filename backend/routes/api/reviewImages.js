@@ -19,7 +19,7 @@ router.delete(
         //find image
         const reviewImage = await ReviewImage.findByPk(imageId);
         if (!reviewImage) {
-            return res.status(404).json({ message: 'Review image not found' });
+            return res.status(404).json({ message: "Review Image couldn't be found" });
         }
         //exist
         const review = await Review.findByPk(reviewImage.reviewId);
@@ -33,7 +33,7 @@ router.delete(
         //delete
         await reviewImage.destroy();
   
-        return res.json({ message: 'Review image deleted successfully' });
+        return res.json({ message: 'Successfully deleted' });
 });
 
 module.exports = router;

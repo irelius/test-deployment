@@ -19,12 +19,15 @@ router.delete('/:imageId',
                 where: { ownerId: Number(id) }
             })
             if (!spot || spot.length <= 0) {
-                return res.status(400).json({ message: "The Spot doesn't belong to the User" })
+                return res.status(403).json({ message: "The Spot doesn't belong to the User" })
             }
   
             const imageBySpot = await SpotImage.findOne({
-                where: { id: imageId, spotId: spot.id }
+                where: { id: imageId }
             });
+            if (imageBySpot && imageBySpot.userId !== id) {
+                return res.status(403).json({ message: "The Spot doesn't belong to the User" })
+            }
   
             if (imageBySpot) {
                 await imageBySpot.destroy();
