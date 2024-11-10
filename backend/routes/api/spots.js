@@ -607,39 +607,6 @@ router.get('/:spotId',
     }
 )
 
-// GET all Spots - no query
-router.get('/',
-    async (req, res) => {
-        
-        try {
-            const allSpots = await Spot.findAll();
-
-            if (!allSpots) {
-                return res.status(400).json({ message: "There is no Spot in the system" })
-            }
-
-            // Map through all the spots and format their createdAt and updatedAt
-            const formattedSpots = allSpots.map(spot => {
-                // Format the createdAt and updatedAt for each spot
-                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-
-                // Return a new object with the formatted dates
-                return {
-                    ...spot.toJSON(),
-                    createdAt: formattedCreatedAt,
-                    updatedAt: formattedUpdatedAt
-                };
-            });
-
-            return res.status(200).json({ Spots: formattedSpots });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "An error occurred while getting all Spots" })
-        }
-    }   
-)
-
 // GET all Spots based on the query filter
 router.get('/',
     async (req, res) => {
@@ -682,7 +649,6 @@ router.get('/',
                 })
             }
 
-            const where = {};
             if (minLat) minLat = parseFloat(minLat);
             if (maxLat) maxLat = parseFloat(maxLat);
             if (minLng) minLng = parseFloat(minLng);
@@ -690,30 +656,7 @@ router.get('/',
             if (minPrice) minPrice = parseFloat(minPrice);
             if (maxPrice) maxPrice = parseFloat(maxPrice);
 
-            // if (minLat && maxLat) {
-            //     where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] }
-            // } else if (minLat) {
-            //     where.lat = { [Op.between]: [parseFloat(minLat), 90] }
-            // } else if (maxLat) {
-            //     where.lat = { [Op.between]: [-90, parseFloat(maxLat)] }
-            // }
-
-            // if (minLng && maxLng) {
-            //     where.lat = { [Op.between]: [parseFloat(minLng), parseFloat(maxLng)] }
-            // } else if (minLng) {
-            //     where.lat = { [Op.between]: [parseFloat(minLng), 180] }
-            // } else if (maxLng) {
-            //     where.lat = { [Op.between]: [-180, parseFloat(maxLng)] }
-            // }
-
-            // if (minPrice && maxPrice) {
-            //     where.price = { [Op.between]: [parseFloat(minPrice), parseFloat(maxPrice)] }
-            // } else if (minPrice) {
-            //     where.price = { [Op.gte]: [parseFloat(minPrice)] }
-            // } else if (maxPrice) {
-            //     where.price = { [Op.lte]: [parseFloat(maxPrice)] }
-            // }
-
+            const where = {};
             if (minLat && maxLat) {
                 where.lat = { [Op.between]: [minLat, maxLat] }
             } else if (minLat) {
@@ -744,6 +687,39 @@ router.get('/',
                 offset: (pageNum - 1) * sizeNum
             });
 
+            if (!allSpots || allSpots.length <= 0) {
+                return res.status(400).json({ message: "There is no Spot in the system" })
+            }
+
+            // Map through all the spots and format their createdAt and updatedAt
+            const formattedSpots = allSpots.map(spot => {
+                // Format the createdAt and updatedAt for each spot
+                const formattedCreatedAt = spot.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+                const formattedUpdatedAt = spot.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+
+                // Return a new object with the formatted dates
+                return {
+                    ...spot.toJSON(),
+                    createdAt: formattedCreatedAt,
+                    updatedAt: formattedUpdatedAt
+                };
+            });
+
+            return res.status(200).json({ Spots: formattedSpots });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "An error occurred while getting all Spots" })
+        }
+    }   
+)
+
+// GET all Spots
+router.get('/',
+    async (req, res) => {
+        
+        try {
+            const allSpots = await Spot.findAll();
+
             if (!allSpots) {
                 return res.status(400).json({ message: "There is no Spot in the system" })
             }
@@ -769,5 +745,6 @@ router.get('/',
         }
     }   
 )
+
 
 module.exports = router;
