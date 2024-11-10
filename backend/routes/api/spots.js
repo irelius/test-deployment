@@ -653,28 +653,52 @@ router.get('/',
             minPrice = parseFloat(minPrice);
             maxPrice = parseFloat(maxPrice);
 
+            // if (minLat && maxLat) {
+            //     where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] }
+            // } else if (minLat) {
+            //     where.lat = { [Op.between]: [parseFloat(minLat), 90] }
+            // } else if (maxLat) {
+            //     where.lat = { [Op.between]: [-90, parseFloat(maxLat)] }
+            // }
+
+            // if (minLng && maxLng) {
+            //     where.lat = { [Op.between]: [parseFloat(minLng), parseFloat(maxLng)] }
+            // } else if (minLng) {
+            //     where.lat = { [Op.between]: [parseFloat(minLng), 180] }
+            // } else if (maxLng) {
+            //     where.lat = { [Op.between]: [-180, parseFloat(maxLng)] }
+            // }
+
+            // if (minPrice && maxPrice) {
+            //     where.price = { [Op.between]: [parseFloat(minPrice), parseFloat(maxPrice)] }
+            // } else if (minPrice) {
+            //     where.price = { [Op.gte]: [parseFloat(minPrice)] }
+            // } else if (maxPrice) {
+            //     where.price = { [Op.lte]: [parseFloat(maxPrice)] }
+            // }
+
             if (minLat && maxLat) {
-                where.lat = { [Op.between]: [parseFloat(minLat), parseFloat(maxLat)] }
+                where.lat = { [Op.between]: [minLat, maxLat] }
             } else if (minLat) {
-                where.lat = { [Op.between]: [parseFloat(minLat), 90] }
+                where.lat = { [Op.between]: [minLat, 90] }
             } else if (maxLat) {
-                where.lat = { [Op.between]: [-90, parseFloat(maxLat)] }
+                where.lat = { [Op.between]: [-90, maxLat] }
             }
 
             if (minLng && maxLng) {
-                where.lat = { [Op.between]: [parseFloat(minLng), parseFloat(maxLng)] }
+                where.lat = { [Op.between]: [minLng, maxLng] }
             } else if (minLng) {
-                where.lat = { [Op.between]: [parseFloat(minLng), 180] }
+                where.lat = { [Op.between]: [minLng, 180] }
             } else if (maxLng) {
-                where.lat = { [Op.between]: [-180, parseFloat(maxLng)] }
+                where.lat = { [Op.between]: [-180, maxLng] }
             }
 
             if (minPrice && maxPrice) {
-                where.price = { [Op.between]: [parseFloat(minPrice), parseFloat(maxPrice)] }
+                where.price = { [Op.between]: [minPrice, maxPrice] }
             } else if (minPrice) {
-                where.price = { [Op.gte]: [parseFloat(minPrice)] }
+                where.price = { [Op.gte]: [minPrice] }
             } else if (maxPrice) {
-                where.price = { [Op.lte]: [parseFloat(maxPrice)] }
+                where.price = { [Op.lte]: [maxPrice] }
             }
 
             const allSpots = await Spot.findAll({
