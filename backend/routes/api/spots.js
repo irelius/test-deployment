@@ -616,15 +616,11 @@ router.get('/',
         try {
 
         if (Object.keys(req.query).length > 0) {
-            let pageNum = parseInt(page);
-            let sizeNum = parseInt(size);
-
-            if (isNaN(pageNum) || pageNum === null) pageNum = 1;
-            if (isNaN(sizeNum) || sizeNum === null) sizeNum = 20;
-            if (sizeNum > 20) sizeNum = 20;
 
             const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
 
+            if (page && isValidDecimal(page)) check = false;
+            if (size && isValidDecimal(size)) check = false;
             if (minLat && (!isValidDecimal(minLat) || minLat < -90)) check = false;
             if (maxLat && (!isValidDecimal(maxLat) || maxLat > 90)) check = false;
             if (minLng && (!isValidDecimal(minLng) || minLng < -180)) check = false;
@@ -650,6 +646,13 @@ router.get('/',
                     }
                 })
             }
+
+            let pageNum = parseInt(page);
+            let sizeNum = parseInt(size);
+
+            if (isNaN(pageNum) || pageNum === null) pageNum = 1;
+            if (isNaN(sizeNum) || sizeNum === null) sizeNum = 20;
+            if (sizeNum > 20) sizeNum = 20;
 
             if (minLat) minLat = minLat ? parseFloat(minLat) : null;
             if (maxLat) maxLat = maxLat ? parseFloat(maxLat) : null;

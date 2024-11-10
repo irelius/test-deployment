@@ -15,7 +15,6 @@ router.delete(
         const { id } = req.user;
         const { imageId } = req.params;
   
-  
         //find image
         const reviewImage = await ReviewImage.findByPk(imageId);
         if (!reviewImage) {
