@@ -193,6 +193,7 @@ router.post('/:spotId/reviews',
     
                     const formattedNewReview = {
                         ...newReview.toJSON(),
+                        stars: parseFloat(newReview.stars),
                         createdAt: formattedCreatedAt,
                         updatedAt: formattedUpdatedAt
                     }
@@ -202,7 +203,7 @@ router.post('/:spotId/reviews',
                     const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
                     const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
 
-                    spot.avgRating = avgRating;
+                    spot.avgRating = parseFloat(avgRating);
                     await spot.save();
 
                     return res.status(201).json(formattedNewReview)
@@ -543,6 +544,9 @@ router.post('/',
 
             const formattedSpotDetail = {
                 ...createdSpot.toJSON(),
+                lat: parseFloat(createdSpot.lat),
+                lng: parseFloat(createdSpot.lng),
+                price: parseFloat(createdSpot.price),
                 createdAt: formattedCreatedAt,
                 updatedAt: formattedUpdatedAt
             }

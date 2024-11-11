@@ -128,7 +128,7 @@ router.put(
         }
 //update review
         reviewToUpdate.review = review;
-        reviewToUpdate.stars = stars;
+        reviewToUpdate.stars = parseFloat(stars);
 
         const updatedReview = await reviewToUpdate.save();
 
@@ -138,7 +138,7 @@ router.put(
         const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
 
         const spot = await Spot.findByPk(reviewToUpdate.spotId);
-        spot.avgRating = avgRating;
+        spot.avgRating = parseFloat(avgRating);
         await spot.save();
 
         const formattedCreatedAt = updatedReview.createdAt.toISOString().replace('T', ' ').slice(0, 19);
@@ -146,6 +146,7 @@ router.put(
 
         const formattedUpdatedReview = {
             ...updatedReview.toJSON(),
+            stars: parseFloat(updatedReview.stars),
             createdAt: formattedCreatedAt,
             updatedAt: formattedUpdatedAt
         }
@@ -182,7 +183,7 @@ router.put(
             const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
 
             const spot = await Spot.findByPk(reviewToDelete.spotId);
-            spot.avgRating = avgRating;
+            spot.avgRating = parseFloat(avgRating);
             await spot.save();
         } else {
             const spot = await Spot.findByPk(reviewToDelete.spotId);
