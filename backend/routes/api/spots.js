@@ -33,6 +33,7 @@ router.get('/current',
                     // Return a new object with the formatted dates
                     return {
                         ...date.toJSON(),
+                        price: Number(date.price),
                         createdAt: formattedCreatedAt,
                         updatedAt: formattedUpdatedAt
                     };
@@ -710,6 +711,7 @@ router.get('/',
                 // Return a new object with the formatted dates
                 return {
                     ...spot.toJSON(),
+                    price: Number(spot.price),
                     createdAt: formattedCreatedAt,
                     updatedAt: formattedUpdatedAt,
                 };
