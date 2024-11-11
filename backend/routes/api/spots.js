@@ -321,7 +321,7 @@ router.post('/:spotId/bookings',
             return res.status(404).json({ message: "Spot couldn't be found" })
         }
         if (spot.ownerId === Number(id)) {
-            return res.status(404).json({ message: "An Owner can't book his / her own Spot" })
+            return res.status(403).json({ message: "An Owner can't book his / her own Spot" })
         }
 
         try {
