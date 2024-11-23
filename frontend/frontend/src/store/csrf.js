@@ -1,10 +1,38 @@
+// frontend/src/store/csrf.js
 import Cookies from 'js-cookie';
 
-// call this to get the "XSRF-TOKEN" cookie, should only be used in development
+export async function csrfFetch(url, options = {}) {
+    options.method = options.method || 'GET';
+    options.headers = options.headers || {};
+
+    if (options.method.toUpperCase() !== 'GET') {
+        options.headers['Content-Type'] =
+            options.headers['Content-Type'] || 'application/json';
+        options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN');
+    }
+
+    const res = await window.fetch(url, options);
+
+    if (res.status >= 400) throw res;
+
+    return res;
+}
+
 export function restoreCSRF() {
     return csrfFetch('/api/csrf/restore');
-  }
+}
 
+
+
+
+
+
+
+
+
+
+
+/*
 export async function csrfFetch(url, options = {}) {
     // set options.method to 'GET' if there is no method
     options.method = options.method || 'GET';
@@ -30,3 +58,9 @@ export async function csrfFetch(url, options = {}) {
     // next promise chain
     return res;
   }
+
+  // call this to get the "XSRF-TOKEN" cookie, should only be used in development
+export function restoreCSRF() {
+  return csrfFetch('/api/csrf/restore');
+}
+*/
