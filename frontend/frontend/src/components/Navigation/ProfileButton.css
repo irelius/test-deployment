@@ -1,0 +1,25 @@
+/* frontend/src/components/Navigation/Navigation.css */
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .navigation a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  .auth-links {
+    display: flex;
+    list-style: none;
+  }
+  
+  .auth-links li {
+    margin: 0 10px;
+  }
