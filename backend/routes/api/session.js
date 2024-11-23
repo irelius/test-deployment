@@ -2,7 +2,6 @@
 const express = require('express')
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
-
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
@@ -27,8 +26,9 @@ router.post(
     '/',
     validateLogin,
     async (req, res, next) => {
+      
       const { credential, password } = req.body;
-  
+
       const user = await User.unscoped().findOne({
         where: {
           [Op.or]: {

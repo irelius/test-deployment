@@ -1,0 +1,18 @@
+
+{
+    "development": {
+      "storage": "backend/db/dev.db",
+      "dialect": "sqlite"
+    },
+    "test": {
+      "storage": "backend/db/test.db",
+      "dialect": "sqlite"
+    },
+    "production": {
+      "username": "your-username",
+      "password": "your-password",
+      "database": "your-database",
+      "host": "your-host",
+      "dialect": "postgres"
+    }
+  }

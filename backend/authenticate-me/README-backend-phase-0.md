@@ -224,7 +224,7 @@ To do this, create a `.sequelizerc` file in the `backend` folder with the
 following contents:
 
 ```js
-// backend/.sequelizerc
+// backend/.sequelizerc 
 const path = require('path');
 
 module.exports = {
