@@ -1,35 +1,81 @@
 // frontend/src/components/Navigation/ProfileButton.jsx
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import LoginFormModal from '../LoginFormModal/LoginFormModal';
+import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const ulRef = useRef();
 
-  const handleLogout = () => {
+  const toggleMenu = (e) => {
+    e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
+    setShowMenu(!showMenu);
+  };
+
+  useEffect(() => {
+    if (!showMenu) return;
+
+    const closeMenu = (e) => {
+      if (!ulRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('click', closeMenu);
+
+    return () => document.removeEventListener("click", closeMenu);
+  }, [showMenu]);
+
+  const logout = (e) => {
+    e.preventDefault();
     dispatch(sessionActions.logout());
+    setShowMenu(false); // Close the dropdown menu on logout
   };
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
-    <div className="profile-dropdown">
-      <button onClick={toggleDropdown} className="profile-button">
-        <FaUserCircle className="profile-icon" />
-        {user.username}
+    <>
+      <button onClick={toggleMenu}>
+        <FaUserCircle />
       </button>
-      {showDropdown && (
-        <div className="dropdown-menu">
-          <button onClick={handleLogout}>Log Out</button>
-        </div>
-      )}
-    </div>
+      <ul className={ulClassName} ref={ulRef}>
+        {user ? (
+          <>
+            <li>{user.username}</li>
+            <li>{user.firstName} {user.lastName}</li>
+            <li>{user.email}</li>
+            <li>
+              <button onClick={logout}>Log Out</button>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <OpenModalButton
+                buttonText="Log In"
+                modalComponent={<LoginFormModal />}
+                onButtonClick={() => setShowMenu(false)} // Close the dropdown menu on login
+              />
+            </li>
+            <li>
+              <OpenModalButton
+                buttonText="Sign Up"
+                modalComponent={<SignupFormModal />}
+                onButtonClick={() => setShowMenu(false)} // Close the dropdown menu on signup
+              />
+            </li>
+          </>
+        )}
+      </ul>
+    </>
   );
 }
 
