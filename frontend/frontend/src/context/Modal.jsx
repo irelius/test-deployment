@@ -42,12 +42,12 @@ export function Modal() {
   if (!modalRef || !modalRef.current || !modalContent) return null;
 
   return ReactDOM.createPortal(
-    <div className="modal-background" onClick={closeModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={closeModal}>X</button>
-        {modalContent}
-      </div>
+    <div id="modal">
+      <div id="modal-background" onClick={closeModal} />
+      <div id="modal-content">{modalContent}</div>
     </div>,
     modalRef.current
   );
 }
+
+export const useModal = () => useContext(ModalContext);
