@@ -38,7 +38,7 @@ const spotSeeds = [
     description: 'A quaint cottage with beautiful views of the city.',
     price: 200,
     avgRating: 4.7,
-    previewImage: '../public/spotImages/sanfran.jpeg',
+    previewImage: '/images/sanfran.jpeg', // Update the image path
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -75,7 +75,7 @@ const spotSeeds = [
     updatedAt: new Date()
   },
   {
-    ownerId: 1,
+    ownerId: 3,
     address: '456 Mountain Rd',
     city: 'Aspen',
     state: 'CO',
@@ -107,7 +107,7 @@ const spotSeeds = [
     updatedAt: new Date()
   },
   {
-    ownerId: 1,
+    ownerId: 2,
     address: '123 Desert Rd',
     city: 'Phoenix',
     state: 'AZ',
@@ -134,12 +134,12 @@ const spotSeeds = [
     description: 'A beautiful mountain retreat in Big Sky, Montana.',
     price: 450,
     avgRating: 4.9,
-    previewImage: '../public/spotImages/bigsky.jpeg',
+    previewImage: '/images/bigsky.jpeg', // Update the image path
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    ownerId: 2,
+    ownerId: 1,
     address: '789 Forest Rd',
     city: 'Portland',
     state: 'OR',
