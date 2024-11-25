@@ -13,7 +13,7 @@ const Spots = () => {
       try {
         const response = await fetch('/api/spots');
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Oh no! Something went wrong');
         }
         const data = await response.json();
         if (Array.isArray(data.Spots)) {
