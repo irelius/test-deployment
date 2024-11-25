@@ -1,16 +1,31 @@
 /* frontend/src/components/Spots/Spots.css */
-.spots-container {
-  display: flex;
-  flex-wrap: wrap;
+
+.spots-container.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
+  padding: 16px;
+}
+
+@media (min-width: 1200px) {
+  .spots-container.grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .spot-tile {
-  border: 1px solid #ccc;
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  cursor: pointer;
-  width: 200px;
+  transition: transform 0.2s;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  position: relative;
+  display: inline-block;
+}
+
+.spot-tile:hover {
+  transform: scale(1.05);
 }
 
 .spot-thumbnail {
@@ -23,6 +38,23 @@
   padding: 8px;
 }
 
-.spot-info div {
-  margin-bottom: 4px;
+/* Optional: Custom tooltip styling */
+.spot-tile:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.spot-tile:hover::after {
+  opacity: 1;
 }

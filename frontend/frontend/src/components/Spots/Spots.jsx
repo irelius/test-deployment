@@ -1,8 +1,6 @@
-// frontend/src/components/Spots/Spots.jsx
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Spots.css'; // Ensure this CSS file exists
+import './Spots.css';
 
 const Spots = () => {
   const [spots, setSpots] = useState([]);
@@ -34,18 +32,18 @@ const Spots = () => {
   };
 
   return (
-    <div className="spots-container">
-      {spots.map(spot => (
+    <div className="spots-container grid">
+      {Array.isArray(spots) && spots.map(spot => (
         <div
           key={spot.id}
           className="spot-tile"
           onClick={() => handleTileClick(spot.id)}
           title={spot.name}
         >
-          <img src={spot.thumbnail} alt={spot.name} className="spot-thumbnail" />
+          <img src={spot.previewImage} alt={spot.name} className="spot-thumbnail" />
           <div className="spot-info">
             <div>{spot.city}, {spot.state}</div>
-            <div>{spot.rating}</div>
+            <div>{spot.avgRating}</div>
             <div>${spot.price} / night</div>
           </div>
         </div>
