@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './Spots.css';
 
 const Spots = () => {
@@ -43,8 +45,11 @@ const Spots = () => {
           <div className="spot-tile">
             <img src={spot.previewImage} alt={spot.name} className="spot-thumbnail" />
             <div className="spot-info">
+              <div>{spot.name}</div>
+              <div>
+                <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? spot.avgRating.toFixed(2) : 'New'}
+              </div>
               <div>{spot.city}, {spot.state}</div>
-              <div>{spot.avgRating}</div>
               <div>${spot.price} / night</div>
             </div>
           </div>
