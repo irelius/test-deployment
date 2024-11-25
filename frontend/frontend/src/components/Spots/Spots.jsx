@@ -36,15 +36,17 @@ const Spots = () => {
       {Array.isArray(spots) && spots.map(spot => (
         <div
           key={spot.id}
-          className="spot-tile"
-          onClick={() => handleTileClick(spot.id)}
+          className="spot-link"
           title={spot.name}
+          onClick={() => handleTileClick(spot.id)}
         >
-          <img src={spot.previewImage} alt={spot.name} className="spot-thumbnail" />
-          <div className="spot-info">
-            <div>{spot.city}, {spot.state}</div>
-            <div>{spot.avgRating}</div>
-            <div>${spot.price} / night</div>
+          <div className="spot-tile">
+            <img src={spot.previewImage} alt={spot.name} className="spot-thumbnail" />
+            <div className="spot-info">
+              <div>{spot.city}, {spot.state}</div>
+              <div>{spot.avgRating}</div>
+              <div>${spot.price} / night</div>
+            </div>
           </div>
         </div>
       ))}

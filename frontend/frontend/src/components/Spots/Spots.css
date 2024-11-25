@@ -38,7 +38,7 @@
   padding: 8px;
 }
 
-/* Optional: Custom tooltip styling */
+
 .spot-tile:hover::after {
   content: attr(title);
   position: absolute;
@@ -46,7 +46,7 @@
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
-  color: #fff;
+  color: #dddeca;
   padding: 5px;
   border-radius: 4px;
   white-space: nowrap;
@@ -57,4 +57,13 @@
 
 .spot-tile:hover::after {
   opacity: 1;
+}
+
+.spot-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.spot-link .spot-tile {
+  display: block;
 }

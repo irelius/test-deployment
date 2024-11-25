@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 import Spots from './components/Spots/Spots'; 
+import SpotDetails from './components/Spots/SpotDetails';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupFormPage />
+      },
+      {
+        path: '/spots/:id',
+        element: <SpotDetails />
       }
     ]
   }

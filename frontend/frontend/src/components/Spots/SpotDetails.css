@@ -1,0 +1,43 @@
+.spot-details {
+    padding: 16px;
+  }
+  
+  .spot-images {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .large-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .small-images {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .small-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .callout-box {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .callout-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .callout-box button:hover {
+    background-color: #0056b3;
+  }
