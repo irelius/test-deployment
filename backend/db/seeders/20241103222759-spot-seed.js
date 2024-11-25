@@ -38,7 +38,7 @@ const spotSeeds = [
     description: 'A quaint cottage with beautiful views of the city.',
     price: 200,
     avgRating: 4.7,
-    previewImage: '/images/sanfran.jpeg', // Update the image path
+    previewImage: '../spotImages/sanfran.jpeg', // Update the image path
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -134,7 +134,7 @@ const spotSeeds = [
     description: 'A beautiful mountain retreat in Big Sky, Montana.',
     price: 450,
     avgRating: 4.9,
-    previewImage: '/images/bigsky.jpeg', // Update the image path
+    previewImage: '../spotImages/bigsky.jpeg', // Update the image path
     createdAt: new Date(),
     updatedAt: new Date()
   },
