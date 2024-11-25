@@ -22,7 +22,7 @@ const spotSeeds = [
     description: 'A lovely apartment located in the heart of Los Angeles.',
     price: 150,
     avgRating: 4.5,
-    previewImage: 'https://example.com/image1.jpg',
+    previewImage: '../spotImages/LA/LAapartment.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -54,7 +54,7 @@ const spotSeeds = [
     description: 'A sleek condo in the downtown area of Seattle.',
     price: 250,
     avgRating: 4.8,
-    previewImage: 'https://example.com/image3.jpg',
+    previewImage: '../spotImages/Seattle/seattle.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -70,7 +70,7 @@ const spotSeeds = [
     description: 'A beautiful house right on the beach in Santa Monica.',
     price: 500,
     avgRating: 4.9,
-    previewImage: 'https://example.com/image4.jpg',
+    previewImage: '../spotImages/SantaMonica/santaMonica.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -86,7 +86,7 @@ const spotSeeds = [
     description: 'A cozy cabin in the mountains of Aspen.',
     price: 300,
     avgRating: 4.7,
-    previewImage: 'https://example.com/image5.jpg',
+    previewImage: '../spotImages/Aspen/aspen.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -102,7 +102,7 @@ const spotSeeds = [
     description: 'A luxurious apartment in the heart of New York City.',
     price: 600,
     avgRating: 4.9,
-    previewImage: 'https://example.com/image6.jpg',
+    previewImage: '../spotImages/NewYork/newYork.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -118,7 +118,7 @@ const spotSeeds = [
     description: 'A stunning villa in the desert of Phoenix.',
     price: 350,
     avgRating: 4.6,
-    previewImage: 'https://example.com/image7.jpg',
+    previewImage: '../spotImages/phoenix/phoenix.jpg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -150,7 +150,7 @@ const spotSeeds = [
     description: 'A peaceful retreat in the forests of Portland.',
     price: 275,
     avgRating: 4.7,
-    previewImage: 'https://example.com/image9.jpg',
+    previewImage: '../spotImages/Portland/portland.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   }
