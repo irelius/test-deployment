@@ -118,7 +118,7 @@ const spotSeeds = [
     description: 'A stunning villa in the desert of Phoenix.',
     price: 350,
     avgRating: 4.6,
-    previewImage: '../spotImages/phoenix/phoenix.jpg',
+    previewImage: '../spotImages/Phoenix/phoenix.jpeg',
     createdAt: new Date(),
     updatedAt: new Date()
   },
