@@ -6,7 +6,7 @@ const { Spot } = require('../models');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;  // define your schema in options object
+  options.schema = process.env.SCHEMA; 
 }
 
 const spotSeeds = [
@@ -38,7 +38,7 @@ const spotSeeds = [
     description: 'A quaint cottage with beautiful views of the city.',
     price: 200,
     avgRating: 4.7,
-    previewImage: '../spotImages/sanfran.jpeg', // Update the image path
+    previewImage: '../spotImages/SanFrancisco/sanfran.jpeg', 
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -134,7 +134,7 @@ const spotSeeds = [
     description: 'A beautiful mountain retreat in Big Sky, Montana.',
     price: 450,
     avgRating: 4.9,
-    previewImage: '../spotImages/bigsky.jpeg', // Update the image path
+    previewImage: '../spotImages/BigSky/bigsky.jpeg', 
     createdAt: new Date(),
     updatedAt: new Date()
   },
