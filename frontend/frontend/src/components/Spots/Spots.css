@@ -1,0 +1,28 @@
+/* frontend/src/components/Spots/Spots.css */
+.spots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.spot-tile {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  width: 200px;
+}
+
+.spot-thumbnail {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.spot-info {
+  padding: 8px;
+}
+
+.spot-info div {
+  margin-bottom: 4px;
+}
