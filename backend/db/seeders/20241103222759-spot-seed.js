@@ -1,3 +1,5 @@
+// seeders/20241103222759-spot-seed.js
+
 'use strict';
 
 const { Spot } = require('../models');
@@ -9,7 +11,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const spotSeeds = [
   {
-    // id: 1,
     ownerId: 1,
     address: '123 Main St',
     city: 'Los Angeles',
@@ -21,10 +22,11 @@ const spotSeeds = [
     description: 'A lovely apartment located in the heart of Los Angeles.',
     price: 150,
     avgRating: 4.5,
-    previewImage: 'https://example.com/image1.jpg'
+    previewImage: 'https://example.com/image1.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
-    // id: 2,
     ownerId: 2,
     address: '456 Oak Ave',
     city: 'San Francisco',
@@ -36,10 +38,11 @@ const spotSeeds = [
     description: 'A quaint cottage with beautiful views of the city.',
     price: 200,
     avgRating: 4.7,
-    previewImage: 'https://example.com/image2.jpg'
+    previewImage: 'https://example.com/image2.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
-    // id: 3,
     ownerId: 1,
     address: '789 Pine Rd',
     city: 'Seattle',
@@ -51,36 +54,118 @@ const spotSeeds = [
     description: 'A sleek condo in the downtown area of Seattle.',
     price: 250,
     avgRating: 4.8,
-    previewImage: 'https://example.com/image3.jpg'
+    previewImage: 'https://example.com/image3.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 2,
+    address: '123 Ocean Ave',
+    city: 'Santa Monica',
+    state: 'CA',
+    country: 'USA',
+    lat: 34.0195,
+    lng: -118.4912,
+    name: 'Beachfront House in Santa Monica',
+    description: 'A beautiful house right on the beach in Santa Monica.',
+    price: 500,
+    avgRating: 4.9,
+    previewImage: 'https://example.com/image4.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 1,
+    address: '456 Mountain Rd',
+    city: 'Aspen',
+    state: 'CO',
+    country: 'USA',
+    lat: 39.1911,
+    lng: -106.8175,
+    name: 'Mountain Cabin in Aspen',
+    description: 'A cozy cabin in the mountains of Aspen.',
+    price: 300,
+    avgRating: 4.7,
+    previewImage: 'https://example.com/image5.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 2,
+    address: '789 City St',
+    city: 'New York',
+    state: 'NY',
+    country: 'USA',
+    lat: 40.7128,
+    lng: -74.0060,
+    name: 'Luxury Apartment in New York',
+    description: 'A luxurious apartment in the heart of New York City.',
+    price: 600,
+    avgRating: 4.9,
+    previewImage: 'https://example.com/image6.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 1,
+    address: '123 Desert Rd',
+    city: 'Phoenix',
+    state: 'AZ',
+    country: 'USA',
+    lat: 33.4484,
+    lng: -112.0740,
+    name: 'Desert Villa in Phoenix',
+    description: 'A stunning villa in the desert of Phoenix.',
+    price: 350,
+    avgRating: 4.6,
+    previewImage: 'https://example.com/image7.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 1,
+    address: '456 Lake Rd',
+    city: 'Lake Tahoe',
+    state: 'CA',
+    country: 'USA',
+    lat: 39.0968,
+    lng: -120.0324,
+    name: 'Lake House in Lake Tahoe',
+    description: 'A charming house by the lake in Lake Tahoe.',
+    price: 400,
+    avgRating: 4.8,
+    previewImage: 'https://example.com/image8.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    ownerId: 2,
+    address: '789 Forest Rd',
+    city: 'Portland',
+    state: 'OR',
+    country: 'USA',
+    lat: 45.5152,
+    lng: -122.6784,
+    name: 'Forest Retreat in Portland',
+    description: 'A peaceful retreat in the forests of Portland.',
+    price: 275,
+    avgRating: 4.7,
+    previewImage: 'https://example.com/image9.jpg',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
-    await Spot.bulkCreate(spotSeeds,
-      { schema: options.schema,
-        validate: true
-      });
+    await Spot.bulkCreate(spotSeeds, {
+      schema: options.schema,
+      validate: true
+    });
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    // options.tableName = 'Spots';
-    return queryInterface.bulkDelete('Spots', null, { schema: options.schema })
+    return queryInterface.bulkDelete('Spots', null, { schema: options.schema });
   }
 };
