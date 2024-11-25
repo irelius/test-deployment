@@ -1,5 +1,9 @@
 /* frontend/src/components/Navigation/ProfileButton.css */
 
+.profile-button-container {
+  position: relative;
+}
+
 .profile-button {
   background: none;
   border: none;
@@ -8,10 +12,12 @@
   font-size: 1.5rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 100%;
 }
 
 .profile-button:hover {
-  color: #ddd;
+  color: #dddddd79;
 }
 
 .profile-dropdown {
