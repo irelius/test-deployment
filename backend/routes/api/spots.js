@@ -20,7 +20,13 @@ router.get('/current',
 
         try {
             const allSpotsByUser = await Spot.findAll({
-                where: { ownerId: id }
+                where: { ownerId: id },
+                include: [
+                    {
+                        model: SpotImage,
+                        attributes: ['url']
+                    }
+                ]
             })
 
             if (allSpotsByUser.length > 0) {

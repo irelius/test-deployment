@@ -89,9 +89,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/SantaMonica/santaMonica1.jpeg', preview: false },
+      { url: '../spotImages/SantaMonica/santaMonica2.jpeg', preview: false },
+      { url: '../spotImages/SantaMonica/santaMonica3.jpeg', preview: false }
     ]
   },
   {
@@ -110,8 +110,8 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/Aspen/Aspen1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/Aspen2.jpeg', preview: false },
       { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
     ]
   },
