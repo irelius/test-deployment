@@ -6,6 +6,11 @@
   padding: 45px;
   column-gap: 0px;
   row-gap: 45px;
+  /* background-image: url('../../../public/opacity50bird.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 40%;
+  background-position: center; */
 }
 
 @media (min-width: 1200px) {
@@ -20,7 +25,7 @@
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   position: relative;
   display: inline-block;
   width: 300px;

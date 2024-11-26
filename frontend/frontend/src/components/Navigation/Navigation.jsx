@@ -1,6 +1,6 @@
 // frontend/src/components/Navigation/Navigation.jsx
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,10 +8,13 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
 import './Navigation.css';
 
+const logo = '/bird.png';
+
 function Navigation({ isLoaded }) {
-  const sessionUser = useSelector(state => state.session.user);
+  const sessionUser = useSelector(state => state.session?.user);
   const searchContainerRef = useRef(null);
   const [dropdownPosition, setDropdownPosition] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,11 +39,18 @@ function Navigation({ isLoaded }) {
     };
   }, []);
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <nav className="navigation">
       <div className="navigation-left">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/bookings">Bookings</NavLink>
+        <NavLink to="/" onClick={handleLogoClick}>
+          <img src={logo} alt="Logo" className="nav-logo" />
+        </NavLink>
+        {sessionUser && <NavLink to="/bookings">Bookings</NavLink>}
+        {sessionUser && <NavLink to="/my-listings">My Listings</NavLink>}
       </div>
       <div className="navigation-right">
         <div className="search-container" ref={searchContainerRef}>

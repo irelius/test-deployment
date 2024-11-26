@@ -9,6 +9,10 @@ import Spots from './components/Spots/Spots';
 import SpotDetails from './components/Spots/SpotDetails';
 import * as sessionActions from './store/session';
 
+
+
+
+
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
