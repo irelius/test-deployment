@@ -24,7 +24,12 @@ const spotSeeds = [
     avgRating: 4.5,
     previewImage: '../spotImages/LA/LAapartment.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/LA/LA1.jpeg', preview: false },
+      { url: '../spotImages/LA/LA2.jpeg', preview: false },
+      { url: '../spotImages/LA/LA3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 2,
@@ -40,7 +45,12 @@ const spotSeeds = [
     avgRating: 4.7,
     previewImage: '../spotImages/SanFrancisco/sanfran.jpeg', 
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 1,
@@ -56,7 +66,12 @@ const spotSeeds = [
     avgRating: 4.8,
     previewImage: '../spotImages/Seattle/seattle.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 2,
@@ -72,7 +87,12 @@ const spotSeeds = [
     avgRating: 4.9,
     previewImage: '../spotImages/SantaMonica/santaMonica.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 3,
@@ -88,7 +108,12 @@ const spotSeeds = [
     avgRating: 4.7,
     previewImage: '../spotImages/Aspen/aspen.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 2,
@@ -104,7 +129,12 @@ const spotSeeds = [
     avgRating: 4.9,
     previewImage: '../spotImages/NewYork/newYork.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 2,
@@ -120,7 +150,12 @@ const spotSeeds = [
     avgRating: 4.6,
     previewImage: '../spotImages/Phoenix/phoenix.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 1,
@@ -136,7 +171,12 @@ const spotSeeds = [
     avgRating: 4.9,
     previewImage: '../spotImages/BigSky/bigsky.jpeg', 
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   },
   {
     ownerId: 1,
@@ -152,7 +192,12 @@ const spotSeeds = [
     avgRating: 4.7,
     previewImage: '../spotImages/Portland/portland.jpeg',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    SpotImages: [
+      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
+      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+    ]
   }
 ];
 
