@@ -3,8 +3,9 @@
 .spots-container.grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 16px;
+  padding: 45px;
+  column-gap: 0px;
+  row-gap: 45px;
 }
 
 @media (min-width: 1200px) {
@@ -22,6 +23,8 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   position: relative;
   display: inline-block;
+  width: 300px;
+  height: 300px
 }
 
 .spot-tile:hover {
@@ -35,7 +38,7 @@
 }
 
 .spot-info {
-  padding: 8px;
+  padding: 10px;
 }
 
 

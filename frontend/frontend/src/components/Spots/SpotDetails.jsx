@@ -15,7 +15,7 @@ const SpotDetails = () => {
       try {
         const response = await fetch(`/api/spots/${id}`);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Oh no! Something went wrong');
         }
         const data = await response.json();
         setSpot(data);
@@ -60,14 +60,11 @@ const SpotDetails = () => {
       <h1>{spot.name}</h1>
       <p>Location: {spot.city}, {spot.state}, {spot.country}</p>
       <div className="spot-images">
-        <img src={spot.largeImageUrl} alt={spot.name} className="large-image" />
-        <div className="small-images">
-          {spot.smallImageUrls && spot.smallImageUrls.map((url, index) => (
-            <img key={index} src={url} alt={`${spot.name} ${index + 1}`} className="small-image" />
-          ))}
-        </div>
+        {spot.SpotImages && spot.SpotImages.map((image, index) => (
+          <img key={index} src={image.url} alt={`${spot.name} ${index + 1}`} className="spot-image" />
+        ))}
       </div>
-      <p>Hosted by {spot.hostFirstName} {spot.hostLastName}</p>
+      <p>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
       <p>{spot.description}</p>
       <div className="callout-box">
         <p>${spot.price} / night</p>
@@ -85,9 +82,9 @@ const SpotDetails = () => {
         {reviewCount > 0 ? (
           reviews.map(review => (
             <div key={review.id} className="review">
-              <p><strong>{review.user.firstName}</strong></p>
+              <p><strong>{review.User.firstName}</strong></p>
               <p>{new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
-              <p>{review.comment}</p>
+              <p>{review.review}</p>
             </div>
           ))
         ) : (

@@ -6,24 +6,16 @@
 
 .spot-images {
   display: flex;
-  flex-direction: column;
-}
-
-.large-image {
-  width: 100%;
-  height: auto;
-}
-
-.small-images {
-  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
 }
 
-.small-image {
-  width: 100px;
-  height: 100px;
+.spot-image {
+  width: 100%;
+  height: auto;
   object-fit: cover;
+  flex: 1 1 calc(33.333% - 8px); /* Adjust the width to fit in the grid */
 }
 
 .callout-box {
