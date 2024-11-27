@@ -32,21 +32,18 @@ export function ModalProvider({ children }) {
       <ModalContext.Provider value={contextValue}>
         {children}
       </ModalContext.Provider>
-      <div ref={modalRef} />
+      <div ref={modalRef} id="modal" />
+      {modalRef.current && ReactDOM.createPortal(
+        modalContent && (
+          <div id="modal-background" onClick={closeModal}>
+            <div id="modal-content" onClick={(e) => e.stopPropagation()}>
+              {modalContent}
+            </div>
+          </div>
+        ),
+        modalRef.current
+      )}
     </>
-  );
-}
-
-export function Modal() {
-  const { modalRef, modalContent, closeModal } = useContext(ModalContext);
-  if (!modalRef || !modalRef.current || !modalContent) return null;
-
-  return ReactDOM.createPortal(
-    <div id="modal">
-      <div id="modal-background" onClick={closeModal} />
-      <div id="modal-content">{modalContent}</div>
-    </div>,
-    modalRef.current
   );
 }
 

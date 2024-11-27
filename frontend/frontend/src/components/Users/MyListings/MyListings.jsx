@@ -1,29 +1,27 @@
 // frontend/src/components/Users/MyListings/MyListings.jsx
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { fetchUserSpots } from '../../utils/api';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserSpots } from '../../store/spots';
 import './MyListings.css';
 
 function MyListings() {
+  const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
-  const [spots, setSpots] = useState([]);
+  const spots = useSelector(state => state.spots.spots);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (sessionUser) {
-      fetchUserSpots()
-        .then(data => {
-          setSpots(data);
-          setLoading(false);
-        })
+      dispatch(fetchUserSpots())
+        .then(() => setLoading(false))
         .catch(err => {
           setError(err.message);
           setLoading(false);
         });
     }
-  }, [sessionUser]);
+  }, [dispatch, sessionUser]);
 
   if (!sessionUser) {
     return <div>Please log in to view your nests.</div>;

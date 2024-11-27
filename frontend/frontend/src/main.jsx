@@ -8,7 +8,7 @@ import './index.css';
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import * as sessionActions from './store/session';
-import { ModalProvider, Modal } from './context/Modal';
+import { ModalProvider } from './context/Modal';
 
 const store = configureStore();
 
@@ -25,7 +25,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <ModalProvider>
         <App />
-        <Modal />
       </ModalProvider>
     </Provider>
   </React.StrictMode>

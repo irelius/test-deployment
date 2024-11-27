@@ -1,16 +1,21 @@
 // frontend/src/components/Navigation/Navigation.jsx
 
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import LoginFormModal from '../LoginFormModal/LoginFormModal';
+import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
+import { logout } from '../../store/session';
 import './Navigation.css';
 
 const logo = '/bird.png';
 
 function Navigation({ isLoaded }) {
+  const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session?.user);
   const searchContainerRef = useRef(null);
   const [dropdownPosition, setDropdownPosition] = useState({});
@@ -43,14 +48,17 @@ function Navigation({ isLoaded }) {
     navigate('/');
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
   return (
     <nav className="navigation">
       <div className="navigation-left">
         <NavLink to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="nav-logo" />
         </NavLink>
-        {sessionUser && <NavLink to="/bookings">Bookings</NavLink>}
-        {sessionUser && <NavLink to="/my-listings">My Listings</NavLink>}
       </div>
       <div className="navigation-right">
         <div className="search-container" ref={searchContainerRef}>
@@ -62,7 +70,29 @@ function Navigation({ isLoaded }) {
           </div>
         </div>
         {isLoaded && (
-          <ProfileButton user={sessionUser} />
+          <div className="profile-dropdown">
+            <ProfileButton user={sessionUser} />
+            <div className="profile-dropdown-content">
+              {sessionUser ? (
+                <>
+                  <span>Hello, {sessionUser.username}</span>
+                  <NavLink to="/my-listings">Manage Spots</NavLink>
+                  <button onClick={handleLogout}>Log Out</button>
+                </>
+              ) : (
+                <>
+                  <OpenModalButton
+                    modalComponent={<LoginFormModal />}
+                    buttonText="Log In"
+                  />
+                  <OpenModalButton
+                    modalComponent={<SignupFormModal />}
+                    buttonText="Sign Up"
+                  />
+                </>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </nav>
