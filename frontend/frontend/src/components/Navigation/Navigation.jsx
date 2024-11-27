@@ -1,21 +1,19 @@
 // frontend/src/components/Navigation/Navigation.jsx
 
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import ProfileButton from './ProfileButton';
-import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import { useSelector } from 'react-redux';
+import ProfileButton from './ProfileButton'; 
+import OpenModalMenuItem from '../OpenModalMenuItem/OpenModalMenuItem'; 
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useEffect, useState } from 'react';
-import { logout } from '../../store/session';
 import './Navigation.css';
 
 const logo = '/bird.png';
 
 function Navigation({ isLoaded }) {
-  const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session?.user);
   const searchContainerRef = useRef(null);
   const [dropdownPosition, setDropdownPosition] = useState({});
@@ -48,10 +46,23 @@ function Navigation({ isLoaded }) {
     navigate('/');
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-  };
+  console.log('Navigation rendered');         //!CONSOLE LOG!
+  console.log('sessionUser:', sessionUser);   //!CONSOLE LOG!
+
+  const sessionLinks = sessionUser ? (
+    <ProfileButton user={sessionUser} />
+  ) : (
+    <>
+      <OpenModalMenuItem
+        itemText="Log In"
+        modalComponent={<LoginFormModal />}
+      />
+      <OpenModalMenuItem
+        itemText="Sign Up"
+        modalComponent={<SignupFormModal />}
+      />
+    </>
+  );
 
   return (
     <nav className="navigation">
@@ -69,31 +80,7 @@ function Navigation({ isLoaded }) {
             <input type="text" placeholder="Search for a location" />
           </div>
         </div>
-        {isLoaded && (
-          <div className="profile-dropdown">
-            <ProfileButton user={sessionUser} />
-            <div className="profile-dropdown-content">
-              {sessionUser ? (
-                <>
-                  <span>Hello, {sessionUser.username}</span>
-                  <NavLink to="/my-listings">Manage Spots</NavLink>
-                  <button onClick={handleLogout}>Log Out</button>
-                </>
-              ) : (
-                <>
-                  <OpenModalButton
-                    modalComponent={<LoginFormModal />}
-                    buttonText="Log In"
-                  />
-                  <OpenModalButton
-                    modalComponent={<SignupFormModal />}
-                    buttonText="Sign Up"
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        )}
+        {isLoaded && sessionLinks}
       </div>
     </nav>
   );

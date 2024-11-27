@@ -8,10 +8,7 @@ import Navigation from './components/Navigation/Navigation';
 import Spots from './components/Spots/Spots'; 
 import SpotDetails from './components/Spots/SpotDetails';
 import * as sessionActions from './store/session';
-
-
-
-
+import { ModalProvider } from './context/Modal'; 
 
 function Layout() {
   const dispatch = useDispatch();
@@ -37,22 +34,26 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Spots /> // landing page
+        element: <Spots />,
+      },
+      {
+        path: '/spots/:spotId',
+        element: <SpotDetails />,
       },
       {
         path: '/signup',
-        element: <SignupFormPage />
+        element: <SignupFormPage />,
       },
-      {
-        path: '/spots/:id',
-        element: <SpotDetails />
-      }
-    ]
-  }
+    ],
+  },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ModalProvider>
+      <RouterProvider router={router} />
+    </ModalProvider>
+  );
 }
 
 export default App;
