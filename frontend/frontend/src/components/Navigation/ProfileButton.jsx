@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from '../OpenModalMenuItem/OpenModalMenuItem'; 
@@ -12,19 +12,16 @@ import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
-  console.log('ProfileButton rendered');       //!CONSOLE LOG!
-
   const openMenu = () => {
-    console.log('openMenu called');        //!CONSOLE LOG!
     if (showMenu) return;
     setShowMenu(true);
   };
 
   useEffect(() => {
-    console.log('useEffect called');      //!CONSOLE LOG!
     if (!showMenu) return;
 
     const closeMenu = (e) => {
@@ -46,17 +43,19 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    navigate('/');
   };
 
   return (
-    <>
+    <div className="profile-button-container">
       <button onClick={openMenu} className="profile-button">
         <FaUserCircle />
       </button>
       <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
         {user ? (
           <>
-            <li>Hello, {user.username}</li>
+            <li>Hello, {user.firstName}</li>
+            <li>{user.email}</li>
             <li>
               <NavLink to="/my-listings" onClick={closeMenu}>Manage Spots</NavLink>
             </li>
@@ -77,7 +76,7 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
-    </>
+    </div>
   );
 }
 

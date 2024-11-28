@@ -2,10 +2,10 @@
 
 #modal {
   position: fixed;
-  /* top: 0;
-  right: 0;
-  left: 0;
-  bottom: 10; */
+  /* top: 10px;
+  right: 10px;
+  left: 10px;
+  bottom: 10px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,7 +23,7 @@
 }
 
 #modal-content {
-  position: absolute;
+  position: relative;
   background-color: white;
   padding: 20px;
   border-radius: 8px;

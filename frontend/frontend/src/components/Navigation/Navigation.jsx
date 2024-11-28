@@ -46,9 +46,6 @@ function Navigation({ isLoaded }) {
     navigate('/');
   };
 
-  console.log('Navigation rendered');         //!CONSOLE LOG!
-  console.log('sessionUser:', sessionUser);   //!CONSOLE LOG!
-
   const sessionLinks = sessionUser ? (
     <ProfileButton user={sessionUser} />
   ) : (
