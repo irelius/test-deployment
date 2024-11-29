@@ -27,35 +27,6 @@
   align-items: center;
 }
 
-.search-container {
-  position: relative;
-}
-
-.search-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #fff; 
-  font-size: 24px;
-}
-
-.search-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 10px;
-  display: none;
-}
-
-.search-container:hover .search-dropdown {
-  display: block;
-}
-
 .profile-button-container {
   position: relative;
 }

@@ -1,4 +1,4 @@
-/* frontend/src/components/LoginFormPage/LoginFormModal.css */
+/* frontend/src/components/LoginFormModal/LoginFormModal.css */
 
 .modal-overlay {
   position: fixed;
@@ -20,6 +20,9 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   width: 400px; 
   max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
 }
 
 .login-form-title {
@@ -30,11 +33,12 @@
 
 .form-group {
   margin-bottom: 15px;
+  width: 100%; 
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .form-group input {
@@ -48,15 +52,22 @@
   width: 100%;
   padding: 12px;
   background-color: #000000; 
-  color: #ffffff; 
-  border: none;
+  color: #65a9ab; 
+  border: black;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
   transition: background-color 0.3s ease;
+  align-items: center;
 }
 
 .login-form .form-button:hover {
-  background-color: #c9c7c7; 
+  background-color: #8d8d8d; 
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }

@@ -1,5 +1,3 @@
-// frontend/src/components/Navigation/ProfileButton.jsx
-
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -16,16 +14,16 @@ function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
-  const openMenu = () => {
-    if (showMenu) return;
-    setShowMenu(true);
+  const toggleMenu = (e) => {
+    e.stopPropagation(); // Prevent event from bubbling up and triggering closeMenu
+    setShowMenu(!showMenu);
   };
 
   useEffect(() => {
     if (!showMenu) return;
 
     const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
+      if (ulRef.current && !ulRef.current.contains(e.target)) {
         setShowMenu(false);
       }
     };
@@ -48,7 +46,7 @@ function ProfileButton({ user }) {
 
   return (
     <div className="profile-button-container">
-      <button onClick={openMenu} className="profile-button">
+      <button onClick={toggleMenu} className="profile-button">
         <FaUserCircle />
       </button>
       <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
@@ -68,10 +66,12 @@ function ProfileButton({ user }) {
             <OpenModalMenuItem
               itemText="Log In"
               modalComponent={<LoginFormModal />}
+              onItemClick={closeMenu}
             />
             <OpenModalMenuItem
               itemText="Sign Up"
               modalComponent={<SignupFormModal />}
+              onItemClick={closeMenu}
             />
           </>
         )}

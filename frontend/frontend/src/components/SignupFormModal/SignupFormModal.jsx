@@ -18,13 +18,22 @@ function SignupFormModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
-    return dispatch(sessionActions.signup({ username, firstName, lastName, email, password }))
-      .then(closeModal)
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data?.errors) setErrors(data.errors);
-      });
+    const newErrors = {};
+    if (!username) newErrors.username = 'Username is required.';
+    if (!firstName) newErrors.firstName = 'First name is required.';
+    if (!lastName) newErrors.lastName = 'Last name is required.';
+    if (!email) newErrors.email = 'Email is required.';
+    if (!password) newErrors.password = 'Password is required.';
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      return dispatch(sessionActions.signup({ username, firstName, lastName, email, password }))
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data?.errors) setErrors(data.errors);
+        });
+    }
   };
 
   const handleOverlayClick = (e) => {
@@ -48,6 +57,7 @@ function SignupFormModal() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
+            {errors.username && <p className="error-message">{errors.username}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="firstName">First Name</label>
@@ -59,6 +69,7 @@ function SignupFormModal() {
               onChange={(e) => setFirstName(e.target.value)}
               required
             />
+            {errors.firstName && <p className="error-message">{errors.firstName}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="lastName">Last Name</label>
@@ -70,6 +81,7 @@ function SignupFormModal() {
               onChange={(e) => setLastName(e.target.value)}
               required
             />
+            {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -81,6 +93,7 @@ function SignupFormModal() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
@@ -92,12 +105,8 @@ function SignupFormModal() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {errors.password && <p className="error-message">{errors.password}</p>}
           </div>
-          {errors.username && <p className="error-message">{errors.username}</p>}
-          {errors.firstName && <p className="error-message">{errors.firstName}</p>}
-          {errors.lastName && <p className="error-message">{errors.lastName}</p>}
-          {errors.email && <p className="error-message">{errors.email}</p>}
-          {errors.password && <p className="error-message">{errors.password}</p>}
           <button className="form-button" type="submit">Sign Up</button>
         </form>
       </div>
