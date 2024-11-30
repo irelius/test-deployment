@@ -33,7 +33,9 @@ function LoginFormModal() {
   };
 
   const handleOverlayClick = (e) => {
+    console.log("Overlay clicked", e.target, e.currentTarget);
     if (e.target === e.currentTarget) {
+      console.log("Closing modal");
       closeModal();
     }
   };
@@ -41,32 +43,33 @@ function LoginFormModal() {
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="login-form-container" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={closeModal}>X</button>
         <h1 className="login-form-title">Log In</h1>
         <form className="login-form" onSubmit={handleSubmit}>
           <ul>
             {errors.map((error, idx) => <li key={idx} className="error-message">{error}</li>)}
           </ul>
           <div className="form-group">
-            <label>
-              Username or Email
-              <input
-                type="text"
-                value={credential}
-                onChange={(e) => setCredential(e.target.value)}
-                required
-              />
-            </label>
+            <label htmlFor="credential">Username or Email</label>
+            <input
+              id="credential"
+              name="credential"
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              required
+            />
           </div>
           <div className="form-group">
-            <label>
-              Password
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </label>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
           <button className="form-button" type="submit">Log In</button>
         </form>

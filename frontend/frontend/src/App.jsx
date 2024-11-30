@@ -9,6 +9,7 @@ import Spots from './components/Spots/Spots';
 import SpotDetails from './components/Spots/SpotDetails';
 import * as sessionActions from './store/session';
 import { ModalProvider } from './context/Modal'; 
+import MyListings from './components/MyListings';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupFormPage />,
+      },
+      {
+        path: '/my-listings', // Define the route
+        element: <MyListings />,
       },
     ],
   },

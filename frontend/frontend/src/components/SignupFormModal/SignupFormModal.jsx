@@ -45,12 +45,14 @@ function SignupFormModal() {
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="signup-form-container" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={closeModal}>X</button>
         <h1 className="signup-form-title">Sign Up!</h1>
         <form className="signup-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
               id="username"
+              name="username"
               className="form-input"
               type="text"
               value={username}
@@ -63,6 +65,7 @@ function SignupFormModal() {
             <label htmlFor="firstName">First Name</label>
             <input
               id="firstName"
+              name="firstName"
               className="form-input"
               type="text"
               value={firstName}
@@ -75,6 +78,7 @@ function SignupFormModal() {
             <label htmlFor="lastName">Last Name</label>
             <input
               id="lastName"
+              name="lastName"
               className="form-input"
               type="text"
               value={lastName}
@@ -87,6 +91,7 @@ function SignupFormModal() {
             <label htmlFor="email">Email</label>
             <input
               id="email"
+              name="email"
               className="form-input"
               type="email"
               value={email}
@@ -99,6 +104,7 @@ function SignupFormModal() {
             <label htmlFor="password">Password</label>
             <input
               id="password"
+              name="password"
               className="form-input"
               type="password"
               value={password}

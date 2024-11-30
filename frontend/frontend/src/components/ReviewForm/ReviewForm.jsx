@@ -1,8 +1,6 @@
-// frontend/src/components/ReviewForm/ReviewForm.jsx
-
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createReview, updateReview, addReviewImage, deleteReviewImage } from '../../store/reviews';
+import { createReview, editReview, addReviewImage, deleteReviewImage } from '../../store/reviews';
 
 const ReviewForm = ({ formType, review, spotId }) => {
   const dispatch = useDispatch();
@@ -16,7 +14,7 @@ const ReviewForm = ({ formType, review, spotId }) => {
     if (formType === 'Create') {
       dispatch(createReview(spotId, reviewData));
     } else {
-      dispatch(updateReview(review.id, reviewData));
+      dispatch(editReview({ ...review, ...reviewData }));
     }
   };
 
@@ -29,7 +27,7 @@ const ReviewForm = ({ formType, review, spotId }) => {
   };
 
   const handleDeleteImage = (imageId) => {
-    dispatch(deleteReviewImage(imageId));
+    dispatch(deleteReviewImage(review.id, imageId));
   };
 
   return (

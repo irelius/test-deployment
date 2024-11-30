@@ -1,33 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSpots } from '../../store/spots';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './Spots.css';
 
 const Spots = () => {
-  const [spots, setSpots] = useState([]);
+  const dispatch = useDispatch();
+  const spots = useSelector(state => state.spots.spots);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSpots = async () => {
-      try {
-        const response = await fetch('/api/spots');
-        if (!response.ok) {
-          throw new Error('Oh no! Something went wrong');
-        }
-        const data = await response.json();
-        if (Array.isArray(data.Spots)) {
-          setSpots(data.Spots);
-        } else {
-          console.error('Fetched data is not an array:', data);
-        }
-      } catch (error) {
-        console.error('Error fetching spots:', error);
-      }
-    };
-
-    fetchSpots();
-  }, []);
+    dispatch(fetchSpots());
+  }, [dispatch]);
 
   const handleTileClick = (spotId) => {
     navigate(`/spots/${spotId}`);
@@ -35,7 +21,7 @@ const Spots = () => {
 
   return (
     <div className="spots-container grid">
-      {Array.isArray(spots) && spots.map(spot => (
+      {spots.map(spot => (
         <div
           key={spot.id}
           className="spot-link"
