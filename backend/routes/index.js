@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
+
+const sessionRouter = require('./api/session'); 
+const usersRouter = require('./api/users'); 
+const spotsRouter = require('./api/spots'); 
+const reviewsRouter = require('./api/reviews'); 
+
+router.use('/session', sessionRouter);
+router.use('/users', usersRouter);
+router.use('/spots', spotsRouter);
+router.use('/reviews', reviewsRouter); // Use the reviews router
+
 /*
 // test purpose
 router.get('/hello/world', function(req, res) {
