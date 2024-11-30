@@ -24,10 +24,12 @@ router.get('/current',
                 include: [
                     {
                         model: SpotImage,
-                        attributes: ['url']
+                        attributes: ['url'],
+                        where: { preview: true },
+                        required: false
                     }
                 ]
-            })
+            });
 
             if (allSpotsByUser.length > 0) {
 
