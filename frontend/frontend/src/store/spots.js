@@ -8,7 +8,7 @@ const ADD_SPOT = 'spots/addSpot';
 const UPDATE_SPOT = 'spots/updateSpot';
 const REMOVE_SPOT = 'spots/removeSpot';
 const SET_SPOT_DETAILS = 'spots/setSpotDetails';
-const SET_USER_LISTINGS = 'spots/setUserListings'; // New action type
+const SET_USER_LISTINGS = 'spots/setUserListings';
 
 // Action Creators
 export const setSpots = (spots) => ({
@@ -31,17 +31,20 @@ export const removeSpot = (spotId) => ({
   spotId,
 });
 
-export const setSpotDetails = (spot) => ({
-  type: SET_SPOT_DETAILS,
-  spot,
-});
+export const setSpotDetails = (spot) => {
+  console.log('Creating setSpotDetails action with spot:', spot);
+  return {
+    type: SET_SPOT_DETAILS,
+    spot,
+  };
+};
 
 export const setUserListings = (listings) => ({
   type: SET_USER_LISTINGS,
   listings,
 });
 
-// Thunk Action Creators
+// Thunks
 export const fetchSpots = () => async (dispatch) => {
   const response = await csrfFetch('/api/spots');
   const data = await response.json();
@@ -50,11 +53,21 @@ export const fetchSpots = () => async (dispatch) => {
 };
 
 export const fetchSpotDetails = (spotId) => async (dispatch) => {
+  console.log('Fetching spot details for spotId:', spotId);
   const response = await csrfFetch(`/api/spots/${spotId}`);
+  console.log('Response from /api/spots/:spotId:', response);
+
   if (response.ok) {
     const data = await response.json();
-    dispatch(setSpotDetails(data.spot));
+    console.log('Data received:', data);
+    if (data) {
+      console.log('Dispatching setSpotDetails with:', data);
+      dispatch(setSpotDetails(data)); // Directly using data instead of data.spot
+    } else {
+      console.error('Data received does not contain spot:', data);
+    }
   } else {
+    console.error('Error fetching spot details:', response);
     throw response;
   }
 };
@@ -98,6 +111,7 @@ const initialState = { spots: [], spotDetails: null, userListings: [] };
 
 // Reducer
 const spotsReducer = (state = initialState, action) => {
+  console.log('Action received in spotsReducer:', action);
   switch (action.type) {
     case SET_SPOTS:
       return { ...state, spots: action.spots };
@@ -116,6 +130,7 @@ const spotsReducer = (state = initialState, action) => {
         spots: state.spots.filter((spot) => spot.id !== action.spotId),
       };
     case SET_SPOT_DETAILS:
+      console.log('Setting spot details:', action.spot);
       return { ...state, spotDetails: action.spot };
     case SET_USER_LISTINGS:
       return { ...state, userListings: action.listings };

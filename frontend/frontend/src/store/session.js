@@ -22,10 +22,9 @@ export const login = (credentials) => async (dispatch) => {
         });
         const data = await response.json();
         dispatch(setSessionUser(data.user));
-        console.log('User logged in:', data.user); // ! Console log
         return response;
     } catch (error) {
-        console.error('Error logging in:', error); // ! Console log
+        console.error('Error logging in:', error); // Handle the error
     }
 };
 
@@ -35,9 +34,8 @@ export const logout = () => async (dispatch) => {
             method: 'DELETE',
         });
         dispatch(removeSessionUser());
-        console.log('User logged out'); // ! Console log
     } catch (error) {
-        console.error('Error logging out:', error); // ! Console log
+        console.error('Error logging out:', error); // Handle the error
     }
 };
 
@@ -50,10 +48,9 @@ export const signup = (user) => async (dispatch) => {
         });
         const data = await response.json();
         dispatch(setSessionUser(data.user));
-        console.log('User signed up:', data.user); // ! Console log
         return response;
     } catch (error) {
-        console.error('Error signing up:', error); // ! Console log
+        console.error('Error signing up:', error); // Handle the error
     }
 };
 
@@ -61,12 +58,10 @@ export const restoreUser = () => async (dispatch) => {
     try {
         const response = await csrfFetch('/api/session');
         const data = await response.json();
-        console.log('Response from /api/session:', data); // ! Console log
         dispatch(setSessionUser(data.user));
-        console.log('User restored:', data.user); // ! Console log
         return response;
     } catch (error) {
-        console.error('Error fetching user:', error); // ! Console log
+        console.error('Error restoring user:', error); // Handle the error
     }
 };
 
@@ -75,13 +70,10 @@ const initialState = { user: null };
 
 // Reducer
 const sessionReducer = (state = initialState, action) => {
-    console.log('Reducer action:', action);     // ! Console log
     switch (action.type) {
         case SET_SESSION_USER:
-            console.log('Setting session user:', action.user);  // ! Console log
             return { ...state, user: action.user };
         case REMOVE_SESSION_USER:
-            console.log('Removing session user');  // ! Console log
             return { ...state, user: null };
         default:
             return state;

@@ -36,34 +36,14 @@ const SpotDetails = () => {
     return <div>Spot not found</div>;
   }
 
-  const avgRating = spot.avgRating ? spot.avgRating.toFixed(2) : 'New';
-  const reviewCount = spot.Reviews.length;
-  const reviewSummaryText = reviewCount === 1 ? '1 Review' : `${reviewCount} Reviews`;
-
   return (
-    <div className="spot-details">
-      <h1>{spot.name}</h1>
-      <p>Location: {spot.city}, {spot.state}, {spot.country}</p>
-      <div className="spot-images">
-        {spot.SpotImages && spot.SpotImages.map((image, index) => (
-          <img key={index} src={image.url} alt={`${spot.name} ${index + 1}`} className="spot-image" />
-        ))}
+    <div>
+      <h1>{spot.address}</h1>
+      <p>{spot.city}, {spot.state}</p>
+      <div>
+        <FontAwesomeIcon icon={faStar} /> {spot.rating}
       </div>
-      <p>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
-      <p>{spot.description}</p>
-      <div className="callout-box">
-        <p>${spot.price} / night</p>
-        <div>
-          <FontAwesomeIcon icon={faStar} /> {avgRating}
-          {reviewCount > 0 && <span> · {reviewSummaryText}</span>}
-        </div>
-        <button onClick={() => alert('Feature coming soon')}>Reserve</button>
-      </div>
-      <h2>
-        <FontAwesomeIcon icon={faStar} /> {avgRating}
-        {reviewCount > 0 && <span> · {reviewSummaryText}</span>}
-      </h2>
-      <ReviewList spotId={spotId} />
+      <ReviewList reviews={spot.reviews} />
     </div>
   );
 };
