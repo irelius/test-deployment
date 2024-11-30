@@ -1,3 +1,5 @@
+// frontend/src/components/ProfileButton/ProfileButton.jsx
+
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';

@@ -45,12 +45,18 @@ export const deleteReviewImageAction = (reviewId, imageId) => ({
 
 // Thunk Action Creators
 export const fetchReviews = (spotId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  if (response.ok) {
+  try {
+    console.log('Fetching reviews for spotId:', spotId);
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
+    if (!response.ok) {
+      throw response;
+    }
     const data = await response.json();
-    dispatch(setReviews(data.Reviews));
-  } else {
-    throw response;
+    console.log('Reviews data received:', data);
+    dispatch(setReviews(data));
+    return data; // Ensure the action returns the data
+  } catch (err) {
+    console.error('Error fetching reviews:', err);
   }
 };
 

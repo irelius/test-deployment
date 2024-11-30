@@ -2,6 +2,7 @@ import { csrfFetch } from './csrf';
 
 const SET_SESSION_USER = 'session/setSessionUser';
 const REMOVE_SESSION_USER = 'session/removeSessionUser';
+const LOGIN_DEMO_USER = 'session/loginDemoUser'; // Add this line
 
 // Action Creators
 export const setSessionUser = (user) => ({
@@ -11,6 +12,11 @@ export const setSessionUser = (user) => ({
 
 export const removeSessionUser = () => ({
     type: REMOVE_SESSION_USER,
+});
+
+export const loginDemoUser = () => ({
+    type: LOGIN_DEMO_USER,
+    user: { username: 'demo', email: 'demo@example.com', firstName: 'Demo', lastName: 'User' }, // Add other necessary demo user details
 });
 
 // Thunk 
@@ -75,6 +81,8 @@ const sessionReducer = (state = initialState, action) => {
             return { ...state, user: action.user };
         case REMOVE_SESSION_USER:
             return { ...state, user: null };
+        case LOGIN_DEMO_USER: // Add this case
+            return { ...state, user: action.user };
         default:
             return state;
     }

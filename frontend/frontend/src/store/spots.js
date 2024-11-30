@@ -53,22 +53,18 @@ export const fetchSpots = () => async (dispatch) => {
 };
 
 export const fetchSpotDetails = (spotId) => async (dispatch) => {
-  console.log('Fetching spot details for spotId:', spotId);
-  const response = await csrfFetch(`/api/spots/${spotId}`);
-  console.log('Response from /api/spots/:spotId:', response);
-
-  if (response.ok) {
+  try {
+    console.log('Fetching spot details for spotId:', spotId);
+    const response = await csrfFetch(`/api/spots/${spotId}`);
+    if (!response.ok) {
+      throw response;
+    }
     const data = await response.json();
     console.log('Data received:', data);
-    if (data) {
-      console.log('Dispatching setSpotDetails with:', data);
-      dispatch(setSpotDetails(data)); // Directly using data instead of data.spot
-    } else {
-      console.error('Data received does not contain spot:', data);
-    }
-  } else {
-    console.error('Error fetching spot details:', response);
-    throw response;
+    dispatch(setSpotDetails(data));
+    return data; // Ensure the action returns the data
+  } catch (err) {
+    console.error('Error fetching spot details:', err);
   }
 };
 

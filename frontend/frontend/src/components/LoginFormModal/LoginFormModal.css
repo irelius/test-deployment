@@ -1,5 +1,11 @@
 /* frontend/src/components/LoginFormModal/LoginFormModal.css */
 
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -61,6 +67,21 @@
 }
 
 .login-form .form-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #000000; 
+  color: #65a9ab; 
+  border: black;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  align-items: center;
+}
+
+.demo-button {
+  margin-top: 10px; 
   width: 100%;
   padding: 12px;
   background-color: #000000; 

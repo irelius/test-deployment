@@ -32,10 +32,13 @@ function LoginFormModal() {
     }
   };
 
+  const handleDemoLogin = () => {
+    dispatch(sessionActions.loginDemoUser());
+    closeModal();
+  };
+
   const handleOverlayClick = (e) => {
-    console.log("Overlay clicked", e.target, e.currentTarget);
     if (e.target === e.currentTarget) {
-      console.log("Closing modal");
       closeModal();
     }
   };
@@ -73,6 +76,7 @@ function LoginFormModal() {
           </div>
           <button className="form-button" type="submit">Log In</button>
         </form>
+        <button className="form-button demo-button" onClick={handleDemoLogin}>Log in as Demo User</button>
       </div>
     </div>
   );
