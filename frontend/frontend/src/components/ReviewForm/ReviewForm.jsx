@@ -16,7 +16,7 @@ const ReviewForm = ({ formType, review, spotId }) => {
     const reviewData = { review: content, stars: rating };
     try {
       if (formType === 'Create') {
-        await dispatch(createReview(spotId, reviewData));
+        await dispatch(createReview({ ...reviewData, spotId }));
       } else {
         await dispatch(editReview({ ...review, ...reviewData }));
       }
@@ -42,6 +42,8 @@ const ReviewForm = ({ formType, review, spotId }) => {
   return (
     <form onSubmit={handleSubmit} className="review-form">
       <textarea
+        id="review-content"
+        name="review-content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Write your review here"
@@ -49,6 +51,8 @@ const ReviewForm = ({ formType, review, spotId }) => {
         className="review-textarea"
       />
       <select
+        id="review-rating"
+        name="review-rating"
         value={rating}
         onChange={(e) => setRating(Number(e.target.value))}
         required
@@ -77,6 +81,8 @@ const ReviewForm = ({ formType, review, spotId }) => {
         <div className="add-image">
           <input
             type="text"
+            id="image-url"
+            name="image-url"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
             placeholder="Image URL"

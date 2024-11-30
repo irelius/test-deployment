@@ -1,3 +1,5 @@
+/* frontend/src/components/Spots/SpotDetails.css */
+
 .spot-details {
   padding: 50px;
 }
@@ -24,14 +26,16 @@
 .spot-images-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: auto;
+  grid-template-rows: repeat(2, 1fr);
   gap: 8px;
   margin-bottom: 20px;
+  background-color: transparent;
+  
 }
 
 .spot-image-large {
   grid-column: 1 / 2;
-  grid-row: 1 / 2;
+  grid-row: 1 / 3;
 }
 
 .spot-image-large img,
@@ -41,10 +45,26 @@
   max-width: 400px;
   cursor: pointer;
   object-fit: cover;
+  border: 3px solid #ccc;
+  padding: 5px;
 }
 
 .spot-image-small {
   grid-column: span 1;
+  padding: 5px;
+}
+
+.empty-image {
+  border: 10px solid #ccc;
+  background-color: #f9f9f9;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #999;
+  z-index: 10;
 }
 
 .spot-content {
@@ -86,35 +106,46 @@
 }
 
 .divider {
-  border: none;
-  height: 4px;
-  background-color: #ccc;
-  margin: 50px 0;
-  
+  margin: 20px 0;
 }
 
 .spot-reviews {
   margin-top: 20px;
 }
 
+.review-form-box {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.spot-reviews-box {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
 .modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-  position: relative;
-  background-color: #fff;
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
+  position: relative;
 }
 
 .modal-image {
