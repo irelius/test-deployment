@@ -16,6 +16,10 @@ const SpotDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const handleReserveClick = () => {
+    alert('Feature coming soon!');
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,7 +76,7 @@ const SpotDetails = () => {
         <div className="spot-reservation">
           <div className="reservation-box">
             <p>${spot.price} / night</p>
-            <button className="reserve-button">Reserve</button>
+            <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
           </div>
         </div>
       </div>
