@@ -53,7 +53,7 @@ export const fetchReviews = (spotId) => async (dispatch) => {
     }
     const data = await response.json();
     console.log('Reviews data received:', data);
-    dispatch(setReviews(data));
+    dispatch(setReviews(data.reviews)); // Ensure the correct property is used
     return data; // Ensure the action returns the data
   } catch (err) {
     console.error('Error fetching reviews:', err);

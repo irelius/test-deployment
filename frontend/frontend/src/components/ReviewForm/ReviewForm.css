@@ -1,0 +1,69 @@
+/* frontend/src/components/ReviewForm/ReviewForm.css */
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .review-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+  }
+  
+  .review-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .review-submit-button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .review-submit-button:hover {
+    background-color: #e04e4e;
+    transform: scale(1.1);
+  }
+  
+  .review-images {
+    margin-top: 10px;
+  }
+  
+  .review-image {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .review-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .add-image {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .image-url-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }

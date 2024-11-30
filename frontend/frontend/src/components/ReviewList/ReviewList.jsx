@@ -5,7 +5,7 @@ import ReviewForm from '../ReviewForm/ReviewForm';
 
 const ReviewList = ({ spotId }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector(state => state.reviews.reviews);
+  const reviews = useSelector(state => state.reviews.reviews || []); // Ensure reviews is an array
 
   useEffect(() => {
     dispatch(fetchReviews(spotId));
@@ -14,6 +14,10 @@ const ReviewList = ({ spotId }) => {
   const handleDelete = (reviewId) => {
     dispatch(deleteReview(reviewId));
   };
+
+  if (!Array.isArray(reviews)) {
+    return <div>No reviews available</div>;
+  }
 
   return (
     <div>

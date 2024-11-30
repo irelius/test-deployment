@@ -1,37 +1,131 @@
-/* frontend/src/components/SpotDetails/SpotDetails.css */
-
 .spot-details {
-  padding: 16px;
+  padding: 50px;
 }
 
-.spot-images {
+.spot-header {
+  margin-bottom: 20px;
+}
+
+.spot-header h1 {
+  margin: 0;
+}
+
+.spot-header h2 {
+  margin: 0;
+  color: gray;
+}
+
+.spot-rating {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.spot-image {
+.spot-images-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.spot-image-large {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.spot-image-large img,
+.spot-image-small img {
   width: 100%;
   height: auto;
+  max-width: 400px;
+  cursor: pointer;
   object-fit: cover;
-  flex: 1 1 calc(33.333% - 8px); /* Adjust the width to fit in the grid */
 }
 
-.callout-box {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-top: 16px;
+.spot-image-small {
+  grid-column: span 1;
 }
 
-.callout-box button {
-  background-color: #007bff;
+.spot-content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.spot-description {
+  flex: 2;
+  margin-right: 20px;
+}
+
+.spot-reservation {
+  flex: 1;
+}
+
+.reservation-box {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.reserve-button {
+  background-color: #ff5a5f;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
-.callout-box button:hover {
-  background-color: #0056b3;
+.reserve-button:hover {
+  background-color: #e04e4e;
+  transform: scale(1.1);
+}
+
+.divider {
+  border: none;
+  height: 4px;
+  background-color: #ccc;
+  margin: 50px 0;
+  
+}
+
+.spot-reviews {
+  margin-top: 20px;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 80vh;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
 }
