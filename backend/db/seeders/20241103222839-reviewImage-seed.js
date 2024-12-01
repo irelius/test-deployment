@@ -12,17 +12,17 @@ const reviewImageSeeds = [
   {
     // id: 1,
     reviewId: 1,
-    url: 'https://example.com/review-image1.jpg'
+    url: 'https://essenziale-hd.com/wp-content/uploads/2020/08/loft_kitchens_118186909_2820081271612439_6383510351478180441_n.jpg'
   },
   {
     // id: 2,
     reviewId: 1,
-    url: 'https://example.com/review-image2.jpg'
+    url: 'https://leasingkc.com/wp-content/uploads/2018/12/DSC_1290-1024x683.jpg'
   },
   {
     // id: 3,
     reviewId: 2,
-    url: 'https://example.com/review-image3.jpg'
+    url: 'https://static.wikia.nocookie.net/vgost/images/5/56/Rick_Astley.jpg/revision/latest?cb=20220705002743'
   },
 ];
 

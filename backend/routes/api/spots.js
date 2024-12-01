@@ -110,132 +110,125 @@ router.post('/:spotId/images',
 )
 
 // GET all Reviews by a Spot's Id
-router.get('/:spotId/reviews',
-    async (req, res) => {
-        const { spotId } = req.params;
+router.get('/:spotId/reviews', async (req, res) => {
+    const { spotId } = req.params;
 
-        try {
-            const spot = await Spot.findByPk(spotId);
-            if (!spot || spot.length <= 0) {
-                return res.status(404).json({ message: "Spot couldn't be found" })
-            }
-
-            const reviewBySpotId = await Review.findAll({
-                where: { spotId: spotId },
-                include: [
-                    { model: User ,
-                        attributes: ['id', 'firstName', 'lastName']
-                    },
-                    { model: ReviewImage,
-                        attributes: ['id', 'url']
-                    }
-                ]
-            });
-
-            if (reviewBySpotId.length > 0) {
-
-                const formattedReviews = reviewBySpotId.map(date => {
-                    // Format the createdAt and updatedAt for each spot
-                    const formattedCreatedAt = date.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-                    const formattedUpdatedAt = date.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-
-                    // Return a new object with the formatted dates
-                    return {
-                        ...date.toJSON(),
-                        createdAt: formattedCreatedAt,
-                        updatedAt: formattedUpdatedAt
-                    };
-                });
-    
-                return res.status(200).json({ Reviews: formattedReviews });
-            } else {
-                return res.status(404).json({ message: "There is no reviews for this Spot" })
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "An error occurred while getting the reviews" })
-        }
-    }
-)
-
-// POST (create) a Review for a Spot based on the Spot's Id
-router.post('/:spotId/reviews',
-    requireAuth,
-    async (req, res) => {
-        const { id } = req.user;
-        const { spotId } = req.params;
-        const { review, stars } = req.body;
-
+    try {
         const spot = await Spot.findByPk(spotId);
         if (!spot) {
-            return res.status(404).json({ message: 'Spot not found' });
-        }
-        if (spot.ownerId === id) {
-            return res.status(403).json({ message: 'You cannot review your own spot' });
+            return res.status(404).json({ message: "Spot couldn't be found" });
         }
 
-        if (!review || review.length < 2 || !stars || isNaN(stars) || stars < 1 || stars > 5) {
-            return res.status(400).json({ 
-                message: "Bad Request",
-                errors: {
-                    review: "Review text is required",
-                    stars: "Stars must be an integer from 1 to 5"
-                }
-            });
-        }
+        const reviewBySpotId = await Review.findAll({
+            where: { spotId },
+            include: [
+                { model: User, attributes: ['id', 'firstName', 'lastName'] },
+                { model: ReviewImage, attributes: ['id', 'url'] }
+            ]
+        });
 
-        try {
-            const reviewByUser = await Review.findAll({
-                where: { userId: id, spotId: spotId }
-            });
-            if (reviewByUser.length > 0) {
-                return res.status(400).json({ message: "User already has a review for this spot" });
-            }
+        const formattedReviews = reviewBySpotId.map(review => {
+            const formattedCreatedAt = review.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+            const formattedUpdatedAt = review.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
 
-            const spotNewReview = {
-                userId: Number(id),
-                spotId: spot.id,
-                review: review,
-                stars: parseFloat(stars)
+            return {
+                ...review.toJSON(),
+                createdAt: formattedCreatedAt,
+                updatedAt: formattedUpdatedAt
             };
+        });
 
-            const newReview = await Review.create(spotNewReview);
-
-            if (newReview) {
-                const formattedCreatedAt = newReview.createdAt.toISOString().replace('T', ' ').slice(0, 19);
-                const formattedUpdatedAt = newReview.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-
-                const formattedNewReview = {
-                    ...newReview.toJSON(),
-                    stars: parseFloat(newReview.stars),
-                    createdAt: formattedCreatedAt,
-                    updatedAt: formattedUpdatedAt
-                };
-
-                // update avgRating in Spots
-                const allReviews = await Review.findAll({ where: { spotId: spotId } });
-                const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
-                const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
-
-                spot.avgRating = parseFloat(avgRating);
-                await spot.save();
-
-                return res.status(201).json(formattedNewReview);
-            } else {
-                return res.status(400).json({ 
-                    message: "Bad Request",
-                    errors: {
-                        review: "Review text is required",
-                        stars: "Stars must be an integer from 1 to 5"
-                    }
-                });
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "An error occurred while creating a new Review" });
-        }
+        return res.status(200).json({ Reviews: formattedReviews });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "An error occurred while getting the reviews" });
     }
-);
+});
+
+/// POST (create) a Review for a Spot based on the Spot's Id
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+    const { id } = req.user;
+    const { spotId } = req.params;
+    const { review, stars } = req.body;
+  
+    console.log('Received review data:', { review, stars, spotId }); // Add this line for debugging
+  
+    if (!review || review.length < 2 || !stars || isNaN(stars) || stars < 1 || stars > 5) {
+      console.log('Validation failed: Review and stars are required');
+      return res.status(400).json({ 
+        message: "Bad Request",
+        errors: {
+          review: "Review text is required",
+          stars: "Stars must be an integer from 1 to 5"
+        }
+      });
+    }
+  
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+      console.log('Validation failed: Spot not found');
+      return res.status(404).json({ message: 'Spot not found' });
+    }
+  
+    if (spot.ownerId === id) {
+      console.log('Validation failed: You cannot review your own spot');
+      return res.status(403).json({ message: 'You cannot review your own spot' });
+    }
+  
+    try {
+      const reviewByUser = await Review.findAll({
+        where: { userId: id, spotId: spotId }
+      });
+      if (reviewByUser.length > 0) {
+        console.log('Validation failed: User already has a review for this spot');
+        return res.status(400).json({ message: "User already has a review for this spot" });
+      }
+  
+      const spotNewReview = {
+        userId: Number(id),
+        spotId: spot.id,
+        review: review,
+        stars: parseFloat(stars)
+      };
+  
+      const newReview = await Review.create(spotNewReview);
+  
+      if (newReview) {
+        const formattedCreatedAt = newReview.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedUpdatedAt = newReview.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+  
+        const formattedNewReview = {
+          ...newReview.toJSON(),
+          stars: parseFloat(newReview.stars),
+          createdAt: formattedCreatedAt,
+          updatedAt: formattedUpdatedAt
+        };
+  
+        // update avgRating in Spots
+        const allReviews = await Review.findAll({ where: { spotId: spotId } });
+        const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
+        const avgRating = parseFloat((sum / allReviews.length).toFixed(1));
+  
+        spot.avgRating = parseFloat(avgRating);
+        await spot.save();
+  
+        console.log('Review created successfully:', formattedNewReview);
+        return res.status(201).json(formattedNewReview);
+      } else {
+        console.log('Validation failed: Bad Request');
+        return res.status(400).json({ 
+          message: "Bad Request",
+          errors: {
+            review: "Review text is required",
+            stars: "Stars must be an integer from 1 to 5"
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error creating review:', error);
+      return res.status(500).json({ message: "An error occurred while creating a new Review" });
+    }
+  });
 
 // GET all Bookings for a Spot based on the Spot's Id
 router.get('/:spotId/bookings',

@@ -68,9 +68,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/Seattle/seattle1.jpeg', preview: false },
+      { url: '../spotImages/Seattle/seattle2.jpeg', preview: false },
+      { url: '../spotImages/Seattle/seattle3.jpeg', preview: false }
     ]
   },
   {
@@ -111,8 +111,8 @@ const spotSeeds = [
     updatedAt: new Date(),
     SpotImages: [
       { url: '../spotImages/Aspen/Aspen1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/Aspen2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/Aspen/Aspen2.jpeg', preview: false },
+      { url: '../spotImages/Aspen/Aspen3.jpeg', preview: false }
     ]
   },
   {
@@ -131,9 +131,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/NewYork/newYork1.jpeg', preview: false },
+      { url: '../spotImages/NewYork/newYork2.jpeg', preview: false },
+      { url: '../spotImages/NewYork/newYork3.jpeg', preview: false }
     ]
   },
   {
@@ -152,9 +152,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/Phoenix/phoenix1.jpeg', preview: false },
+      { url: '../spotImages/Phoenix/phoenix2.jpeg', preview: false },
+      { url: '../spotImages/Phoenix/phoenix3.jpeg', preview: false }
     ]
   },
   {
@@ -173,9 +173,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/BigSky/bigsky1.jpeg', preview: true },
+      { url: '../spotImages/BigSky/bigsky2.jpeg', preview: false },
+      { url: '../spotImages/BigSky/bigsky3.jpeg', preview: false }
     ]
   },
   {
@@ -194,9 +194,9 @@ const spotSeeds = [
     createdAt: new Date(),
     updatedAt: new Date(),
     SpotImages: [
-      { url: '../spotImages/SanFrancisco/sanfran1.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran2.jpeg', preview: false },
-      { url: '../spotImages/SanFrancisco/sanfran3.jpeg', preview: false }
+      { url: '../spotImages/Portland/portland1.jpeg', preview: false },
+      { url: '../spotImages/Portland/portland2.jpeg', preview: false },
+      { url: '../spotImages/Portland/portland3.jpeg', preview: false }
     ]
   }
 ];

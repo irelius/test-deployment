@@ -14,7 +14,7 @@ const { ValidationError } = require('sequelize');
 const app = express();
 const routes = require('./routes');
 const { constructFromSymbol } = require('date-fns/constants');
-
+// app.use('/api/spots', spotsRouter);                //! ADDED IN AFTER TESTING
 app.use(morgan('dev')); 
 app.use(cookieParser());
 app.use(express.json());

@@ -12,7 +12,7 @@ const spotImageSeeds = [
   {
     // id: 1,
     spotId: 1,
-    url: 'https://example.com/image1.jpg',
+    url: 'https://photos.zillowstatic.com/fp/3cbea417ab49c0154b65760a0ebd3eea-p_e.jpg',
     preview: true
   },
   {
