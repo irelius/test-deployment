@@ -10,20 +10,24 @@ const ReviewForm = ({ formType, review, spotId }) => {
   const [content, setContent] = useState(review ? review.review : '');
   const [rating, setRating] = useState(review ? review.stars : 0);
   const [imageUrl, setImageUrl] = useState('');
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const reviewData = { review: content, stars: rating };
+    const reviewData = { review: content, stars: rating, spotId: Number(spotId) }; // Ensure spotId is a number
+    console.log('Submitting review:', reviewData); // This log should appear in the console
     try {
       if (formType === 'Create') {
-        await dispatch(createReview({ ...reviewData, spotId }));
+        await dispatch(createReview(reviewData));
       } else {
         await dispatch(editReview({ ...review, ...reviewData }));
       }
       setContent('');
       setRating(0);
+      setError(null);
     } catch (err) {
-      console.error('Error submitting review:', err);
+      console.error('Error submitting review:', err); // This log should appear in the console
+      setError(err.message);
     }
   };
 
@@ -41,6 +45,7 @@ const ReviewForm = ({ formType, review, spotId }) => {
 
   return (
     <form onSubmit={handleSubmit} className="review-form">
+      {error && <p className="error-message">{error}</p>}
       <textarea
         id="review-content"
         name="review-content"

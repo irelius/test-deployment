@@ -50,29 +50,44 @@ const setNoReviews = () => ({
 
 // Thunks
 export const fetchReviews = (spotId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  if (response.ok) {
-    const reviews = await response.json();
-    dispatch(setReviews(reviews));
-  } else if (response.status === 404) {
-    dispatch(setNoReviews());
-  } else {
-    console.error('Error fetching reviews:', response);
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
+    if (response.ok) {
+      const reviews = await response.json();
+      if (reviews.length === 0) {
+        dispatch(setNoReviews());
+      } else {
+        dispatch(setReviews(reviews));
+      }
+    } else {
+      console.error('Failed to fetch reviews:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
   }
 };
 
-export const createReview = (review) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${review.spotId}/reviews`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(review),
-  });
 
-  if (response.ok) {
-    const newReview = await response.json();
-    dispatch(addReview(newReview));
-  } else {
-    console.error('Error submitting review:', response);
+export const createReview = (review) => async (dispatch) => {
+  try {
+    console.log('Sending review data:', review); // This log should appear in the console
+    const response = await csrfFetch(`/api/spots/${review.spotId}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(review),
+    });
+
+    if (response.ok) {
+      const newReview = await response.json();
+      dispatch(addReview(newReview));
+    } else {
+      const errorData = await response.json();
+      console.error('Error submitting review:', errorData); // This log should appear in the console
+      throw new Error(errorData.message); // Throw error to be caught in handleSubmit
+    }
+  } catch (error) {
+    console.error('Error submitting review:', error); // This log should appear in the console
+    throw error; // Rethrow error to be caught in handleSubmit
   }
 };
 

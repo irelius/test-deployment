@@ -1,7 +1,5 @@
-// frontend/src/components/SignupFormModal/SignupFormModal.jsx
-
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useModal } from '../../context/Modal';
 import './SignupForm.css';
@@ -14,7 +12,7 @@ function SignupFormModal() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const errors = useSelector(state => state.session.errors) || {};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,16 +22,14 @@ function SignupFormModal() {
     if (!lastName) newErrors.lastName = 'Last name is required.';
     if (!email) newErrors.email = 'Email is required.';
     if (!password) newErrors.password = 'Password is required.';
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      return dispatch(sessionActions.signup({ username, firstName, lastName, email, password }))
-        .then(closeModal)
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data?.errors) setErrors(data.errors);
-        });
+    if (Object.keys(newErrors).length > 0) {
+      dispatch(sessionActions.setSessionErrors(newErrors));
+      return;
     }
+
+    dispatch(sessionActions.signup({ username, firstName, lastName, email, password }))
+      .then(closeModal)
+      .catch(() => {}); // Errors are already handled in the action
   };
 
   const handleOverlayClick = (e) => {
@@ -114,6 +110,7 @@ function SignupFormModal() {
             {errors.password && <p className="error-message">{errors.password}</p>}
           </div>
           <button className="form-button" type="submit">Sign Up</button>
+          {errors.general && <p className="error-message">{errors.general}</p>}
         </form>
       </div>
     </div>

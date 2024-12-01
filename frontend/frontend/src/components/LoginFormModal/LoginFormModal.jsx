@@ -1,7 +1,7 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useModal } from '../../context/Modal';
 import './LoginFormModal.css';
@@ -11,14 +11,21 @@ function LoginFormModal() {
   const { closeModal } = useModal();
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState([]);
+  const [localErrors, setLocalErrors] = useState([]);
+  const errors = useSelector(state => state.session.errors);
+
+  useEffect(() => {
+    if (errors) {
+      setLocalErrors(Object.values(errors));
+    }
+  }, [errors]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = [];
     if (!credential) newErrors.push('Username or Email is required.');
     if (!password) newErrors.push('Password is required.');
-    setErrors(newErrors);
+    setLocalErrors(newErrors);
 
     if (newErrors.length === 0) {
       return dispatch(sessionActions.login({ credential, password }))
@@ -27,7 +34,7 @@ function LoginFormModal() {
         })
         .catch(async (res) => {
           const data = await res.json();
-          if (data && data.errors) setErrors(data.errors);
+          if (data && data.errors) setLocalErrors(Object.values(data.errors));
         });
     }
   };
@@ -50,7 +57,7 @@ function LoginFormModal() {
         <h1 className="login-form-title">Log In</h1>
         <form className="login-form" onSubmit={handleSubmit}>
           <ul>
-            {errors.map((error, idx) => <li key={idx} className="error-message">{error}</li>)}
+            {localErrors.map((error, idx) => <li key={idx} className="error-message">{error}</li>)}
           </ul>
           <div className="form-group">
             <label htmlFor="credential">Username or Email</label>
