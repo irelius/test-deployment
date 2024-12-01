@@ -492,7 +492,7 @@ router.post('/',
     requireAuth,
     async (req, res) => {
         const { id } = req.user;
-        const { address, city, state, country, lat, lng, name, description, price } = req.body
+        const { address, city, state, country, lat, lng, name, description, price, previewImage } = req.body;
         let check = true;
 
         const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
@@ -520,13 +520,13 @@ router.post('/',
                   description: "Description is required",
                   price: "Price per day must be a positive number"
                 }
-            })
+            });
         }
 
         try {
             const user = await User.findByPk(id);
             if (!user) {
-                return res.status(400).json({ message: "User doesn't exist in the system" })
+                return res.status(400).json({ message: "User doesn't exist in the system" });
             }
 
             let spotDetail = {};
@@ -540,6 +540,7 @@ router.post('/',
             spotDetail.name = name;
             spotDetail.description = description;
             spotDetail.price = parseFloat(price);
+            spotDetail.previewImage = previewImage;
 
             const createdSpot = await Spot.create(spotDetail);
 
@@ -553,16 +554,16 @@ router.post('/',
                 price: parseFloat(createdSpot.price),
                 createdAt: formattedCreatedAt,
                 updatedAt: formattedUpdatedAt
-            }
+            };
             delete formattedSpotDetail.avgRating;
             delete formattedSpotDetail.previewImage;
             return res.status(201).json(formattedSpotDetail);
         } catch (error) {
             console.error(error);
-            return res.status(500).json({ message: "An error occurred while creating a new Spot" })
+            return res.status(500).json({ message: "An error occurred while creating a new Spot" });
         }
     }
-)
+);
 
 // GET details of a Spot from a Spot's Id
 router.get('/:spotId',
