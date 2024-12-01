@@ -1,0 +1,37 @@
+/* frontend/src/components/CreateSpotForm/CreateSpotForm.css */
+
+.create-spot-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .create-spot-form h1 {
+    text-align: center;
+  }
+  
+  .create-spot-form div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .create-spot-form input,
+  .create-spot-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .create-spot-form button {
+    padding: 10px;
+    background-color: #65a9ab;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .create-spot-form .error {
+    color: red;
+  }

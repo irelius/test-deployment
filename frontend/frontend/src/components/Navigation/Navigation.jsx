@@ -18,8 +18,15 @@ function Navigation({ isLoaded }) {
     navigate('/');
   };
 
+  const handleCreateSpotClick = () => {
+    navigate('/spots/new');
+  };
+
   const sessionLinks = sessionUser ? (
-    <ProfileButton user={sessionUser} />
+    <>
+      <button onClick={handleCreateSpotClick} className="create-spot-button">Create a New Spot</button>
+      <ProfileButton user={sessionUser} />
+    </>
   ) : (
     <ProfileButton user={null} />
   );
