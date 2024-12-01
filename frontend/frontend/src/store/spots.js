@@ -80,9 +80,16 @@ export const createSpot = (spot) => async (dispatch) => {
     method: 'POST',
     body: JSON.stringify(spot),
   });
+
   const data = await response.json();
-  dispatch(addSpot(data.spot));
-  return response;
+  console.log('Response data:', data);
+
+  if (response.ok) {
+    dispatch(addSpot(data));
+    return data;
+  } else {
+    throw data;
+  }
 };
 
 export const editSpot = (spot) => async (dispatch) => {
@@ -91,8 +98,8 @@ export const editSpot = (spot) => async (dispatch) => {
     body: JSON.stringify(spot),
   });
   const data = await response.json();
-  dispatch(updateSpot(data.spot));
-  return response;
+  dispatch(updateSpot(data));
+  return data;
 };
 
 export const deleteSpot = (spotId) => async (dispatch) => {

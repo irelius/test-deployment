@@ -1,5 +1,3 @@
-// frontend/src/components/LoginFormModal/LoginFormModal.jsx
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
@@ -40,8 +38,12 @@ function LoginFormModal() {
   };
 
   const handleDemoLogin = () => {
-    dispatch(sessionActions.loginDemoUser());
-    closeModal();
+    dispatch(sessionActions.login({ credential: 'demo@user.com', password: 'password' }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setLocalErrors(Object.values(data.errors));
+      });
   };
 
   const handleOverlayClick = (e) => {

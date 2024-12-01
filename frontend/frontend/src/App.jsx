@@ -7,6 +7,7 @@ import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
 import Spots from './components/Spots/Spots'; 
 import SpotDetails from './components/Spots/SpotDetails';
+import EditSpotForm from './components/EditSpotForm/EditSpotForm';
 import * as sessionActions from './store/session';
 import { ModalProvider } from './context/Modal'; 
 import MyListings from './components/MyListings';
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: '/spots/:spotId',
         element: <SpotDetails />,
+      },
+      {
+        path: '/spots/:spotId/edit',
+        element: <EditSpotForm />,
       },
       {
         path: '/signup',

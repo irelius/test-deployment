@@ -160,3 +160,9 @@
   font-size: 24px;
   cursor: pointer;
 }
+.spot-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: flex-end; 
+}

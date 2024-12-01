@@ -1,20 +1,23 @@
 // frontend/src/components/Spots/SpotDetails.jsx
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSpotDetails } from '../../store/spots';
+import { fetchSpotDetails, deleteSpot } from '../../store/spots';
 import Reviews from '../Reviews/Reviews';
 import ReviewForm from '../ReviewForm/ReviewForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { useModal } from '../../context/Modal';
 import './SpotDetails.css';
 
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const spot = useSelector(state => state.spots.spotDetails);
   const sessionUser = useSelector(state => state.session.user);
+  const { setModalContent, closeModal } = useModal();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -52,6 +55,26 @@ const SpotDetails = () => {
     setSelectedImage(null);
   };
 
+  const handleDelete = async () => {
+    await dispatch(deleteSpot(spotId));
+    closeModal();
+    navigate('/my-listings');
+  };
+
+  const openDeleteModal = () => {
+    setModalContent(
+      <div className="delete-modal">
+        <h2>Are you sure you want to delete this spot?</h2>
+        <button onClick={handleDelete}>Yes</button>
+        <button onClick={closeModal}>Cancel</button>
+      </div>
+    );
+  };
+
+  const handleEdit = () => {
+    navigate(`/spots/${spotId}/edit`);
+  };
+
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -59,6 +82,12 @@ const SpotDetails = () => {
 
   return (
     <div className="spot-details">
+      {sessionUser && sessionUser.id === spot.ownerId && (
+        <div className="spot-actions">
+          <button className="reserve-button" onClick={handleEdit}>Edit Spot</button>
+          <button className="reserve-button" onClick={openDeleteModal}>Delete Spot</button>
+        </div>
+      )}
       <div className="spot-header">
         <h1>{spot.name}</h1>
         <h2>{spot.city}, {spot.state}</h2>
