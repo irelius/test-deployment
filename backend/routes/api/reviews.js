@@ -1,4 +1,3 @@
-// backend/routes/api/reviews.js
 const express = require('express');
 const { User, Review, Spot, ReviewImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
@@ -44,7 +43,7 @@ router.get(
         ]
       });
 
-      res.json(userReviews);
+      res.json({ reviews: userReviews });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'An error occurred while fetching user reviews' });
@@ -72,7 +71,7 @@ router.get('/spots/:spotId/reviews', async (req, res) => {
     });
 
     if (!reviews.length) {
-      return res.status(404).json({ message: 'No reviews found for this spot' });
+      return res.json([]);
     }
 
     res.json(reviews);
@@ -121,7 +120,7 @@ router.post(
 
       res.status(201).json(newReview);
     } catch (error) {
-      console.error('Error creating review:', error); // Detailed error logging
+      console.error('Error creating review:', error);
       res.status(500).json({ message: 'An error occurred while creating the review' });
     }
   }
