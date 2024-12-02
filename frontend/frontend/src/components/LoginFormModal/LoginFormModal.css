@@ -6,18 +6,6 @@
   border: none;
   border-radius: 10px;
 }
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
 
 .login-form-container {
   background-color: #65a9ab; 
@@ -30,17 +18,6 @@
   flex-direction: column;
   align-items: center; 
   position: relative;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #ffffff;
 }
 
 .login-form-title {

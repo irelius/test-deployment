@@ -1,8 +1,5 @@
-// frontend/src/context/Modal.jsx
-
-import { useRef, useState, useContext, createContext } from 'react';
+import { createContext, useContext, useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './Modal.css';
 
 const ModalContext = createContext();
 
@@ -12,12 +9,37 @@ export function ModalProvider({ children }) {
   const [onModalClose, setOnModalClose] = useState(null);
 
   const closeModal = () => {
+    console.log('Closing modal');
     setModalContent(null);
     if (typeof onModalClose === 'function') {
       setOnModalClose(null);
       onModalClose();
     }
   };
+
+  useEffect(() => {
+    console.log('Modal content changed:', modalContent);
+  }, [modalContent]);
+
+  useEffect(() => {
+    if (!modalRef.current) {
+      const modalDiv = document.createElement('div');
+      modalDiv.id = 'modal';
+      document.body.appendChild(modalDiv);
+      modalRef.current = modalDiv;
+    }
+
+    return () => {
+      if (modalRef.current) {
+        document.body.removeChild(modalRef.current);
+        modalRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('Modal ref:', modalRef.current);
+  }, [modalRef]);
 
   const contextValue = {
     modalRef,
@@ -32,7 +54,6 @@ export function ModalProvider({ children }) {
       <ModalContext.Provider value={contextValue}>
         {children}
       </ModalContext.Provider>
-      <div ref={modalRef} id="modal" />
       {modalRef.current && ReactDOM.createPortal(
         modalContent && (
           <div id="modal-background" onClick={closeModal}>
@@ -41,7 +62,7 @@ export function ModalProvider({ children }) {
             </div>
           </div>
         ),
-        modalRef.current
+        modalRef.current || document.body // Use body as a backup
       )}
     </>
   );

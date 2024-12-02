@@ -1,3 +1,5 @@
+// frontend/src/store/session.js
+
 import { csrfFetch } from './csrf';
 
 const SET_SESSION_USER = 'session/setSessionUser';
@@ -36,7 +38,11 @@ export const login = (credentials) => async (dispatch) => {
         dispatch(setSessionUser(data.user));
         return response;
     } catch (error) {
-        console.error('Error logging in:', error); // Handle the error
+        if (error.data && error.data.errors) {
+            dispatch(setSessionErrors(error.data.errors));
+        } else {
+            dispatch(setSessionErrors({ general: 'An unexpected error occurred' }));
+        }
     }
 };
 
@@ -80,22 +86,22 @@ export const restoreUser = () => async (dispatch) => {
 };
 
 // Initial State
-const initialState = { user: null };
+const initialState = { user: null, errors: [] };
 
 // Reducer
 const sessionReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case SET_SESSION_USER:
-        return { ...state, user: action.user, errors: {} };
-      case REMOVE_SESSION_USER:
-        return { ...state, user: null, errors: {} };
-      case LOGIN_DEMO_USER:
-        return { ...state, user: action.user, errors: {} };
-      case SET_SESSION_ERRORS:
-        return { ...state, errors: action.errors };
-      default:
-        return state;
-    }
-  };
+  switch (action.type) {
+    case SET_SESSION_USER:
+      return { ...state, user: action.user, errors: [] };
+    case REMOVE_SESSION_USER:
+      return { ...state, user: null, errors: [] };
+    case LOGIN_DEMO_USER:
+      return { ...state, user: action.user, errors: [] };
+    case SET_SESSION_ERRORS:
+      return { ...state, errors: action.errors };
+    default:
+      return state;
+  }
+};
 
 export default sessionReducer;

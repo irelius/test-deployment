@@ -1,6 +1,5 @@
-// frontend/src/components/OpenModalMenuItem/OpenModalMenuItem.jsx
-
 import { useModal } from '../../context/Modal';
+import './OpenModalMenuItem.css';
 
 function OpenModalMenuItem({
   itemText, // text of the menu item that opens the modal
@@ -11,13 +10,15 @@ function OpenModalMenuItem({
   const { setModalContent, setOnModalClose } = useModal();
 
   const onClick = () => {
-    if (onModalClose) setOnModalClose(onModalClose);
+    if (onItemClick) onItemClick();
     setModalContent(modalComponent);
-    if (typeof onItemClick === "function") onItemClick();
+    if (onModalClose) setOnModalClose(onModalClose);
   };
 
   return (
-    <li onClick={onClick}>{itemText}</li>
+    <div className="open-modal-menu-item" onClick={onClick}>
+      {itemText}
+    </div>
   );
 }
 
