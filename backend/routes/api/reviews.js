@@ -111,6 +111,14 @@ router.post(
         return res.status(404).json({ message: 'Spot not found' });
       }
 
+      const existingReview = await Review.findOne({
+        where: { userId, spotId },
+      });
+
+      if (existingReview) {
+        return res.status(400).json({ message: 'User already has a review for this spot' });
+      }
+
       const newReview = await Review.create({
         userId,
         spotId,
@@ -118,7 +126,14 @@ router.post(
         stars
       });
 
-      res.status(201).json(newReview);
+      const createdReview = await Review.findByPk(newReview.id, {
+        include: [
+          { model: User, attributes: ['id', 'firstName', 'lastName'] },
+          { model: ReviewImage, attributes: ['id', 'url'] },
+        ],
+      });
+
+      res.status(201).json(createdReview);
     } catch (error) {
       console.error('Error creating review:', error);
       res.status(500).json({ message: 'An error occurred while creating the review' });
