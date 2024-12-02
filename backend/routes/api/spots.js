@@ -493,33 +493,26 @@ router.post('/',
     async (req, res) => {
         const { id } = req.user;
         const { address, city, state, country, lat, lng, name, description, price, previewImage } = req.body;
-        let check = true;
+    
 
-        const isValidDecimal = (value) => !isNaN(value) && !isNaN(parseFloat(value));
+        console.log('Received data:', req.body);
 
-        if (!address || address.length < 4) check = false;
-        if (!city || city.length < 2) check = false;
-        if (!state || state.length < 2) check = false;
-        if (!country || country.length < 2) check = false;
-        if (!lat || !isValidDecimal(lat) || lat < -90 || lat > 90) check = false;
-        if (!lng || !isValidDecimal(lng) || lng < -180 || lng > 180) check = false;
-        if (!name || name.length < 2) check = false;
-        if (!description || description.length < 2) check = false;
-        if (!price || !isValidDecimal(price) || price < 0) check = false;
-        if (check === false) {
+        const errors = {};
+        if (!address) errors.address = "Street address is required";
+        if (!city) errors.city = "City is required";
+        if (!state) errors.state = "State is required";
+        if (!country) errors.country = "Country is required";
+        if (!lat || lat < -90 || lat > 90) errors.lat = "Latitude must be within -90 and 90";
+        if (!lng || lng < -180 || lng > 180) errors.lng = "Longitude must be within -180 and 180";
+        if (!name) errors.name = "Name is required";
+        if (!description) errors.description = "Description is required";
+        if (!price || price < 0) errors.price = "Price per day must be a positive number";
+
+        if (Object.keys(errors).length > 0) {
+            console.log('Validation errors:', errors);
             return res.status(400).json({
                 message: "Bad Request",
-                errors: {
-                  address: "Street address is required",
-                  city: "City is required",
-                  state: "State is required",
-                  country: "Country is required",
-                  lat: "Latitude must be within -90 and 90",
-                  lng: "Longitude must be within -180 and 180",
-                  name: "Name must be less than 50 characters",
-                  description: "Description is required",
-                  price: "Price per day must be a positive number"
-                }
+                errors
             });
         }
 
@@ -559,7 +552,7 @@ router.post('/',
             delete formattedSpotDetail.previewImage;
             return res.status(201).json(formattedSpotDetail);
         } catch (error) {
-            console.error(error);
+            console.error('Error creating spot:', error);
             return res.status(500).json({ message: "An error occurred while creating a new Spot" });
         }
     }
