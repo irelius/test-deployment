@@ -1,5 +1,3 @@
-// frontend/src/store/reviews.js
-
 import { csrfFetch } from './csrf';
 
 // Action Types
@@ -10,6 +8,7 @@ const REMOVE_REVIEW = 'reviews/removeReview';
 const ADD_REVIEW_IMAGE = 'reviews/addReviewImage';
 const DELETE_REVIEW_IMAGE = 'reviews/deleteReviewImage';
 const SET_NO_REVIEWS = 'reviews/setNoReviews';
+const SET_USER_REVIEWS = 'reviews/setUserReviews';
 
 // Action Creators
 export const setReviews = (reviews) => ({
@@ -44,50 +43,42 @@ export const deleteReviewImage = (reviewId, imageId) => ({
   imageId,
 });
 
-const setNoReviews = () => ({
+export const setNoReviews = () => ({
   type: SET_NO_REVIEWS,
+});
+
+export const setUserReviews = (reviews) => ({
+  type: SET_USER_REVIEWS,
+  reviews,
 });
 
 // Thunks
 export const fetchReviews = (spotId) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
-    if (response.ok) {
-      const reviews = await response.json();
-      if (reviews.length === 0) {
-        dispatch(setNoReviews());
-      } else {
-        dispatch(setReviews(reviews));
-      }
-    } else {
-      console.error('Failed to fetch reviews:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  if (response.ok) {
+    const reviews = await response.json();
+    dispatch(setReviews(reviews));
   }
 };
 
+export const fetchUserReviews = (userId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/users/${userId}/reviews`);
+  if (response.ok) {
+    const reviews = await response.json();
+    dispatch(setUserReviews(reviews));
+  }
+};
 
 export const createReview = (review) => async (dispatch) => {
-  try {
-    console.log('Sending review data:', review); // This log should appear in the console
-    const response = await csrfFetch(`/api/spots/${review.spotId}/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(review),
-    });
+  const response = await csrfFetch(`/api/spots/${review.spotId}/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(review),
+  });
 
-    if (response.ok) {
-      const newReview = await response.json();
-      dispatch(addReview(newReview));
-    } else {
-      const errorData = await response.json();
-      console.error('Error submitting review:', errorData); // This log should appear in the console
-      throw new Error(errorData.message); // Throw error to be caught in handleSubmit
-    }
-  } catch (error) {
-    console.error('Error submitting review:', error); // This log should appear in the console
-    throw error; // Rethrow error to be caught in handleSubmit
+  if (response.ok) {
+    const newReview = await response.json();
+    dispatch(addReview(newReview));
   }
 };
 
@@ -101,8 +92,6 @@ export const editReview = (review) => async (dispatch) => {
   if (response.ok) {
     const updatedReview = await response.json();
     dispatch(updateReview(updatedReview));
-  } else {
-    console.error('Error updating review:', response);
   }
 };
 
@@ -113,19 +102,17 @@ export const deleteReview = (reviewId) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(removeReview(reviewId));
-  } else {
-    console.error('Error deleting review:', response);
   }
 };
 
 // Initial State
-const initialState = { reviews: [], noReviews: false };
+const initialState = { reviews: [], userReviews: [] };
 
 // Reducer
 const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_REVIEWS:
-      return { ...state, reviews: action.reviews, noReviews: false };
+      return { ...state, reviews: action.reviews };
     case ADD_REVIEW:
       return { ...state, reviews: [...state.reviews, action.review] };
     case UPDATE_REVIEW:
@@ -158,6 +145,8 @@ const reviewsReducer = (state = initialState, action) => {
             : review
         ),
       };
+    case SET_USER_REVIEWS:
+      return { ...state, userReviews: action.reviews };
     case SET_NO_REVIEWS:
       return { ...state, reviews: [], noReviews: true };
     default:

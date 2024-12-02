@@ -19,6 +19,11 @@ export function ModalProvider({ children }) {
 
   useEffect(() => {
     console.log('Modal content changed:', modalContent);
+    if (modalRef.current) {
+      modalRef.current.style.height = 'auto'; // Reset height
+      const modalStyles = window.getComputedStyle(modalRef.current);
+      console.log('Modal height:', modalStyles.height);
+    }
   }, [modalContent]);
 
   useEffect(() => {
@@ -55,13 +60,16 @@ export function ModalProvider({ children }) {
         {children}
       </ModalContext.Provider>
       {modalRef.current && ReactDOM.createPortal(
-        modalContent && (
-          <div id="modal-background" onClick={closeModal}>
-            <div id="modal-content" onClick={(e) => e.stopPropagation()}>
-              {modalContent}
-            </div>
-          </div>
-        ),
+        <>
+          {modalContent && (
+            <>
+              <div id="modal-background" onClick={closeModal}></div>
+              <div id="modal-content" onClick={(e) => e.stopPropagation()}>
+                {modalContent}
+              </div>
+            </>
+          )}
+        </>,
         modalRef.current || document.body // Use body as a backup
       )}
     </>

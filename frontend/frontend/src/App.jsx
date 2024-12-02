@@ -1,7 +1,7 @@
 // frontend/src/App.jsx
 
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormModal/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
@@ -12,10 +12,12 @@ import * as sessionActions from './store/session';
 import { ModalProvider } from './context/Modal'; 
 import MyListings from './components/MyListings';
 import CreateSpotForm from './components/CreateSpotForm/CreateSpotForm';
+import ManageReviews from './components/ReviewList/ManageReviews';
 
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const sessionUser = useSelector(state => state.session.user);
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => {
@@ -26,7 +28,7 @@ function Layout() {
   return (
     <>
       <Navigation isLoaded={isLoaded} />
-      {isLoaded && <Outlet />}
+      {isLoaded && <Outlet context={{ sessionUser }} />}
     </>
   );
 }
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: '/spots/new',
         element: <CreateSpotForm />,
+      },
+      {
+        path: '/manage-reviews',
+        element: <ManageReviews />,
       },
     ],
   },

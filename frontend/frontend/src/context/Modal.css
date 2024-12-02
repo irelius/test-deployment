@@ -1,21 +1,34 @@
 /* frontend/src/components/Modal/Modal.css */
 
+#modal {
+  position: fixed; /* Ensure the modal container is fixed */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Make it cover the entire viewport height */
+  z-index: 1000; /* Ensure the modal container is above other content */
+}
+
 #modal-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh; /* Make it cover the entire viewport height */
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+  z-index: 1001; /* Ensure the background is behind the modal content */
 }
 
 #modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  position: relative;
+  z-index: 1002; /* Ensure the modal content is above the background */
+  min-height: 200px; /* Ensure the modal has a minimum height */
+  max-height: 80vh; /* Ensure the modal does not exceed the viewport height */
+  overflow-y: auto; /* Add scroll if content exceeds max-height */
 }

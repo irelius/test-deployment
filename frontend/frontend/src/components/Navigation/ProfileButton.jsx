@@ -58,6 +58,9 @@ function ProfileButton({ user }) {
               <NavLink to="/my-listings" onClick={closeMenu}>Manage Spots</NavLink>
             </li>
             <li>
+              <NavLink to="/manage-reviews" onClick={closeMenu}>Manage Reviews</NavLink>
+            </li>
+            <li>
               <button onClick={logout}>Log Out</button>
             </li>
           </>

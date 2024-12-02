@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpotDetails, deleteSpot } from '../../store/spots';
-import Reviews from '../Reviews/Reviews';
-import ReviewForm from '../ReviewForm/ReviewForm';
+import ReviewList from '../ReviewList/ReviewList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../../context/Modal';
@@ -75,11 +74,6 @@ const SpotDetails = () => {
     navigate(`/spots/${spotId}/edit`);
   };
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
   return (
     <div className="spot-details">
       {sessionUser && sessionUser.id === spot.ownerId && (
@@ -129,15 +123,9 @@ const SpotDetails = () => {
         </div>
       </div>
       <hr className="divider" />
-      {sessionUser && spot && sessionUser.id !== spot.ownerId && (
-        <div className="review-form-box">
-          <h2>Leave a Review</h2>
-          <ReviewForm formType="Create" spotId={spotId} />
-        </div>
-      )}
       <div className="spot-reviews-box">
         <h2>What other nesters had to say about this spot:</h2>
-        <Reviews spotId={spotId} formatDate={formatDate} sessionUser={sessionUser} />
+        <ReviewList spotId={spotId} sessionUser={sessionUser} />
       </div>
       {selectedImage && (
         <div className="modal" onClick={handleCloseModal}>

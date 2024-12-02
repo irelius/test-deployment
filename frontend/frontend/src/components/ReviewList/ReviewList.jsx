@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, deleteReview } from '../../store/reviews';
-import ReviewForm from '../ReviewForm/ReviewForm';
+import ReviewItem from '../ReviewList/ReviewItem';
+import ReviewModal from '../ReviewModal/ReviewModal';
+import { useModal } from '../../context/Modal';
 
-const ReviewList = ({ spotId }) => {
+const ReviewList = ({ spotId, sessionUser }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector(state => state.reviews.reviews || []); // Ensure reviews is an array
+  const reviews = useSelector(state => state.reviews.reviews || []);
+  const spot = useSelector(state => state.spots.spotDetails);
+  const { setModalContent, closeModal } = useModal();
 
   useEffect(() => {
     dispatch(fetchReviews(spotId));
@@ -15,21 +19,33 @@ const ReviewList = ({ spotId }) => {
     dispatch(deleteReview(reviewId));
   };
 
-  if (!Array.isArray(reviews)) {
-    return <div>No reviews available</div>;
-  }
+  const openReviewModal = (formType, review) => {
+    setModalContent(
+      <ReviewModal
+        formType={formType}
+        review={review}
+        spotId={spotId}
+        closeModal={closeModal}
+      />
+    );
+  };
+
+  const userHasReviewed = Array.isArray(reviews) && reviews.find(review => review.userId === sessionUser.id);
 
   return (
-    <div>
+    <div className="reviews">
       <h2>Reviews</h2>
-      <ReviewForm formType="Create" spotId={spotId} />
-      {reviews.map(review => (
-        <div key={review.id}>
-          <p>{review.content}</p>
-          <p>Rating: {review.rating}</p>
-          <button onClick={() => handleDelete(review.id)}>Delete</button>
-          <ReviewForm formType="Edit" review={review} spotId={spotId} />
-        </div>
+      {sessionUser && spot && sessionUser.id !== spot.ownerId && !userHasReviewed && (
+        <button onClick={() => openReviewModal('Create')}>Post Your Review</button>
+      )}
+      {Array.isArray(reviews) && reviews.map(review => (
+        <ReviewItem
+          key={review.id}
+          review={review}
+          sessionUser={sessionUser}
+          onDelete={handleDelete}
+          onEdit={() => openReviewModal('Edit', review)}
+        />
       ))}
     </div>
   );
