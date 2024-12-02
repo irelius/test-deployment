@@ -14,6 +14,7 @@ const ReviewModal = ({ formType, review, spotId, spotName, closeModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const reviewData = { review: content, stars: rating, spotId: Number(spotId) };
+    console.log('Submitting review:', reviewData); // Debugging log
     try {
       if (formType === 'Create') {
         await dispatch(createReview(reviewData));
@@ -22,6 +23,7 @@ const ReviewModal = ({ formType, review, spotId, spotName, closeModal }) => {
       }
       closeModal();
     } catch (err) {
+      console.error('Error submitting review:', err); // Debugging log
       setError(err.message);
     }
   };

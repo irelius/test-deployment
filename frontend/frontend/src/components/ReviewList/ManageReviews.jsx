@@ -18,8 +18,9 @@ const ManageReviews = () => {
     }
   }, [dispatch, sessionUser]);
 
-  const handleDelete = (reviewId) => {
-    dispatch(deleteReview(reviewId));
+  const handleDelete = async (reviewId) => {
+    await dispatch(deleteReview(reviewId));
+    dispatch(fetchUserReviews(sessionUser.id)); // Refresh the reviews after deletion
   };
 
   const openReviewModal = (formType, review) => {
@@ -45,7 +46,7 @@ const ManageReviews = () => {
             key={review.id}
             review={review}
             sessionUser={sessionUser}
-            onDelete={handleDelete}
+            onDelete={() => handleDelete(review.id)}
             onEdit={() => openReviewModal('Edit', review)}
           />
         ))

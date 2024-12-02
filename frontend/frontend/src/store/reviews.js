@@ -61,11 +61,11 @@ export const fetchReviews = (spotId) => async (dispatch) => {
   }
 };
 
-export const fetchUserReviews = (userId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/users/${userId}/reviews`);
+export const fetchUserReviews = () => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/current`);
   if (response.ok) {
     const reviews = await response.json();
-    dispatch(setUserReviews(reviews));
+    dispatch(setUserReviews(reviews.reviews));
   }
 };
 
@@ -78,7 +78,11 @@ export const createReview = (review) => async (dispatch) => {
 
   if (response.ok) {
     const newReview = await response.json();
+    console.log('Backend Response:', newReview); // Debugging log
     dispatch(addReview(newReview));
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
   }
 };
 
@@ -92,6 +96,9 @@ export const editReview = (review) => async (dispatch) => {
   if (response.ok) {
     const updatedReview = await response.json();
     dispatch(updateReview(updatedReview));
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
   }
 };
 
@@ -102,6 +109,9 @@ export const deleteReview = (reviewId) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(removeReview(reviewId));
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
   }
 };
 
@@ -110,6 +120,9 @@ const initialState = { reviews: [], userReviews: [] };
 
 // Reducer
 const reviewsReducer = (state = initialState, action) => {
+  console.log('Reducer State (before):', state.reviews); // Debugging log
+  console.log('Action:', action); // Debugging log
+
   switch (action.type) {
     case SET_REVIEWS:
       return { ...state, reviews: action.reviews };
@@ -125,7 +138,7 @@ const reviewsReducer = (state = initialState, action) => {
     case REMOVE_REVIEW:
       return {
         ...state,
-        reviews: state.reviews.filter((review) => review.id !== action.reviewId),
+        reviews: Array.isArray(state.reviews) ? state.reviews.filter((review) => review.id !== action.reviewId) : [],
       };
     case ADD_REVIEW_IMAGE:
       return {

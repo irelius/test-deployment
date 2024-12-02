@@ -50,7 +50,7 @@ const ReviewList = ({ spotId, sessionUser }) => {
         />
       ))}
     </div>
-  );
+  ); 
 };
 
 export default ReviewList;
