@@ -4,18 +4,18 @@
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import './SpotCard.css';
+import SpotCardStyles from './SpotCard.module.css';
 
 const SpotCard = ({ spot }) => {
   const avgRating = spot.avgRating ? spot.avgRating.toFixed(2) : 'New';
 
   return (
-    <div className="spot-card">
+    <div className={SpotCardStyles.spotCard}>
       <NavLink to={`/spots/${spot.id}`}>
-        <img src={spot.previewImage} alt={spot.name} className="spot-card-image" />
-        <div className="spot-card-details">
+        <img src={spot.previewImage} alt={spot.name} className={SpotCardStyles.spotCardImage} />
+        <div className={SpotCardStyles.spotCardDetails}>
           <h3>{spot.name}</h3>
-          <div className="spot-card-rating">
+          <div className={SpotCardStyles.spotCardRating}>
             <FontAwesomeIcon icon={faStar} /> {avgRating}
           </div>
           <p>{spot.description}</p>

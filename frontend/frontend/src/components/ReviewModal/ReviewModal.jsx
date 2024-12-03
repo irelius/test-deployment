@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReview, editReview } from '../../store/reviews';
-import './ReviewModal.css';
+import { FaStar } from 'react-icons/fa';
+import reviewModalStyles from './ReviewModal.module.css';
 
 const ReviewModal = ({ formType, review, spotId, spotName, closeModal }) => {
   const dispatch = useDispatch();
   const [content, setContent] = useState(review ? review.review : '');
   const [rating, setRating] = useState(review ? review.stars : 0);
+  const [hover, setHover] = useState(null);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -29,10 +31,10 @@ const ReviewModal = ({ formType, review, spotId, spotName, closeModal }) => {
   };
 
   return (
-    <div className="review-modal">
+    <div className={reviewModalStyles.reviewModal}>
       <h2>How was your stay?</h2>
       <h3>{spotName}</h3>
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className={reviewModalStyles.errorMessage}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <textarea
           value={content}
@@ -40,16 +42,20 @@ const ReviewModal = ({ formType, review, spotId, spotName, closeModal }) => {
           placeholder="Write your review here"
           required
         />
-        <select
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          required
-        >
-          <option value="" disabled>Select rating</option>
-          {[1, 2, 3, 4, 5].map(star => (
-            <option key={star} value={star}>{star} Star{star > 1 && 's'}</option>
-          ))}
-        </select>
+        <div className={reviewModalStyles.starRating}>
+          {[...Array(5)].map((star, index) => {
+            const ratingValue = index + 1;
+            return (
+              <FaStar
+                key={index}
+                className={`${reviewModalStyles.star} ${ratingValue <= (hover || rating) ? reviewModalStyles.selected : ''}`}
+                onClick={() => setRating(ratingValue)}
+                onMouseEnter={() => setHover(ratingValue)}
+                onMouseLeave={() => setHover(null)}
+              />
+            );
+          })}
+        </div>
         <button type="submit" disabled={content.length < 10 || rating === 0}>
           {formType === 'Create' ? 'Submit Review' : 'Update Review'}
         </button>

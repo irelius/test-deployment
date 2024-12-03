@@ -1,45 +1,44 @@
-/* frontend/src/components/Spots/SpotDetails.css */
+/* frontend/src/components/Spots/SpotDetails.module.css */
 
-.spot-details {
+.spotDetails {
   padding: 50px;
 }
 
-.spot-header {
+.spotHeader {
   margin-bottom: 20px;
 }
 
-.spot-header h1 {
+.spotHeader h1 {
   margin: 0;
 }
 
-.spot-header h2 {
+.spotHeader h2 {
   margin: 0;
   color: gray;
 }
 
-.spot-rating {
+.spotRating {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.spot-images-grid {
+.spotImagesGrid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   gap: 8px;
   margin-bottom: 20px;
   background-color: transparent;
-  
 }
 
-.spot-image-large {
+.spotImageLarge {
   grid-column: 1 / 2;
   grid-row: 1 / 3;
 }
 
-.spot-image-large img,
-.spot-image-small img {
+.spotImageLarge img,
+.spotImageSmall img {
   width: 100%;
   height: auto;
   max-width: 400px;
@@ -49,12 +48,12 @@
   padding: 5px;
 }
 
-.spot-image-small {
+.spotImageSmall {
   grid-column: span 1;
   padding: 5px;
 }
 
-.empty-image {
+.emptyImage {
   border: 10px solid #ccc;
   background-color: #f9f9f9;
   width: 100%;
@@ -67,22 +66,22 @@
   z-index: 10;
 }
 
-.spot-content {
+.spotContent {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.spot-description {
+.spotDescription {
   flex: 2;
   margin-right: 20px;
 }
 
-.spot-reservation {
+.spotReservation {
   flex: 1;
 }
 
-.reservation-box {
+.reservationBox {
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;
@@ -90,7 +89,7 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.reserve-button {
+.reserveButton {
   background-color: #ff5a5f;
   color: white;
   border: none;
@@ -100,7 +99,7 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.reserve-button:hover {
+.reserveButton:hover {
   background-color: #e04e4e;
   transform: scale(1.1);
 }
@@ -109,11 +108,11 @@
   margin: 20px 0;
 }
 
-.spot-reviews {
+.spotReviews {
   margin-top: 20px;
 }
 
-.review-form-box {
+.reviewFormBox {
   margin-top: 20px;
   padding: 20px;
   border: 1px solid #ccc;
@@ -121,7 +120,7 @@
   background-color: #f9f9f9;
 }
 
-.spot-reviews-box {
+.spotReviewsBox {
   margin-top: 20px;
   padding: 20px;
   border: 1px solid #ccc;
@@ -141,14 +140,14 @@
   align-items: center;
 }
 
-.modal-content {
+.modalContent {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
   position: relative;
 }
 
-.modal-image {
+.modalImage {
   max-width: 100%;
   max-height: 80vh;
 }
@@ -160,7 +159,8 @@
   font-size: 24px;
   cursor: pointer;
 }
-.spot-actions {
+
+.spotActions {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;

@@ -1,0 +1,99 @@
+/* frontend/src/components/Reviews/ReviewModal.module.css */
+
+.reviewModal {
+  background-color: #65a9ab; 
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  width: 400px; 
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001; 
+  box-sizing: border-box;
+}
+
+.reviewModal h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.reviewModal h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.reviewModal form {
+  width: 100%;
+}
+
+.reviewModal textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 100px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 16px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.starRating {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.star {
+  font-size: 30px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.star:hover,
+.star.selected {
+  color: #ffcc00;
+}
+
+.reviewModal button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  background-color: #000000;
+  color: #65a9ab;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  align-items: center;
+}
+
+.reviewModal button:hover {
+  background-color: #8d8d8d;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; 
+}

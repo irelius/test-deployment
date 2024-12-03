@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpots } from '../../store/spots';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import './Spots.css';
+import spotsStyles from './Spots.module.css';
 
 const Spots = () => {
   const dispatch = useDispatch();
@@ -20,17 +20,19 @@ const Spots = () => {
   };
 
   return (
-    <div className="spots-container grid">
+    <div className={spotsStyles.spotsContainer + ' ' + spotsStyles.grid}>
       {spots.map(spot => (
         <div
           key={spot.id}
-          className="spot-link"
-          title={spot.name}
-          onClick={() => handleTileClick(spot.id)}
+          className={spotsStyles.spotLink}
         >
-          <div className="spot-tile">
-            <img src={spot.previewImage} alt={spot.name} className="spot-thumbnail" />
-            <div className="spot-info">
+          <div
+            className={spotsStyles.spotTile}
+            title={spot.name}
+            onClick={() => handleTileClick(spot.id)}
+          >
+            <img src={spot.previewImage} alt={spot.name} className={spotsStyles.spotThumbnail} />
+            <div className={spotsStyles.spotInfo}>
               <div>{spot.name}</div>
               <div>
                 <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? spot.avgRating.toFixed(2) : 'New'}

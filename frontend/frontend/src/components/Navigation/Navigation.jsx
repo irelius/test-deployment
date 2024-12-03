@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton'; 
-import './Navigation.css';
+import styles from './Navigation.module.css';
 
 const logo = '/bird.png';
 
@@ -19,7 +19,7 @@ function Navigation({ isLoaded }) {
 
   const sessionLinks = sessionUser ? (
     <>
-      <button onClick={handleCreateSpotClick} className="create-spot-button">Create a New Spot</button>
+      <button onClick={handleCreateSpotClick} className={styles.createSpotButton}>Create a New Spot</button>
       <ProfileButton user={sessionUser} />
     </>
   ) : (
@@ -27,13 +27,13 @@ function Navigation({ isLoaded }) {
   );
 
   return (
-    <nav className="navigation">
-      <div className="navigation-left">
+    <nav className={styles.navigation}>
+      <div className={styles.navigationLeft}>
         <NavLink to="/" onClick={handleLogoClick}>
-          <img src={logo} alt="Logo" className="nav-logo" />
+          <img src={logo} alt="Logo" className={styles.navLogo} />
         </NavLink>
       </div>
-      <div className="navigation-right">
+      <div className={styles.navigationRight}>
         {isLoaded && sessionLinks}
       </div>
     </nav>

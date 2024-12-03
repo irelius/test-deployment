@@ -1,6 +1,6 @@
-/* frontend/src/components/SignupFormModal/SignupForm.css */
+/* frontend/src/components/SignupFormModal/SignupFormModal.module.css */
 
-.signup-form-container {
+.signupFormContainer {
   background-color: #65a9ab;
   padding: 20px;
   border-radius: 12px;
@@ -10,40 +10,44 @@
   display: flex;
   flex-direction: column;
   align-items: center; 
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001; 
 }
 
-.signup-form-title {
+.signupFormTitle {
   margin-bottom: 20px;
   text-align: center;
   color: #ffffff;
 }
 
-.signup-form {
+.signupForm {
   width: 100%; 
   display: flex;
   flex-direction: column;
   align-items: center; 
 }
 
-.form-group {
+.formGroup {
   margin-bottom: 15px;
   width: 100%; 
 }
 
-.form-group label {
+.formGroup label {
   display: block;
   margin-bottom: 5px;
 }
 
-.form-group input {
+.formGroup input {
   width: 100%;
   padding: 8px;
   border: none;
   border-radius: 10px;
 }
 
-.signup-form .form-button {
+.formButton {
   width: 100%;
   padding: 12px;
   background-color: #000000; 
@@ -56,12 +60,22 @@
   align-items: center;
 }
 
-.signup-form .form-button:hover {
+.formButton:hover {
   background-color: #555; 
 }
 
-.error-message {
+.errorMessage {
   color: red;
   font-size: 12px;
   margin-top: 5px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; 
 }

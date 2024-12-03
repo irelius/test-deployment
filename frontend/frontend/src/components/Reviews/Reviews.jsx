@@ -1,11 +1,10 @@
-// frontend/src/components/Reviews/ReviewList.jsx
-
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, deleteReview } from '../../store/reviews';
 import ReviewItem from './ReviewItem';
 import ReviewModal from './ReviewModal';
 import { useModal } from '../../context/Modal';
+import reviewStyles from './Reviews.module.css';
 
 const ReviewList = ({ spotId, sessionUser }) => {
   const dispatch = useDispatch();
@@ -35,7 +34,7 @@ const ReviewList = ({ spotId, sessionUser }) => {
   const userHasReviewed = Array.isArray(reviews) && reviews.find(review => review.userId === sessionUser.id);
 
   return (
-    <div className="reviews">
+    <div className={reviewStyles.reviews}>
       <h2>Reviews</h2>
       {sessionUser && spot && sessionUser.id !== spot.ownerId && !userHasReviewed && (
         <button onClick={() => openReviewModal('Create')}>Post Your Review</button>

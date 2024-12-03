@@ -5,6 +5,7 @@ import ReviewItem from './ReviewItem';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import { useModal } from '../../context/Modal';
 import { useOutletContext } from 'react-router-dom';
+import manageReviewsStyles from './ManageReviews.module.css'; // Correct import
 
 const ManageReviews = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const ManageReviews = () => {
   };
 
   return (
-    <div className="manage-reviews">
+    <div className={manageReviewsStyles.manageReviews}>
       <h2>Manage Reviews</h2>
       {reviews.length === 0 ? (
         <p>You have not posted any reviews yet.</p>

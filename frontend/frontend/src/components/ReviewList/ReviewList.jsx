@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, deleteReview } from '../../store/reviews';
-import ReviewItem from '../ReviewList/ReviewItem';
+import ReviewItem from './ReviewItem';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import { useModal } from '../../context/Modal';
+import styles from './ReviewList.module.css';
 
 const ReviewList = ({ spotId, sessionUser }) => {
   const dispatch = useDispatch();
@@ -33,10 +34,10 @@ const ReviewList = ({ spotId, sessionUser }) => {
   const userHasReviewed = Array.isArray(reviews) && reviews.find(review => review.userId === sessionUser.id);
 
   return (
-    <div className="reviews">
+    <div className={styles.reviews}>
       <h2>Reviews</h2>
       {sessionUser && spot && sessionUser.id !== spot.ownerId && !userHasReviewed && (
-        <button onClick={() => openReviewModal('Create')}>Post Your Review</button>
+        <button className={styles.reviewButton} onClick={() => openReviewModal('Create')}>Post Your Review</button>
       )}
       {Array.isArray(reviews) && reviews.map(review => (
         <ReviewItem

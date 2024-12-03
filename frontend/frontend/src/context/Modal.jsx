@@ -1,5 +1,6 @@
 import { createContext, useContext, useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import modalStyles from './Modal.module.css';
 
 const ModalContext = createContext();
 
@@ -9,22 +10,12 @@ export function ModalProvider({ children }) {
   const [onModalClose, setOnModalClose] = useState(null);
 
   const closeModal = () => {
-    console.log('Closing modal');
     setModalContent(null);
     if (typeof onModalClose === 'function') {
       setOnModalClose(null);
       onModalClose();
     }
   };
-
-  useEffect(() => {
-    console.log('Modal content changed:', modalContent);
-    if (modalRef.current) {
-      modalRef.current.style.height = 'auto'; // Reset height
-      const modalStyles = window.getComputedStyle(modalRef.current);
-      console.log('Modal height:', modalStyles.height);
-    }
-  }, [modalContent]);
 
   useEffect(() => {
     if (!modalRef.current) {
@@ -41,10 +32,6 @@ export function ModalProvider({ children }) {
       }
     };
   }, []);
-
-  useEffect(() => {
-    console.log('Modal ref:', modalRef.current);
-  }, [modalRef]);
 
   const contextValue = {
     modalRef,
@@ -63,8 +50,8 @@ export function ModalProvider({ children }) {
         <>
           {modalContent && (
             <>
-              <div id="modal-background" onClick={closeModal}></div>
-              <div id="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className={modalStyles.modalBackground} onClick={closeModal}></div>
+              <div className={modalStyles.modalContent} onClick={(e) => e.stopPropagation()}>
                 {modalContent}
               </div>
             </>

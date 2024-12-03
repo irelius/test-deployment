@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useModal } from '../../context/Modal';
-import './SignupForm.css';
+import styles from './SignupFormModal.module.css';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -33,78 +33,81 @@ function SignupFormModal() {
   };
 
   return (
-    <div className="signup-form-container">
-      <h1 className="signup-form-title">Sign Up!</h1>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            className="form-input"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          {Array.isArray(errors.username) && errors.username.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-        </div>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
-          <input
-            id="firstName"
-            name="firstName"
-            className="form-input"
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          {Array.isArray(errors.firstName) && errors.firstName.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-        </div>
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            id="lastName"
-            name="lastName"
-            className="form-input"
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-          {Array.isArray(errors.lastName) && errors.lastName.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            className="form-input"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          {Array.isArray(errors.email) && errors.email.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            className="form-input"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {Array.isArray(errors.password) && errors.password.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-        </div>
-        <button className="form-button" type="submit">Sign Up</button>
-        {Array.isArray(errors.general) && errors.general.map((error, idx) => <p key={idx} className="error-message">{error}</p>)}
-      </form>
-    </div>
+    <>
+      <div className={styles.overlay} onClick={closeModal}></div>
+      <div className={styles.signupFormContainer} onClick={(e) => e.stopPropagation()}>
+        <h1 className={styles.signupFormTitle}>Sign Up!</h1>
+        <form className={styles.signupForm} onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              className={styles.formInput}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            {Array.isArray(errors.username) && errors.username.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="firstName">First Name</label>
+            <input
+              id="firstName"
+              name="firstName"
+              className={styles.formInput}
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            {Array.isArray(errors.firstName) && errors.firstName.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              id="lastName"
+              name="lastName"
+              className={styles.formInput}
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+            {Array.isArray(errors.lastName) && errors.lastName.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              className={styles.formInput}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            {Array.isArray(errors.email) && errors.email.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              className={styles.formInput}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {Array.isArray(errors.password) && errors.password.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          </div>
+          <button className={styles.formButton} type="submit">Sign Up</button>
+          {Array.isArray(errors.general) && errors.general.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+        </form>
+      </div>
+    </>
   );
 }
 

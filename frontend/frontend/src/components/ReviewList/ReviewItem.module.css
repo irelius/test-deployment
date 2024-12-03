@@ -1,15 +1,7 @@
-frontend/src/components/Reviews/Reviews.css
+/* frontend/src/components/Reviews/ReviewItem.module.css */
 
-.reviews {
-    margin-top: 20px;
-  }
-  
-  .reviews h2 {
-    margin-bottom: 20px;
-  }
-  
-  .review {
-    border: 1px solid #ccc;
+.review {
+    border: 1px solid #ddd;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -21,15 +13,16 @@ frontend/src/components/Reviews/Reviews.css
   }
   
   .review button {
-    background-color: #ff5a5f;
+    background-color: #65a9ab;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 3px;
     cursor: pointer;
+    margin-right: 5px;
     transition: background-color 0.3s ease;
   }
   
   .review button:hover {
-    background-color: #e04e4e;
+    background-color: #4f8a8b;
   }

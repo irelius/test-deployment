@@ -6,7 +6,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from '../OpenModalMenuItem/OpenModalMenuItem'; 
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
-import './ProfileButton.css';
+import pb from './ProfileButton.module.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -44,12 +44,14 @@ function ProfileButton({ user }) {
     navigate('/');
   };
 
+  const divClassName = showMenu ? pb.profileDropdown : pb.hidden;
+
   return (
-    <div className="profile-button-container">
-      <button onClick={toggleMenu} className="profile-button">
+    <div className={pb.profileButtonContainer}>
+      <button onClick={toggleMenu} className={pb.profileButton}>
         <FaUserCircle />
       </button>
-      <ul className={`profile-dropdown ${showMenu ? "" : "hidden"}`} ref={ulRef}>
+      <ul className={divClassName} ref={ulRef} >
         {user ? (
           <>
             <li>Hello, {user.firstName}</li>
