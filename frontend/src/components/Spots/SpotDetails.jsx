@@ -164,7 +164,7 @@ const SpotDetails = () => {
         <p>Hosted by {spot.Owner.firstName}</p>
       </div>
       <div className={spotDetailsStyles.spotRating}>
-        <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? spot.avgRating.toFixed(2) : 'New'}
+        <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? parseFloat(spot.avgRating).toFixed(1) : 'New'}
         {spot.numReviews > 0 && (
           <>
             <span> · </span>
