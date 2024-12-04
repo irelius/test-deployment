@@ -56,7 +56,7 @@ router.get('/current',
             return res.status(500).json({ message: "An error occurred while getting the Spots" })
         }
 })
-
+ 
 
 // POST (add) an Image to a Spot based on the Spot's Id
 router.post('/:spotId/images',
