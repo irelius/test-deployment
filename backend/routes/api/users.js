@@ -52,26 +52,27 @@ router.get(
     }
 
     const user = await User.findByPk(req.params.userId, {
-    attributes: { 
-      exclude: ['hashedPassword'],
-      include: ['id', 'firstName', 'lastName', 'username', 'email']
+      attributes: { 
+        exclude: ['hashedPassword'],
+        include: ['id', 'firstName', 'lastName', 'username', 'email']
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
 
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+    const reorderedUser = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,       
+      username: user.username  
+    };
+
+    return res.status(200).json({ user: reorderedUser });
   }
-
-  const reorderedUser = {
-    id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,       
-    username: user.username  
-  };
-
-  return res.status(200).json({ user: reorderedUser });
-})
+);
 
 // POST (create) a new User = sign-up
 router.post(
@@ -90,7 +91,7 @@ router.post(
           username: "Username is required",
           password: "Password is required"
         }
-      })
+      });
     }
 
     const existingUser = await User.findOne({
@@ -110,11 +111,10 @@ router.post(
           username: "User with that username already exists"
         } 
       });
-    };
+    }
     
     const hashedPassword = bcrypt.hashSync(password);
 
-//create user
     const newUser = await User.create({
       firstName,
       lastName,
@@ -122,8 +122,6 @@ router.post(
       username,
       hashedPassword
     });
-
-//cookie and resp w/ data
 
     const safeUser = {
       id: newUser.id,
@@ -137,7 +135,8 @@ router.post(
     return res.status(201).json({
       user: safeUser
     });
-  });
+  }
+);
 
 
 module.exports = router;

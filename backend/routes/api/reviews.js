@@ -5,7 +5,6 @@ const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 
-// GET all Reviews of current user 
 router.get(
   '/current',
   requireAuth,
@@ -13,7 +12,6 @@ router.get(
     try {
       const { id } = req.user;
 
-      // Find all reviews by the current user
       const userReviews = await Review.findAll({
         where: { userId: id },
         include: [
@@ -141,6 +139,50 @@ router.post(
   }
 );
 
+// GET REVIEW BY reviewId
+router.get('/:reviewId', requireAuth, async (req, res) => {
+  const { id } = req.user;
+  const { reviewId } = req.params;
+
+  try {
+    const review = await Review.findByPk(reviewId, {
+      include: [
+        {
+          model: User,
+          attributes: ['firstName', 'lastName']
+        },
+        {
+          model: ReviewImage,
+          attributes: ['id', 'url']
+        }
+      ]
+    });
+
+    if (!review) {
+      return res.status(404).json({ message: "Review couldn't be found" });
+    }
+
+    if (review.userId !== Number(id)) {
+      return res.status(403).json({ message: "You are not authorized to view this review" });
+    }
+
+    const formattedCreatedAt = review.createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedUpdatedAt = review.updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+
+    const formattedReview = {
+      ...review.toJSON(),
+      stars: parseFloat(review.stars),
+      createdAt: formattedCreatedAt,
+      updatedAt: formattedUpdatedAt
+    };
+
+    return res.status(200).json(formattedReview);
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    return res.status(500).json({ message: 'An error occurred while fetching the review' });
+  }
+});
+
 // ADD IMAGE TO REVIEW
 router.post(
   '/:reviewId/images', 
@@ -150,18 +192,15 @@ router.post(
     const { reviewId } = req.params;
     const { url } = req.body;
 
-    // Check if review exists
     const review = await Review.findByPk(reviewId);
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Check if user is the owner of the review
     if (review.userId !== Number(id)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    // Check if the maximum number of images is reached
     const existingImages = await ReviewImage.count({ 
       where: { reviewId } 
     });
@@ -169,7 +208,6 @@ router.post(
       return res.status(400).json({ message: 'Maximum number of images for this review reached' });
     }
 
-    // Add image
     const newImage = await ReviewImage.create({ reviewId, url });
     return res.status(201).json({ 
       id: newImage.id, url: newImage.url 
@@ -185,19 +223,16 @@ router.delete(
     const { id } = req.user;
     const { imageId } = req.params;
 
-    // Find image
     const imageToDelete = await ReviewImage.findByPk(imageId);
     if (!imageToDelete) {
       return res.status(404).json({ message: 'Image not found' });
     }
 
-    // Check if user is the owner of the review
     const review = await Review.findByPk(imageToDelete.reviewId);
     if (review.userId !== Number(id)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    // Delete image
     await imageToDelete.destroy();
     return res.json({ message: 'Successfully deleted' });
   }
@@ -212,27 +247,31 @@ router.put(
     const { reviewId } = req.params;
     const { review, stars } = req.body;
 
-    // Find review
     const reviewToUpdate = await Review.findByPk(reviewId);
     if (!reviewToUpdate) {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Check if user is the owner of the review
     if (reviewToUpdate.userId !== Number(id)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    // Validate review content and stars
     if (!review || review.length < 2 || review.length > 256 || isNaN(stars) || stars < 1 || stars > 5) {
       return res.status(400).json({ message: 'Invalid review content or stars' });
     }
 
-    // Update review
     reviewToUpdate.review = review;
     reviewToUpdate.stars = parseFloat(stars);
 
     const updatedReview = await reviewToUpdate.save();
+
+    // Recalculate the average rating for the spot
+    const spot = await Spot.findByPk(reviewToUpdate.spotId);
+    const reviews = await Review.findAll({ where: { spotId: spot.id } });
+    const avgRating = reviews.reduce((acc, review) => acc + review.stars, 0) / reviews.length;
+    spot.avgRating = avgRating;
+    await spot.save();
+
     res.json(updatedReview);
   }
 );
@@ -245,21 +284,17 @@ router.delete(
     const { id } = req.user;
     const { reviewId } = req.params;
 
-    // Find review
     const reviewToDelete = await Review.findByPk(reviewId);
     if (!reviewToDelete) {
       return res.status(404).json({ message: "Review couldn't be found" });
     }
 
-    // Check if user is the owner of the review
     if (reviewToDelete.userId !== Number(id)) {
       return res.status(403).json({ message: 'You are not authorized to delete this review.' });
     }
 
-    // Delete review
     await reviewToDelete.destroy();
 
-    // Update avgRating for spot
     const allReviews = await Review.findAll({ where: { spotId: reviewToDelete.spotId } });
     if (allReviews.length > 0) {
       const sum = allReviews.reduce((acc, el) => acc + el.stars, 0);
