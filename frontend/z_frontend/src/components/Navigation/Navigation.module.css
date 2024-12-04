@@ -1,0 +1,43 @@
+/* frontend/src/components/Navigation/Navigation.module.css */
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #65a9ab; 
+  color: #fff; 
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  z-index: 100;
+}
+
+.navigationLeft {
+  display: flex;
+  align-items: center;
+}
+
+.navLogo {
+  width: 100px; 
+  height: auto;
+}
+
+.navigationRight {
+  display: flex;
+  align-items: center;
+}
+
+.createSpotButton {
+  background-color: #ffffff;
+  color: #65a9ab;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 20px; /* Add space between the button and ProfileButton */
+  transition: background-color 0.3s ease;
+}
+
+.createSpotButton:hover {
+  background-color: #f0f0f0;
+}

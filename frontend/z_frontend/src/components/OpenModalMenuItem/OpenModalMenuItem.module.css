@@ -1,0 +1,10 @@
+/* frontend/src/components/OpenModalMenuItem/OpenModalMenuItem.module.css */
+
+.openModalMenuItem {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.openModalMenuItem:hover {
+  background-color: #f0f0f0;
+}

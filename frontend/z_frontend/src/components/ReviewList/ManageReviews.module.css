@@ -1,0 +1,18 @@
+frontend/src/components/ManageReviews/ManageReviews.module.css
+
+.manageReviews {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .manageReviews h2 {
+    margin-bottom: 20px;
+  }
+  
+  .manageReviews p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+  }

@@ -1,0 +1,33 @@
+/* frontend/src/components/Modal/Modal.module.css */
+
+
+.modal {
+  display: none; 
+}
+
+.modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
+
+.modalContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1002;
+  min-width: 50vw;
+  max-width: 50vw; 
+  min-height: 50vh;
+  max-height: 90vh; 
+  overflow-y: visible;
+  box-sizing: border-box;
+}
