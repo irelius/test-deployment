@@ -18,7 +18,7 @@ const Spots = () => {
         await dispatch(fetchSpots());
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching spots:', error);
+        
         setIsLoading(false);
       }
     };

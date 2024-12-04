@@ -1,0 +1,35 @@
+.myListingsContainer {
+  padding: 20px;
+}
+
+.listingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.listingTile {
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.listingTile:hover {
+  transform: scale(1.05);
+}
+
+.listingThumbnail {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.listingInfo {
+  padding: 10px;
+}
+
+.listingInfo div {
+  margin-bottom: 5px;
+}

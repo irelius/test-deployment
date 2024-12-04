@@ -51,6 +51,13 @@ const SpotDetails = () => {
 
   const handleEditReview = async (e) => {
     e.preventDefault();
+    setError(null);
+
+    if (editContent.trim() === '' || editRating === 0) {
+      setError('Please provide a review and a rating.');
+      return;
+    }
+
     try {
       await dispatch(editReview({ id: editingReviewId, review: editContent, stars: editRating }));
       setEditingReviewId(null);
@@ -62,6 +69,7 @@ const SpotDetails = () => {
       closeModal();
     } catch (error) {
       console.error('Error editing review:', error);
+      setError('An error occurred while editing your review. Please try again.');
     }
   };
 

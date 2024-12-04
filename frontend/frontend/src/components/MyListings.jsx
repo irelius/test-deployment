@@ -4,12 +4,12 @@ import { fetchUserListings } from '../store/spots';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import './MyListings.css';
+import myListingsStyles from './MyListingsStyles.module.css';
 
 const MyListings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userListings = useSelector(state => state.spots.userListings || []);
+  const userListings = useSelector(state => state.spots.currentUserSpots || []);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,18 +35,18 @@ const MyListings = () => {
   }
 
   return (
-    <div className="my-listings-container">
+    <div className={myListingsStyles.myListingsContainer}>
       <h1>My Listings</h1>
-      <div className="listings-grid">
+      <div className={myListingsStyles.listingsGrid}>
         {userListings.map(spot => (
           <div
             key={spot.id}
-            className="listing-tile"
+            className={myListingsStyles.listingTile}
             title={spot.name}
             onClick={() => handleTileClick(spot.id)}
           >
-            <img src={spot.previewImage} alt={spot.name} className="listing-thumbnail" />
-            <div className="listing-info">
+            <img src={spot.previewImage} alt={spot.name} className={myListingsStyles.listingThumbnail} />
+            <div className={myListingsStyles.listingInfo}>
               <div>{spot.name}</div>
               <div>
                 <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? spot.avgRating.toFixed(2) : 'New'}

@@ -43,6 +43,7 @@ function LoginFormModal() {
           </ul>
           <div className={loginFormStyles.formGroup}>
             <label htmlFor="credential">Username or Email</label>
+            {errors.credential && <p className={loginFormStyles.errorMessage}>{errors.credential}</p>}
             <input
               id="credential"
               name="credential"
@@ -54,6 +55,7 @@ function LoginFormModal() {
           </div>
           <div className={loginFormStyles.formGroup}>
             <label htmlFor="password">Password</label>
+            {errors.password && <p className={loginFormStyles.errorMessage}>{errors.password}</p>}
             <input
               id="password"
               name="password"

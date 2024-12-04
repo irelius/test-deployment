@@ -40,6 +40,7 @@ function SignupFormModal() {
         <form className={styles.signupForm} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="username">Username</label>
+            {errors.username && <p className={styles.errorMessage}>{errors.username}</p>}
             <input
               id="username"
               name="username"
@@ -49,10 +50,10 @@ function SignupFormModal() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-            {Array.isArray(errors.username) && errors.username.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="firstName">First Name</label>
+            {errors.firstName && <p className={styles.errorMessage}>{errors.firstName}</p>}
             <input
               id="firstName"
               name="firstName"
@@ -62,10 +63,10 @@ function SignupFormModal() {
               onChange={(e) => setFirstName(e.target.value)}
               required
             />
-            {Array.isArray(errors.firstName) && errors.firstName.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="lastName">Last Name</label>
+            {errors.lastName && <p className={styles.errorMessage}>{errors.lastName}</p>}
             <input
               id="lastName"
               name="lastName"
@@ -75,10 +76,10 @@ function SignupFormModal() {
               onChange={(e) => setLastName(e.target.value)}
               required
             />
-            {Array.isArray(errors.lastName) && errors.lastName.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
+            {errors.email && <p className={styles.errorMessage}>{errors.email}</p>}
             <input
               id="email"
               name="email"
@@ -88,10 +89,10 @@ function SignupFormModal() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            {Array.isArray(errors.email) && errors.email.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="password">Password</label>
+            {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
             <input
               id="password"
               name="password"
@@ -101,10 +102,9 @@ function SignupFormModal() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {Array.isArray(errors.password) && errors.password.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
           </div>
           <button className={styles.formButton} type="submit">Sign Up</button>
-          {Array.isArray(errors.general) && errors.general.map((error, idx) => <p key={idx} className={styles.errorMessage}>{error}</p>)}
+          {errors.general && <p className={styles.errorMessage}>{errors.general}</p>}
         </form>
       </div>
     </>
