@@ -53,7 +53,7 @@ function CreateSpotForm() {
       images: images.filter(img => img)
     };
 
-    console.log('Submitting new spot:', newSpot);
+ 
 
     try {
       const createdSpot = await dispatch(createSpot(newSpot));

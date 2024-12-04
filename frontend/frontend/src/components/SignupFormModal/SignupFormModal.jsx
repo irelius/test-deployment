@@ -28,8 +28,8 @@ function SignupFormModal() {
     }
 
     dispatch(sessionActions.signup({ username, firstName, lastName, email, password }))
-      .then(closeModal)
-      .catch(() => {}); // Errors are already handled in the action
+    .then(closeModal)
+    .catch(() => {});
   };
 
   return (

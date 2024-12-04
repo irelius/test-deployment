@@ -12,7 +12,7 @@ import * as sessionActions from './store/session';
 import { ModalProvider } from './context/Modal'; 
 import MyListings from './components/MyListings';
 import CreateSpotForm from './components/CreateSpotForm/CreateSpotForm';
-import ManageReviews from './components/ReviewList/ManageReviews';
+// import ManageReviews from './components/ReviewList/ManageReviews';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -61,10 +61,10 @@ const router = createBrowserRouter([
         path: '/spots/new',
         element: <CreateSpotForm />,
       },
-      {
-        path: '/manage-reviews',
-        element: <ManageReviews />,
-      },
+      // {
+      //   path: '/manage-reviews',
+      //   element: <ManageReviews />,
+      // },
     ],
   },
 ]);

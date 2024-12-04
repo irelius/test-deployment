@@ -25,7 +25,7 @@
   display: inline-block;
   width: 300px;
   height: 300px;
-  cursor: pointer; /* Add cursor pointer to indicate clickability */
+  cursor: pointer; 
 }
 
 .spotTile:hover {
@@ -65,5 +65,5 @@
 .spotLink {
   text-decoration: none;
   color: inherit;
-  display: inline-block; /* Ensure it doesn't overflow */
+  display: inline-block; 
 }

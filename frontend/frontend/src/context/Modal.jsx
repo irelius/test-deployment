@@ -57,7 +57,7 @@ export function ModalProvider({ children }) {
             </>
           )}
         </>,
-        modalRef.current || document.body // Use body as a backup
+        modalRef.current || document.body 
       )}
     </>
   );

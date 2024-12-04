@@ -166,3 +166,51 @@
   margin-bottom: 20px;
   justify-content: flex-end; 
 }
+
+.newReviewForm {
+  margin-top: 20px;
+}
+
+.newReviewForm h3 {
+  margin-bottom: 10px;
+}
+
+.newReviewForm textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.ratingInput {
+  margin-bottom: 10px;
+}
+
+.ratingInput label {
+  margin-right: 10px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.starRating {
+  display: flex;
+  flex-direction: row;
+}
+
+.starRating button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 5px;
+}
+
+.starRating .on {
+  color: #f5c518;
+}
+
+.starRating .off {
+  color: #ccc;
+}

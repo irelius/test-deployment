@@ -1,23 +1,38 @@
-// frontend/src/store/spots.js
-
 import { csrfFetch } from './csrf';
 
 // Action Types
-const SET_SPOTS = 'spots/setSpots';
-const ADD_SPOT = 'spots/addSpot';
+const GET_ALL_SPOTS = 'spots/getAllSpots';
+const GET_CURRENT_USER_SPOTS = 'spots/getCurrentUserSpots';
+const GET_SPOT_DETAILS = 'spots/getSpotDetails';
+const CREATE_NEW_SPOT = 'spots/createNewSpot';
 const UPDATE_SPOT = 'spots/updateSpot';
-const REMOVE_SPOT = 'spots/removeSpot';
-const SET_SPOT_DETAILS = 'spots/setSpotDetails';
-const SET_USER_LISTINGS = 'spots/setUserListings';
+const DELETE_SPOT = 'spots/deleteSpot';
+const ADD_SPOT_IMAGE = 'spots/addSpotImage';
+const UPDATE_SPOT_IMAGE = 'spots/updateSpotImage';
+const DELETE_SPOT_IMAGE = 'spots/deleteSpotImage';
+const GET_REVIEWS_BY_SPOT = 'spots/getReviewsBySpot';
+const CREATE_NEW_REVIEW = 'spots/createNewReview';
+const SET_NO_SPOTS_AVAILABLE = 'spots/setNoSpotsAvailable';
+const CLEAR_NO_SPOTS_MESSAGE = 'spots/clearNoSpotsMessage';
 
 // Action Creators
-export const setSpots = (spots) => ({
-  type: SET_SPOTS,
+export const getAllSpots = (spots) => ({
+  type: GET_ALL_SPOTS,
   spots,
 });
 
-export const addSpot = (spot) => ({
-  type: ADD_SPOT,
+export const getCurrentUserSpots = (spots) => ({
+  type: GET_CURRENT_USER_SPOTS,
+  spots,
+});
+
+export const getSpotDetails = (spot) => ({
+  type: GET_SPOT_DETAILS,
+  spot,
+});
+
+export const createNewSpot = (spot) => ({
+  type: CREATE_NEW_SPOT,
   spot,
 });
 
@@ -26,43 +41,64 @@ export const updateSpot = (spot) => ({
   spot,
 });
 
-export const removeSpot = (spotId) => ({
-  type: REMOVE_SPOT,
+export const deleteSpotAction = (spotId) => ({
+  type: DELETE_SPOT,
   spotId,
 });
 
-export const setSpotDetails = (spot) => {
-  console.log('Creating setSpotDetails action with spot:', spot);
-  return {
-    type: SET_SPOT_DETAILS,
-    spot,
-  };
-};
+export const addSpotImage = (spotId, imageUrl) => ({
+  type: ADD_SPOT_IMAGE,
+  spotId,
+  imageUrl,
+});
 
-export const setUserListings = (listings) => ({
-  type: SET_USER_LISTINGS,
-  listings,
+export const updateSpotImage = (spotId, imageUrl) => ({
+  type: UPDATE_SPOT_IMAGE,
+  spotId,
+  imageUrl,
+});
+
+export const deleteSpotImage = (spotId, imageUrl) => ({
+  type: DELETE_SPOT_IMAGE,
+  spotId,
+  imageUrl,
+});
+
+export const getReviewsBySpot = (reviews) => ({
+  type: GET_REVIEWS_BY_SPOT,
+  reviews,
+});
+
+export const createNewReview = (review) => ({
+  type: CREATE_NEW_REVIEW,
+  review,
+});
+
+export const setNoSpotsAvailable = () => ({
+  type: SET_NO_SPOTS_AVAILABLE,
+});
+
+export const clearNoSpotsMessage = () => ({
+  type: CLEAR_NO_SPOTS_MESSAGE,
 });
 
 // Thunks
 export const fetchSpots = () => async (dispatch) => {
   const response = await csrfFetch('/api/spots');
   const data = await response.json();
-  dispatch(setSpots(data.Spots));
+  dispatch(getAllSpots(data.Spots));
   return response;
 };
 
 export const fetchSpotDetails = (spotId) => async (dispatch) => {
   try {
-    console.log('Fetching spot details for spotId:', spotId);
     const response = await csrfFetch(`/api/spots/${spotId}`);
     if (!response.ok) {
       throw response;
     }
     const data = await response.json();
-    console.log('Data received:', data);
-    dispatch(setSpotDetails(data));
-    return data; // Ensure the action returns the data
+    dispatch(getSpotDetails(data));
+    return data;
   } catch (err) {
     console.error('Error fetching spot details:', err);
   }
@@ -71,7 +107,7 @@ export const fetchSpotDetails = (spotId) => async (dispatch) => {
 export const fetchUserListings = () => async (dispatch) => {
   const response = await csrfFetch('/api/spots/current');
   const data = await response.json();
-  dispatch(setUserListings(data.Spots));
+  dispatch(getCurrentUserSpots(data.Spots));
   return response;
 };
 
@@ -82,10 +118,9 @@ export const createSpot = (spot) => async (dispatch) => {
   });
 
   const data = await response.json();
-  console.log('Response data:', data);
 
   if (response.ok) {
-    dispatch(addSpot(data));
+    dispatch(createNewSpot(data));
     return data;
   } else {
     throw data;
@@ -106,37 +141,60 @@ export const deleteSpot = (spotId) => async (dispatch) => {
   await csrfFetch(`/api/spots/${spotId}`, {
     method: 'DELETE',
   });
-  dispatch(removeSpot(spotId));
+  dispatch(deleteSpotAction(spotId));
 };
 
 // Initial State
-const initialState = { spots: [], spotDetails: null, userListings: [] };
+const initialState = {
+  allSpots: [],
+  currentUserSpots: [],
+  spotDetails: null,
+  noSpotsMessage: null,
+};
 
 // Reducer
 const spotsReducer = (state = initialState, action) => {
-  console.log('Action received in spotsReducer:', action);
   switch (action.type) {
-    case SET_SPOTS:
-      return { ...state, spots: action.spots };
-    case ADD_SPOT:
-      return { ...state, spots: [...state.spots, action.spot] };
+    case GET_ALL_SPOTS:
+      return {
+        ...state,
+        allSpots: action.spots,
+      };
+    case GET_CURRENT_USER_SPOTS:
+      return {
+        ...state,
+        currentUserSpots: action.spots,
+      };
+    case GET_SPOT_DETAILS:
+      return {
+        ...state,
+        spotDetails: action.spot,
+      };
+    case CREATE_NEW_SPOT:
+      return {
+        ...state,
+        allSpots: [...state.allSpots, action.spot],
+      };
     case UPDATE_SPOT:
       return {
         ...state,
-        spots: state.spots.map((spot) =>
+        allSpots: state.allSpots.map((spot) =>
           spot.id === action.spot.id ? action.spot : spot
         ),
       };
-    case REMOVE_SPOT:
+    case DELETE_SPOT:
       return {
         ...state,
-        spots: state.spots.filter((spot) => spot.id !== action.spotId),
+        allSpots: state.allSpots.filter((spot) => spot.id !== action.spotId),
       };
-    case SET_SPOT_DETAILS:
-      console.log('Setting spot details:', action.spot);
-      return { ...state, spotDetails: action.spot };
-    case SET_USER_LISTINGS:
-      return { ...state, userListings: action.listings };
+    case ADD_SPOT_IMAGE:
+    case UPDATE_SPOT_IMAGE:
+    case DELETE_SPOT_IMAGE:
+    case GET_REVIEWS_BY_SPOT:
+    case CREATE_NEW_REVIEW:
+    case SET_NO_SPOTS_AVAILABLE:
+    case CLEAR_NO_SPOTS_MESSAGE:
+      return state; 
     default:
       return state;
   }

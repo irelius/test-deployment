@@ -25,9 +25,7 @@ function LoginFormModal() {
 
   const handleDemoLogin = () => {
     dispatch(sessionActions.login({ credential: 'demo@user.com', password: 'password' }))
-      .then(() => {
-        closeModal();
-      })
+      .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) dispatch(sessionActions.setSessionErrors(Object.values(data.errors)));
@@ -36,7 +34,7 @@ function LoginFormModal() {
 
   return (
     <>
-      <div className={loginFormStyles.overlay} onClick={closeModal}></div>
+      <div className={loginFormStyles.loginOverlay} onClick={closeModal}></div>
       <div className={loginFormStyles.loginFormContainer} onClick={(e) => e.stopPropagation()}>
         <h1 className={loginFormStyles.loginFormTitle}>Log In</h1>
         <form className={loginFormStyles.loginForm} onSubmit={handleSubmit}>

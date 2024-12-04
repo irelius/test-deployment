@@ -1,5 +1,3 @@
-// frontend/src/components/Reviews/ReviewItem.jsx
-
 import reviewItemStyles from './ReviewItem.module.css';
 
 const ReviewItem = ({ review, sessionUser, onDelete, onEdit }) => {

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchSpots } from '../../store/spots';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -8,16 +8,31 @@ import spotsStyles from './Spots.module.css';
 
 const Spots = () => {
   const dispatch = useDispatch();
-  const spots = useSelector(state => state.spots.spots);
   const navigate = useNavigate();
+  const spots = useSelector(state => state.spots.allSpots || []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchSpots());
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchSpots());
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching spots:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const handleTileClick = (spotId) => {
     navigate(`/spots/${spotId}`);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={spotsStyles.spotsContainer + ' ' + spotsStyles.grid}>

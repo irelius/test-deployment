@@ -19,7 +19,7 @@ export const removeSessionUser = () => ({
 
 export const loginDemoUser = () => ({
     type: LOGIN_DEMO_USER,
-    user: { username: 'demo', email: 'demo@example.com', firstName: 'Demo', lastName: 'User' }, // Add other necessary demo user details
+    user: { username: 'demo', email: 'demo@example.com', firstName: 'Demo', lastName: 'User' }, 
 });
 
 export const setSessionErrors = (errors) => ({
@@ -53,7 +53,7 @@ export const logout = () => async (dispatch) => {
         });
         dispatch(removeSessionUser());
     } catch (error) {
-        console.error('Error logging out:', error); // Handle the error
+        console.error('Error logging out:', error); 
     }
 };
 

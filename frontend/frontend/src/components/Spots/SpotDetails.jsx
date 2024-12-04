@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpotDetails, deleteSpot } from '../../store/spots';
-import ReviewList from '../ReviewList/ReviewList';
+import { fetchReviewsBySpotId, createReview, editReview, deleteReview } from '../../store/reviews';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../../context/Modal';
@@ -13,19 +13,26 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const spot = useSelector(state => state.spots.spotDetails);
+  const reviews = useSelector(state => state.reviews.reviews);
+  const noReviews = useSelector(state => state.reviews.noReviews);
   const sessionUser = useSelector(state => state.session.user);
   const { setModalContent, closeModal } = useModal();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  const handleReserveClick = () => {
-    alert('Feature coming soon!');
-  };
+  const [editContent, setEditContent] = useState('');
+  const [editRating, setEditRating] = useState(0);
+  const [newReviewContent, setNewReviewContent] = useState('');
+  const [newReviewRating, setNewReviewRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [error, setError] = useState(null);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await dispatch(fetchSpotDetails(spotId));
+        await dispatch(fetchReviewsBySpotId(spotId));
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching spot details:', error);
@@ -35,6 +42,62 @@ const SpotDetails = () => {
 
     fetchData();
   }, [dispatch, spotId]);
+
+  useEffect(() => {
+    if (sessionUser && reviews.some(review => review.userId === sessionUser.id)) {
+      setHasSubmittedReview(true);
+    }
+  }, [sessionUser, reviews]);
+
+  const handleEditReview = async (e) => {
+    e.preventDefault();
+    try {
+      await dispatch(editReview({ id: editingReviewId, review: editContent, stars: editRating }));
+      setEditingReviewId(null);
+      setEditContent('');
+      setEditRating(0);
+      await dispatch(fetchSpotDetails(spotId)); // Refresh spot details to update rating and review count
+      await dispatch(fetchReviewsBySpotId(spotId)); // Refresh reviews
+      setHasSubmittedReview(true); // Hide the "Leave a Review" form after editing
+      closeModal();
+    } catch (error) {
+      console.error('Error editing review:', error);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await dispatch(deleteReview(reviewId));
+      await dispatch(fetchSpotDetails(spotId)); // Refresh spot details to update rating and review count
+      await dispatch(fetchReviewsBySpotId(spotId)); // Refresh reviews
+      setHasSubmittedReview(false); // Allow the user to leave a new review
+      closeModal();
+    } catch (error) {
+      console.error('Error deleting review:', error);
+    }
+  };
+
+  const handleNewReviewSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (newReviewContent.trim() === '' || newReviewRating === 0) {
+      setError('Please provide a review and a rating.');
+      return;
+    }
+
+    try {
+      await dispatch(createReview({ spotId, review: newReviewContent, stars: newReviewRating }));
+      await dispatch(fetchSpotDetails(spotId)); // Refresh spot details to update rating and review count
+      await dispatch(fetchReviewsBySpotId(spotId)); // Refresh reviews
+      setNewReviewContent('');
+      setNewReviewRating(0);
+      setHasSubmittedReview(true); // Hide the "Leave a Review" form
+    } catch (error) {
+      console.error('Error creating review:', error);
+      setError('An error occurred while submitting your review. Please try again.');
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -70,6 +133,13 @@ const SpotDetails = () => {
 
   const handleEdit = () => {
     navigate(`/spots/${spotId}/edit`);
+  };
+
+  const startEditingReview = (review) => {
+    setEditingReviewId(review.id);
+    setEditContent(review.review);
+    setEditRating(review.stars);
+    setHasSubmittedReview(false); // Show the "Leave a Review" form for editing
   };
 
   return (
@@ -116,14 +186,70 @@ const SpotDetails = () => {
         <div className={spotDetailsStyles.spotReservation}>
           <div className={spotDetailsStyles.reservationBox}>
             <p>${spot.price} / night</p>
-            <button className={spotDetailsStyles.reserveButton} onClick={handleReserveClick}>Reserve</button>
+            <button className={spotDetailsStyles.reserveButton} onClick={() => alert('Feature coming soon!')}>Reserve</button>
           </div>
         </div>
       </div>
       <hr className={spotDetailsStyles.divider} />
+      {sessionUser && !hasSubmittedReview && (
+        <div className={spotDetailsStyles.newReviewForm}>
+          <h3>{editingReviewId ? 'Edit Your Review' : 'Leave a Review'}</h3>
+          {error && <p className={spotDetailsStyles.error}>{error}</p>}
+          <form onSubmit={editingReviewId ? handleEditReview : handleNewReviewSubmit}>
+            <textarea
+              value={editingReviewId ? editContent : newReviewContent}
+              onChange={(e) => editingReviewId ? setEditContent(e.target.value) : setNewReviewContent(e.target.value)}
+              placeholder="Write your review here..."
+              required
+            />
+            <div className={spotDetailsStyles.ratingInput}>
+              <label>Rating: </label>
+              <div className={spotDetailsStyles.starRating}>
+                {[...Array(5)].map((star, index) => {
+                  index += 1;
+                  return (
+                    <button
+                      type="button"
+                      key={index}
+                      className={index <= (hover || (editingReviewId ? editRating : newReviewRating)) ? spotDetailsStyles.on : spotDetailsStyles.off}
+                      onClick={() => editingReviewId ? setEditRating(index) : setNewReviewRating(index)}
+                      onMouseEnter={() => setHover(index)}
+                      onMouseLeave={() => setHover(editingReviewId ? editRating : newReviewRating)}
+                    >
+                      <FontAwesomeIcon icon={faStar} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <button type="submit" className={spotDetailsStyles.button}>{editingReviewId ? 'Update Review' : 'Submit Review'}</button>
+          </form>
+        </div>
+      )}
       <div className={spotDetailsStyles.spotReviewsBox}>
         <h2>What other nesters had to say about this spot:</h2>
-        <ReviewList spotId={spotId} sessionUser={sessionUser} />
+        {noReviews ? (
+          <p>No reviews yet.</p>
+        ) : (
+          reviews.map(review => (
+            <div key={review.id} className={spotDetailsStyles.review}>
+              <p><strong>{review.User?.firstName || 'Anonymous'}</strong> - {new Date(review.createdAt).toLocaleDateString()}</p>
+              <p>{review.review}</p>
+              <p>
+                {Array.from({ length: review.stars }).map((_, index) => (
+                  <FontAwesomeIcon key={index} icon={faStar} className={spotDetailsStyles.star} />
+                ))}
+              </p>
+              {sessionUser && sessionUser.id === review.userId && (
+                <>
+                  <button className={spotDetailsStyles.button} onClick={() => startEditingReview(review)}>Edit</button>
+                  <button className={spotDetailsStyles.button} onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                </>
+              )}
+              <hr className={spotDetailsStyles.reviewDivider} />
+            </div>
+          ))
+        )}
       </div>
       {selectedImage && (
         <div className={spotDetailsStyles.modal} onClick={handleCloseModal}>

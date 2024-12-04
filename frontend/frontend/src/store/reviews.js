@@ -1,16 +1,10 @@
-// frontend/src/store/reviews.js
-
 import { csrfFetch } from './csrf';
 
 // Action Types
 const SET_REVIEWS = 'reviews/setReviews';
-const ADD_REVIEW = 'reviews/addReview';
-const UPDATE_REVIEW = 'reviews/updateReview';
+const SET_REVIEW = 'reviews/setReview';
 const REMOVE_REVIEW = 'reviews/removeReview';
-const ADD_REVIEW_IMAGE = 'reviews/addReviewImage';
-const DELETE_REVIEW_IMAGE = 'reviews/deleteReviewImage';
 const SET_NO_REVIEWS = 'reviews/setNoReviews';
-const SET_USER_REVIEWS = 'reviews/setUserReviews';
 
 // Action Creators
 export const setReviews = (reviews) => ({
@@ -18,13 +12,8 @@ export const setReviews = (reviews) => ({
   reviews,
 });
 
-export const addReview = (review) => ({
-  type: ADD_REVIEW,
-  review,
-});
-
-export const updateReview = (review) => ({
-  type: UPDATE_REVIEW,
+export const setReview = (review) => ({
+  type: SET_REVIEW,
   review,
 });
 
@@ -33,33 +22,18 @@ export const removeReview = (reviewId) => ({
   reviewId,
 });
 
-export const addReviewImage = (reviewId, imageUrl) => ({
-  type: ADD_REVIEW_IMAGE,
-  reviewId,
-  imageUrl,
-});
-
-export const deleteReviewImage = (reviewId, imageUrl) => ({
-  type: DELETE_REVIEW_IMAGE,
-  reviewId,
-  imageUrl,
-});
-
 export const setNoReviews = () => ({
   type: SET_NO_REVIEWS,
 });
 
-export const setUserReviews = (reviews) => ({
-  type: SET_USER_REVIEWS,
-  reviews,
-});
-
 // Thunk Action Creators
-export const fetchReviews = (spotId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
+export const fetchReviewsBySpotId = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/spots/${spotId}/reviews`);
   if (response.ok) {
     const reviews = await response.json();
     dispatch(setReviews(reviews));
+  } else {
+    dispatch(setNoReviews());
   }
 };
 
@@ -73,7 +47,7 @@ export const createReview = (reviewData) => async (dispatch) => {
   });
   if (response.ok) {
     const review = await response.json();
-    dispatch(addReview(review));
+    dispatch(setReview(review));
   } else {
     const error = await response.json();
     throw new Error(error.message);
@@ -90,7 +64,7 @@ export const editReview = (reviewData) => async (dispatch) => {
   });
   if (response.ok) {
     const review = await response.json();
-    dispatch(updateReview(review));
+    dispatch(setReview(review));
   } else {
     const error = await response.json();
     throw new Error(error.message);
@@ -109,21 +83,10 @@ export const deleteReview = (reviewId) => async (dispatch) => {
   }
 };
 
-export const fetchUserReviews = (userId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/users/${userId}/reviews`);
-  if (response.ok) {
-    const reviews = await response.json();
-    dispatch(setUserReviews(reviews));
-  } else {
-    const error = await response.json();
-    throw new Error(error.message);
-  }
-};
-
 // Initial State
 const initialState = {
   reviews: [],
-  userReviews: [],
+  noReviews: false,
 };
 
 // Reducer
@@ -133,51 +96,24 @@ const reviewsReducer = (state = initialState, action) => {
       return {
         ...state,
         reviews: action.reviews,
+        noReviews: action.reviews.length === 0,
       };
-    case ADD_REVIEW:
+    case SET_REVIEW:
       return {
         ...state,
-        reviews: [...state.reviews, action.review],
-      };
-    case UPDATE_REVIEW:
-      return {
-        ...state,
-        reviews: state.reviews.map((review) =>
-          review.id === action.review.id ? action.review : review
-        ),
+        reviews: [...state.reviews.filter(r => r.id !== action.review.id), action.review],
+        noReviews: false,
       };
     case REMOVE_REVIEW:
       return {
         ...state,
-        reviews: state.reviews.filter((review) => review.id !== action.reviewId),
-      };
-    case ADD_REVIEW_IMAGE:
-      return {
-        ...state,
-        reviews: state.reviews.map((review) =>
-          review.id === action.reviewId
-            ? { ...review, images: [...review.images, action.imageUrl] }
-            : review
-        ),
-      };
-    case DELETE_REVIEW_IMAGE:
-      return {
-        ...state,
-        reviews: state.reviews.map((review) =>
-          review.id === action.reviewId
-            ? { ...review, images: review.images.filter((url) => url !== action.imageUrl) }
-            : review
-        ),
+        reviews: state.reviews.filter(review => review.id !== action.reviewId),
       };
     case SET_NO_REVIEWS:
       return {
         ...state,
         reviews: [],
-      };
-    case SET_USER_REVIEWS:
-      return {
-        ...state,
-        userReviews: action.reviews,
+        noReviews: true,
       };
     default:
       return state;

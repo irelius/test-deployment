@@ -58,7 +58,7 @@ function EditSpotForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { country, address, city, state, lat, lng, description, name, price, previewImage, images } = formData;
-
+  
     const updatedSpot = {
       id: spotId,
       country,
@@ -73,7 +73,7 @@ function EditSpotForm() {
       previewImage,
       images: images.filter(img => img)
     };
-
+  
     try {
       await dispatch(editSpot(updatedSpot));
       navigate(`/spots/${spotId}`);

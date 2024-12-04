@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserListings } from '../store/spots'; // Correct the import path
+import { fetchUserListings } from '../store/spots'; 
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -9,15 +9,30 @@ import './MyListings.css';
 const MyListings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userListings = useSelector(state => state.spots.userListings);
+  const userListings = useSelector(state => state.spots.userListings || []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchUserListings());
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchUserListings());
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user listings:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const handleTileClick = (spotId) => {
     navigate(`/spots/${spotId}`);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="my-listings-container">
