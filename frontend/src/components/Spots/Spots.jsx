@@ -50,7 +50,7 @@ const Spots = () => {
             <div className={spotsStyles.spotInfo}>
               <div>{spot.name}</div>
               <div>
-                <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? spot.avgRating.toFixed(2) : 'New'}
+                <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? parseFloat(spot.avgRating).toFixed(1) : 'New'}
               </div>
               <div>{spot.city}, {spot.state}</div>
               <div>${spot.price} / night</div>
