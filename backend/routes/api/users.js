@@ -41,7 +41,6 @@ const validateLogin = [
     handleValidationErrors
 ]
 
-
 // GET detail of a User based on userId
 router.get(
   '/:userId', 
@@ -138,5 +137,51 @@ router.post(
   }
 );
 
+// PUT (update) a User profile
+router.put('/:userId', requireAuth, validateSignup, async (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, email, username, password } = req.body;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.email = email;
+  user.username = username;
+  if (password) {
+    user.hashedPassword = bcrypt.hashSync(password);
+  }
+
+  await user.save();
+
+  const safeUser = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    username: user.username,
+  };
+
+  return res.json({ user: safeUser });
+});
+
+// DELETE (remove) a User profile
+router.delete('/:userId', requireAuth, async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  await user.destroy();
+
+  return res.json({ message: 'User deleted successfully' });
+});
 
 module.exports = router;
