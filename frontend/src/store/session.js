@@ -85,6 +85,34 @@ export const restoreUser = () => async (dispatch) => {
     }
 };
 
+export const updateProfile = (user) => async (dispatch) => {
+  try {
+    const response = await csrfFetch(`/api/users/${user.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(user),
+    });
+    const data = await response.json();
+    dispatch(setSessionUser(data.user));
+  } catch (error) {
+    if (error.data && error.data.errors) {
+      dispatch(setSessionErrors(error.data.errors));
+    } else {
+      dispatch(setSessionErrors({ general: 'An unexpected error occurred' }));
+    }
+  }
+};
+
+export const deleteAccount = (userId) => async (dispatch) => {
+  try {
+    await csrfFetch(`/api/users/${userId}`, {
+      method: 'DELETE',
+    });
+    dispatch(removeSessionUser());
+  } catch (error) {
+    console.error('Error deleting account:', error);
+  }
+};
+
 // Initial State
 const initialState = { user: null, errors: [] };
 

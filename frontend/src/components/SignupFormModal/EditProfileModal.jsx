@@ -2,36 +2,44 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useModal } from '../../context/Modal';
-import styles from './SignupFormModal.module.css';
+import styles from '../SignupFormModal/SignupFormModal.module.css';
 
-function SignupFormModal() {
+function EditProfileModal() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-  const [username, setUsername] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const sessionUser = useSelector(state => state.session.user);
+  const [username, setUsername] = useState(sessionUser.username);
+  const [firstName, setFirstName] = useState(sessionUser.firstName);
+  const [lastName, setLastName] = useState(sessionUser.lastName);
+  const [email, setEmail] = useState(sessionUser.email);
   const [password, setPassword] = useState('');
   const errors = useSelector(state => state.session.errors) || [];
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!username) newErrors.username = 'Username is required.';
     if (!firstName) newErrors.firstName = 'First name is required.';
     if (!lastName) newErrors.lastName = 'Last name is required.';
     if (!email) newErrors.email = 'Email is required.';
-    if (!password) newErrors.password = 'Password is required.';
     if (Object.keys(newErrors).length > 0) {
       dispatch(sessionActions.setSessionErrors(newErrors));
       return;
     }
 
-    try {
-      await dispatch(sessionActions.signup({ username, firstName, lastName, email, password }));
-      closeModal();
-    } catch (error) {
-      // Handle errors if needed
+    dispatch(sessionActions.updateProfile({ id: sessionUser.id, username, firstName, lastName, email, password }))
+      .then(closeModal)
+      .catch(() => {});
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      dispatch(sessionActions.deleteAccount(sessionUser.id))
+        .then(() => {
+          closeModal();
+          window.location.href = '/';
+        })
+        .catch(() => {});
     }
   };
 
@@ -39,7 +47,7 @@ function SignupFormModal() {
     <>
       <div className={styles.overlay} onClick={closeModal}></div>
       <div className={styles.signupFormContainer} onClick={(e) => e.stopPropagation()}>
-        <h1 className={styles.signupFormTitle}>Sign Up</h1>
+        <h1 className={styles.signupFormTitle}>Edit Profile</h1>
         <form className={styles.signupForm} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="username">Username</label>
@@ -94,7 +102,7 @@ function SignupFormModal() {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password (leave blank to keep current password)</label>
             {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
             <input
               id="password"
@@ -103,10 +111,10 @@ function SignupFormModal() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
           </div>
-          <button className={styles.formButton} type="submit">Sign Up</button>
+          <button className={styles.formButton} type="submit">Update</button>
+          <button className={styles.formButton} type="button" onClick={handleDelete}>Delete Account</button>
           {errors.general && <p className={styles.errorMessage}>{errors.general}</p>}
         </form>
       </div>
@@ -114,4 +122,4 @@ function SignupFormModal() {
   );
 }
 
-export default SignupFormModal;
+export default EditProfileModal;

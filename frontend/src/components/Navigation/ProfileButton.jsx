@@ -6,6 +6,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from '../OpenModalMenuItem/OpenModalMenuItem'; 
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
+import EditProfileModal from '../SignupFormModal/EditProfileModal';
 import pb from './ProfileButton.module.css';
 
 function ProfileButton({ user }) {
@@ -58,6 +59,13 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li>
               <NavLink to="/my-listings" onClick={closeMenu}>Manage Spots</NavLink>
+            </li>
+            <li>
+              <OpenModalMenuItem
+                itemText="Edit Profile"
+                modalComponent={<EditProfileModal />}
+                onItemClick={closeMenu}
+              />
             </li>
             <li>
               <button onClick={logout}>Log Out</button>
