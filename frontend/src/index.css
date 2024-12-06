@@ -1,11 +1,15 @@
 /* TODO: Add sitewide styles */
 /* frontend/src/index.css */
 
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+
+
 body {
     position: relative;
     margin: 0;
     padding: 0;
-    font-family: 'PT Sans', Arial, sans-serif;
+    font-family: 'Lexend Deca', sans-serif;
     background-color: #f5f5f5;
   }
 
