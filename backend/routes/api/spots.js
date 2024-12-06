@@ -576,7 +576,11 @@ router.get('/:spotId',
                     { model: User,
                         as: 'Owner',
                         attributes: ['id', 'firstName', 'lastName']
-                    }
+                    },
+                    {
+                        model: SpotImage,
+                        attributes: ['url'],
+                      },
                 ]
             })
 
