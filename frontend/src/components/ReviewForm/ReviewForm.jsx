@@ -1,5 +1,3 @@
-// frontend/src/components/ReviewForm/ReviewForm.jsx
-
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReview, editReview, addReviewImage, deleteReviewImage } from '../../store/reviews';
@@ -14,8 +12,8 @@ const ReviewForm = ({ formType, review, spotId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const reviewData = { review: content, stars: rating, spotId: Number(spotId) }; // Ensure spotId is a number
-    console.log('Submitting review:', reviewData); // This log should appear in the console
+    const reviewData = { review: content, stars: rating, spotId: Number(spotId) };
+    console.log('Submitting review:', reviewData);
     try {
       if (formType === 'Create') {
         await dispatch(createReview(reviewData));
@@ -26,7 +24,7 @@ const ReviewForm = ({ formType, review, spotId }) => {
       setRating(0);
       setError(null);
     } catch (err) {
-      console.error('Error submitting review:', err); // This log should appear in the console
+      console.error('Error submitting review:', err);
       setError(err.message);
     }
   };
@@ -68,7 +66,11 @@ const ReviewForm = ({ formType, review, spotId }) => {
           <option key={star} value={star}>{star} Star{star > 1 && 's'}</option>
         ))}
       </select>
-      <button type="submit" className="review-submit-button">
+      <button
+        type="submit"
+        className="review-submit-button"
+        disabled={content.length < 10 || rating === 0}
+      >
         {formType === 'Create' ? 'Submit Review' : 'Update Review'}
       </button>
       {formType === 'Edit' && review.ReviewImages && (

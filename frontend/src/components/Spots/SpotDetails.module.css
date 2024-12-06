@@ -23,47 +23,59 @@
   margin-bottom: 20px;
 }
 
-.spotImagesGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  gap: 8px;
+.spotImagesContainer {
+  display: flex;
+  gap: 16px;
   margin-bottom: 20px;
-  background-color: transparent;
 }
 
 .spotImageLarge {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
+  display: flex;
+  width: 500px; 
+  height: 500px; 
 }
 
-.spotImageLarge img,
-.spotImageSmall img {
+.spotImageLarge img {
   width: 100%;
-  height: auto;
-  max-width: 400px;
+  height: 100%;
+  object-fit: cover; 
   cursor: pointer;
-  object-fit: cover;
-  border: 3px solid #ccc;
-  padding: 5px;
+}
+
+.spotImagesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  width: 700px; 
+  height: 500px; 
 }
 
 .spotImageSmall {
-  grid-column: span 1;
-  padding: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.spotImageSmall img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
 }
 
 .emptyImage {
-  border: 10px solid #ccc;
+  border: 1px solid #ccc;
   background-color: #f9f9f9;
-  width: 100%;
-  height: 100%;
+  background-image: url('https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko=');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   color: #999;
-  z-index: 10;
+  min-height: 100%; 
 }
 
 .spotContent {
@@ -213,4 +225,11 @@
 
 .starRating .off {
   color: #ccc;
+}
+
+.mapContainer {
+  display: flex;
+  width: 500px; 
+  height: 500px; 
+  background-color: #e0e0e0; 
 }

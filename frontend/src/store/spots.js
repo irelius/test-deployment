@@ -174,6 +174,7 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         allSpots: [...state.allSpots, action.spot],
+        currentUserSpots: [...state.currentUserSpots, action.spot],
       };
     case UPDATE_SPOT:
       return {
@@ -181,11 +182,15 @@ const spotsReducer = (state = initialState, action) => {
         allSpots: state.allSpots.map((spot) =>
           spot.id === action.spot.id ? action.spot : spot
         ),
+        currentUserSpots: state.currentUserSpots.map((spot) =>
+          spot.id === action.spot.id ? action.spot : spot
+        ),
       };
     case DELETE_SPOT:
       return {
         ...state,
         allSpots: state.allSpots.filter((spot) => spot.id !== action.spotId),
+        currentUserSpots: state.currentUserSpots.filter((spot) => spot.id !== action.spotId),
       };
     case ADD_SPOT_IMAGE:
     case UPDATE_SPOT_IMAGE:

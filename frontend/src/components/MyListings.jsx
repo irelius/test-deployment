@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserListings } from '../store/spots'; 
+import { fetchUserListings, deleteSpot } from '../store/spots'; 
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,8 @@ const MyListings = () => {
   const navigate = useNavigate();
   const userListings = useSelector(state => state.spots.currentUserSpots || []);
   const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [spotToDelete, setSpotToDelete] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +32,30 @@ const MyListings = () => {
     navigate(`/spots/${spotId}`);
   };
 
+  const handleEditClick = (spotId) => {
+    navigate(`/spots/${spotId}/edit`);
+  };
+
+  const handleDeleteClick = (spot) => {
+    setSpotToDelete(spot);
+    setShowModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await dispatch(deleteSpot(spotToDelete.id));
+      setShowModal(false);
+      setSpotToDelete(null);
+    } catch (error) {
+      console.error('Error deleting spot:', error);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowModal(false);
+    setSpotToDelete(null);
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -43,9 +69,8 @@ const MyListings = () => {
             key={spot.id}
             className={myListingsStyles.listingTile}
             title={spot.name}
-            onClick={() => handleTileClick(spot.id)}
           >
-            <img src={spot.previewImage} alt={spot.name} className={myListingsStyles.listingThumbnail} />
+            <img src={spot.previewImage} alt={spot.name} className={myListingsStyles.listingThumbnail} onClick={() => handleTileClick(spot.id)} />
             <div className={myListingsStyles.listingInfo}>
               <div>{spot.name}</div>
               <div>
@@ -53,10 +78,22 @@ const MyListings = () => {
               </div>
               <div>{spot.city}, {spot.state}</div>
               <div>${spot.price} / night</div>
+              <button className={`${myListingsStyles.editButton} ${myListingsStyles.listingInfo}`} onClick={() => handleEditClick(spot.id)}>Edit</button>
+              <button className={`${myListingsStyles.deleteButton} ${myListingsStyles.listingInfo}`} onClick={() => handleDeleteClick(spot)}>Delete</button>
             </div>
           </div>
         ))}
       </div>
+      {showModal && (
+        <div className={myListingsStyles.modal}>
+          <div className={myListingsStyles.modalContent}>
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to remove this spot?</p>
+            <button className={myListingsStyles.deleteButton} onClick={confirmDelete}>Yes (Delete Spot)</button>
+            <button className={myListingsStyles.cancelButton} onClick={cancelDelete}>No (Keep Spot)</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

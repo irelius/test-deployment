@@ -15,7 +15,7 @@
   z-index: 1001;
 }
 
-.modalContent {
+/* .modalContent {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -30,4 +30,4 @@
   max-height: 90vh; 
   overflow-y: visible;
   box-sizing: border-box;
-}
+} */

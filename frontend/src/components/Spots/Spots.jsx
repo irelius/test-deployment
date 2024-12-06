@@ -18,7 +18,7 @@ const Spots = () => {
         await dispatch(fetchSpots());
         setIsLoading(false);
       } catch (error) {
-        
+        console.error('Error fetching spots:', error);
         setIsLoading(false);
       }
     };
@@ -32,6 +32,10 @@ const Spots = () => {
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!Array.isArray(spots)) {
+    return <div>Error: spots is not an array</div>;
   }
 
   return (

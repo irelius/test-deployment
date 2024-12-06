@@ -113,8 +113,10 @@ function EditProfileModal() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className={styles.formButton} type="submit">Update</button>
-          <button className={styles.formButton} type="button" onClick={handleDelete}>Delete Account</button>
+          <div className={styles.buttonGroup}>
+            <button className={styles.formButton} type="submit">Update</button>
+            <button className={`${styles.formButton} ${styles.deleteButton}`} type="button" onClick={handleDelete}>Delete Account</button>
+          </div>
           {errors.general && <p className={styles.errorMessage}>{errors.general}</p>}
         </form>
       </div>

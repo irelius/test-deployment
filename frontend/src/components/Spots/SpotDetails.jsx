@@ -147,7 +147,7 @@ const SpotDetails = () => {
     setEditingReviewId(review.id);
     setEditContent(review.review);
     setEditRating(review.stars);
-    setHasSubmittedReview(false); // Show the "Leave a Review" form for editing
+    setHasSubmittedReview(false); 
   };
 
   return (
@@ -172,20 +172,34 @@ const SpotDetails = () => {
           </>
         )}
       </div>
-      <div className={spotDetailsStyles.spotImagesGrid}>
+      <div className={spotDetailsStyles.spotImagesContainer}>
         <div className={spotDetailsStyles.spotImageLarge}>
           <img src={spot.previewImage} alt={spot.name} onClick={() => handleImageClick(spot.previewImage)} />
         </div>
-        {spot.images && spot.images.slice(0, 4).map((image, index) => (
-          <div key={index} className={spotDetailsStyles.spotImageSmall}>
-            <img src={image.url} alt={`Spot ${index}`} onClick={() => handleImageClick(image.url)} />
-          </div>
-        ))}
-        {spot.images && spot.images.length < 4 && (
-          Array.from({ length: 4 - spot.images.length }).map((_, index) => (
-            <div key={index} className={spotDetailsStyles.spotImageSmall + ' ' + spotDetailsStyles.emptyImage}>Empty</div>
-          ))
-        )}
+        <div className={spotDetailsStyles.spotImagesGrid}>
+          {spot.SpotImages && spot.SpotImages.slice(0, 4).map((image, index) => (
+            <div key={index} className={spotDetailsStyles.spotImageSmall}>
+              <img src={image.url} alt={`Spot ${index}`} onClick={() => handleImageClick(image.url)} />
+            </div>
+          ))}
+          {spot.SpotImages && spot.SpotImages.length < 4 && (
+            Array.from({ length: 4 - spot.SpotImages.length }).map((_, index) => (
+              <div key={index} className={spotDetailsStyles.spotImageSmall + ' ' + spotDetailsStyles.emptyImage}>Empty</div>
+            ))
+          )}
+        </div>
+        <div className={spotDetailsStyles.spotMap}>
+          {/* Replace with your map component or iframe */}
+          <iframe
+            src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${spot.city},${spot.state}`}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            title="Location Map"
+          ></iframe>
+        </div>
       </div>
       <div className={spotDetailsStyles.spotContent}>
         <div className={spotDetailsStyles.spotDescription}>
@@ -199,7 +213,7 @@ const SpotDetails = () => {
         </div>
       </div>
       <hr className={spotDetailsStyles.divider} />
-      {sessionUser && !hasSubmittedReview && (
+      {sessionUser && !hasSubmittedReview && sessionUser.id !== spot.ownerId && (
         <div className={spotDetailsStyles.newReviewForm}>
           <h3>{editingReviewId ? 'Edit Your Review' : 'Leave a Review'}</h3>
           {error && <p className={spotDetailsStyles.error}>{error}</p>}

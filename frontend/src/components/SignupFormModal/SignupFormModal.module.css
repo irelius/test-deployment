@@ -79,3 +79,24 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000; 
 }
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.buttonGroup button {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.buttonGroup .deleteButton {
+  background-color: red;
+  color: white;
+}
+
+.buttonGroup .deleteButton:hover {
+  background-color: darkred;
+}
