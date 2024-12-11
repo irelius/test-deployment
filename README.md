@@ -1,146 +1,37 @@
-# Choose Your Branch!
+This is a repo for testing purposes. Testing deployment via Render using a Dockerfile and deployment directly from the repo.
 
-This repo contains different versions of the starter code for **aa19-python-group-project**,
-with each version stored in a program-specific branch. To download or clone the
-correct branch, choose a method (`tiged`, zip, or clone) and follow the
-instructions for your specific program.
 
-* [`tiged`](#tiged-the-branch)
-* [Zip](#download-the-branch-as-a-zip)
-* [Clone](#clone-the-branch)
+# Deployment via Repo:
+- Environment variables needed on Render:
+    - `DATABASE_URL`
+        - Get from postgres database service. Use internal database url
+        - If you want to test things out on a production level without deploying to Render...
+            - Change your local .env file's DATABASE_URL variable from "sqlite:///dev.db" to be the *external* database url of Render's postgres database service
+            - Then change your local .env file's FLASK_ENV variable from "development" to production"
+            - Then enter your shell with "pipenv shell" and migrate and seed like normal
+                - Make sure that you specify the schema in your model files (refer to model files)
+    - `FLASK_APP`
+        - Set to "app"
+    - `FLASK_ENV`
+        - Set to "production"
+    - `SCHEMA`
+        - Something short, concise, and descriptive of the project
+    - `SECRET_KEY`
+        - A random string of characters. Do not share. It's a secret
+- Build command: `pip install -r requirements.txt && pip install psycopg2 && flask db upgrade && flask seed undo && flask seed all`
+    - Install the packages first, then unseed/downgrade so push doesn't break with unique properties on columns
+    <!-- - Kinda weird that "flask db migrate" isn't included in the build command. Not really sure why it breaks when I add it ¯\\_(ツ)\_/¯ -->
+- Start command: `gunicorn app:app`
 
-## `tiged` the branch
 
-This is the most straightforward way to clone the project into a folder named
-**aa19-python-group-project**. In the directory where you want the project to appear, simply
-run the following command for your program and preferred authentication method:
+# Deployment via Dockerfile:
 
-### Online Full-Time
 
-To authenticate with a Personal Access Token over HTTPS, run
+## Notes:
+- "psycopg2-binary" was added to Pipfile, version "2.9.10". Probably not needed. idk why i added it
+- Development python version is 3.9.4
+- Development pip version is 24.3.1
+- Development pyenv version is 2.4.20
 
-```sh
-npx tiged https://github.com/appacademy/aa19-python-group-project#full-time aa19-python-group-project
-```
 
-To authenticate with SSH, run
 
-```sh
-npx tiged appacademy/aa19-python-group-project#full-time aa19-python-group-project
-```
-
-### Online Part-Time
-
-To authenticate with a Personal Access Token over HTTPS, run
-
-```sh
-npx tiged https://github.com/appacademy/aa19-python-group-project#part-time aa19-python-group-project
-```
-
-To authenticate with SSH, run
-
-```sh
-npx tiged appacademy/aa19-python-group-project#part-time aa19-python-group-project
-```
-
------
-
-> **Note:** The first time you run `npx tiged`, you will likely be asked if you
-> want to install `tiged`. Go ahead and install it.
-
-Unless you cloned the project into an already existing local git repo, run
-
-```sh
-cd aa19-python-group-project && git init
-```
-
-to initialize the project as a git repository that you can connect to a remote
-repo in your personal GitHub account.
-
-## Download the branch as a .zip
-
-**READ THESE INSTRUCTIONS FULLY BEFORE IMPLEMENTING THEM AS YOU WILL LOSE ACCESS
-TO THIS PAGE ONCE YOU SWITCH TO YOUR PROGRAM BRANCH.**
-
-If you want to download your branch as a __.zip__ file, click on the branch
-button to the upper-left of the file list above--the button should currently
-read "main"--and select your program from the resulting dropdown menu. This will
-take you to your program's branch. Once there, click the green "Code" button and
-select "Download ZIP" from the bottom of the menu. Move the __.zip__ to your
-desired location and unzip!
-
-Unless you unzipped the project in an already existing local git repo, run
-
-```sh
-cd aa19-python-group-project && git init
-```
-
-to initialize the project as a git repository that you can connect to a remote
-repo in your personal GitHub account.
-
-(To return to this page in your browser, simply select the "main" branch again.)
-
-## Clone the branch
-
-To clone the branch, open a terminal and cd into the directory where you want
-the repo to go. Then run the command specified below for your program and
-preferred authentication method:
-
-### Online Full-Time
-
-To authenticate with a Personal Access Token over HTTPS, run
-
-```sh
-git clone --branch full-time --single-branch https://github.com/appacademy/aa19-python-group-project.git
-```
-
-To authenticate with SSH, run
-
-```sh
-git clone --branch full-time --single-branch git@github.com:appacademy/aa19-python-group-project.git
-```
-
-### Online Part-Time
-
-To authenticate with a Personal Access Token over HTTPS, run
-
-```sh
-git clone --branch part-time --single-branch https://github.com/appacademy/aa19-python-group-project.git
-```
-
-To authenticate with SSH, run
-
-```sh
-git clone --branch part-time --single-branch git@github.com:appacademy/aa19-python-group-project.git
-```
-
-When you clone a repo, the cloned repo's remote `origin` will still point to the
-original repo.
-
-To reassign the clone to your personal GitHub account (so you can `push` and
-`pull` changes), create a remote `aa19-python-group-project` repo at `https://github.com`.
-Then, back in your local terminal, `cd` into the cloned repo and run the
-following commands to link the cloned repo to your newly created remote and push
-up the current code (replace <YOUR-GH-USERNAME> with your actual GitHub username):
-
-```sh
-git remote set-url origin https://github.com/<YOUR-GH-USERNAME>/aa19-python-group-project
-git push -u origin
-```
-
- > **Note:** The first command differs from the command GitHub tells you to use
- > to connect an existing repo: you should run `git remote set-url` (as above)
- > rather than `git remote add` (as GitHub recommends).
-
- If you instead clone the project into a folder already initialized as a local
- git repo, you just need to remove the clone's remote connection to the original
- repo. `cd` into the cloned repo and run
-
- ```sh
- rm -rf .git
- ```
-
-**WARNING:** `rm -rf` is a dangerous command that will delete the specified
-directory--here, __.git__--and all of the directory's subfolders without any
-verification. **Make sure you are in the cloned repo when you run this
-command.**
