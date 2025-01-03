@@ -1,7 +1,7 @@
 
 {
     "development": {
-      "storage": "backend/db/dev.db",
+      "storage": "db/dev.db",
       "dialect": "sqlite"
     },
     "test": {
