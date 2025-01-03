@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { restoreUser } from '../store/session';
+import Footer from './Footer';
 
 const Layout = ({ children }) => {
   const dispatch = useDispatch();
@@ -16,7 +17,12 @@ const Layout = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return <>{children}</>;
+  return (
+    <div style={{ paddingBottom: '100px' }}> 
+      {children}
+      <Footer /> 
+    </div>
+  );
 };
 
 export default Layout;

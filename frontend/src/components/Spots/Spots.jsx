@@ -5,6 +5,7 @@ import { fetchSpots } from '../../store/spots';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import spotsStyles from './Spots.module.css';
+import Footer from '../Footer';
 
 const Spots = () => {
   const dispatch = useDispatch();
@@ -26,43 +27,39 @@ const Spots = () => {
     fetchData();
   }, [dispatch]);
 
-  const handleTileClick = (spotId) => {
-    navigate(`/spots/${spotId}`);
+  const handleTileClick = (id) => {
+    navigate(`/spots/${id}`);
   };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!Array.isArray(spots)) {
-    return <div>Error: spots is not an array</div>;
-  }
-
   return (
-    <div className={spotsStyles.spotsContainer + ' ' + spotsStyles.grid}>
-      {spots.map(spot => (
-        <div
-          key={spot.id}
-          className={spotsStyles.spotLink}
-        >
-          <div
-            className={spotsStyles.spotTile}
-            title={spot.name}
-            onClick={() => handleTileClick(spot.id)}
-          >
-            <img src={spot.previewImage} alt={spot.name} className={spotsStyles.spotThumbnail} />
-            <div className={spotsStyles.spotInfo}>
-              <div>{spot.name}</div>
-              <div>
-                <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? parseFloat(spot.avgRating).toFixed(1) : 'New'}
+    <>
+      <div className={spotsStyles.spotsContainer}>
+        {spots.map((spot) => (
+          <div key={spot.id} className={spotsStyles.spotTileContainer}>
+            <div
+              className={spotsStyles.spotTile}
+              title={spot.name}
+              onClick={() => handleTileClick(spot.id)}
+            >
+              <img src={spot.previewImage} alt={spot.name} className={spotsStyles.spotThumbnail} />
+              <div className={spotsStyles.spotInfo}>
+                <div>{spot.name}</div>
+                <div>
+                  <FontAwesomeIcon icon={faStar} /> {spot.avgRating ? parseFloat(spot.avgRating).toFixed(1) : 'New'}
+                </div>
+                <div>{spot.city}, {spot.state}</div>
+                <div>${spot.price} / night</div>
               </div>
-              <div>{spot.city}, {spot.state}</div>
-              <div>${spot.price} / night</div>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+      <Footer />
+    </>
   );
 };
 
